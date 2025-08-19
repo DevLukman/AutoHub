@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Nosifer } from "next/font/google";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const fontInter = Inter({
+  variable: "--font-inter",
+  weight: "400",
   subsets: ["latin"],
 });
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const fontNosifer = Nosifer({
+  variable: "--font-nosifer",
+  weight: "400",
   subsets: ["latin"],
 });
 
@@ -25,9 +27,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${fontInter.variable} ${fontNosifer.variable} bg-secondary text-primary font-inter antialiased`}
       >
-        {children}
+        <main>{children}</main>
+        <ToastContainer position="bottom-right" />
       </body>
     </html>
   );
