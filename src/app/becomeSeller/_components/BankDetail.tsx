@@ -10,14 +10,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-type FormActionType = {
-  bankDetails: BankDetails | null;
-  onClick: MouseEventHandler<HTMLButtonElement> | undefined;
-};
 import { Button } from "@/components/ui/button";
 import { BankDetails } from "@/lib/Types";
 import { MouseEventHandler } from "react";
 import { useFormStatus } from "react-dom";
+type FormActionType = {
+  bankDetails: BankDetails | null;
+  onClick: MouseEventHandler<HTMLButtonElement> | undefined;
+};
 export default function BankDetailsModal({
   bankDetails,
   onClick,

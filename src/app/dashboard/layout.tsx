@@ -1,4 +1,4 @@
-import { checkUserProfileComplete } from "@/lib/action";
+import { sellerProfile } from "../../lib/action";
 import { DashboardSidebar } from "../../app/dashboard/_components/DashboardSidebar";
 import { SidebarInset, SidebarProvider } from "../../components/ui/sidebar";
 import DashboardHeader from "./_components/DashboardHeader";
@@ -9,7 +9,7 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const isComplete = await checkUserProfileComplete();
+  const isComplete = await sellerProfile();
   if (!isComplete) {
     redirect("/becomeSeller");
   }

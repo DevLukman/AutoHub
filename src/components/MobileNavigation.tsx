@@ -1,6 +1,5 @@
 "use client";
 import { Separator } from "@/components/ui/separator";
-import { SignInButton, useUser } from "@clerk/nextjs";
 import {
   Sheet,
   SheetContent,
@@ -9,11 +8,15 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { sellerProfile } from "@/lib/action";
+import { SignInButton, useUser } from "@clerk/nextjs";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import { IoMoonOutline } from "react-icons/io5";
+import NavDropdown from "./NavDropdown";
 import SearchButton from "./Search";
 const navLinks = [
   { link: "Home", href: "/" },
@@ -23,7 +26,15 @@ const navLinks = [
 ];
 export default function MobileNavigation() {
   const pathName = usePathname();
+  const [seller, setSeller] = useState<boolean | null>(true);
   const { isSignedIn } = useUser();
+  useEffect(function () {
+    async function sellerCreated() {
+      const created = await sellerProfile();
+      setSeller(created);
+    }
+    sellerCreated();
+  }, []);
   return (
     <nav className="inner-container mt-4 flex w-full items-center justify-between md:hidden">
       <div>
@@ -83,13 +94,14 @@ export default function MobileNavigation() {
             <IoMoonOutline size="1rem" />
           </button>
           <Separator orientation="vertical" className="mr-2" />
-          {!isSignedIn ? (
+          {!isSignedIn && (
             <SignInButton>
               <button className="bg-btnBg text-main font-inter cursor-pointer rounded-sm px-3 py-1.5 text-sm">
                 Sign in
               </button>
             </SignInButton>
-          ) : (
+          )}
+          {isSignedIn && !seller && (
             <Link
               href={"/becomeSeller"}
               className="bg-btnBg text-main font-inter cursor-pointer rounded-sm px-3 py-1.5 text-sm"
@@ -97,6 +109,7 @@ export default function MobileNavigation() {
               Become a seller
             </Link>
           )}
+          {isSignedIn && seller && <NavDropdown />}
         </div>
       </div>
     </nav>

@@ -5,6 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { IoBagOutline, IoMoonOutline } from "react-icons/io5";
 import SearchButton from "./Search";
+import { useEffect, useState } from "react";
+import { sellerProfile } from "@/lib/action";
 type Links = {
   link: string;
   href: string;
@@ -17,9 +19,18 @@ const navLinks: Links[] = [
   { link: "Become a seller", href: "/becomeSeller" },
   { link: "dashboard", href: "/dashboard" },
 ];
+import NavDropdown from "../components/NavDropdown";
 export default function Navigation() {
   const pathName = usePathname();
+  const [seller, setSeller] = useState<boolean | null>(null);
   const { isSignedIn } = useUser();
+  useEffect(function () {
+    async function sellerCreated() {
+      const created = await sellerProfile();
+      setSeller(created);
+    }
+    sellerCreated();
+  }, []);
   return (
     <nav className="inner-container mt-4 hidden w-full items-center justify-between md:flex">
       <div>
@@ -58,13 +69,14 @@ export default function Navigation() {
           </button>
 
           <Separator orientation="vertical" className="mr-2" />
-          {!isSignedIn ? (
+          {!isSignedIn && (
             <SignInButton>
               <button className="bg-btnBg text-main font-inter cursor-pointer rounded-sm px-3 py-1.5 text-sm">
                 Sign in
               </button>
             </SignInButton>
-          ) : (
+          )}
+          {isSignedIn && !seller && (
             <Link
               href={"/becomeSeller"}
               className="bg-btnBg text-main font-inter cursor-pointer rounded-sm px-3 py-1.5 text-sm"
@@ -72,10 +84,11 @@ export default function Navigation() {
               Become a seller
             </Link>
           )}
+          {isSignedIn && seller && <NavDropdown />}
         </div>
-        <div className="cursor-pointer">
+        {/* <div className="cursor-pointer">
           <SignOutButton />
-        </div>
+        </div> */}
       </div>
     </nav>
   );

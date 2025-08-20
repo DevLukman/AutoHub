@@ -1,5 +1,5 @@
 "use client";
-
+import { SignOutButton } from "@clerk/nextjs";
 import {
   BadgeCheck,
   Bell,
@@ -9,7 +9,7 @@ import {
   Sparkles,
 } from "lucide-react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,11 +25,12 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { MdDangerous } from "react-icons/md";
-
+import { useUser } from "@clerk/nextjs";
 export function NavUser() {
   const { isMobile } = useSidebar();
-
+  const { user } = useUser();
+  const first = user?.fullName?.split(" ")[0].split("")[0];
+  const second = user?.fullName?.split(" ")[1].split("")[0];
   return (
     <SidebarMenu className="bg-main rounded-lg">
       <SidebarMenuItem>
@@ -40,16 +41,14 @@ export function NavUser() {
               className="data-[state=open]:bg-mainHover hover:text-primary text-primary bg-main data-[state=open]:text-primary"
             >
               <Avatar className="border-border text-primary flex h-8 w-8 items-center justify-center rounded-sm border">
-                {/* <AvatarImage src={user.avatar} alt={user.name} /> */}
-                {/* <AvatarFallback className="rounded-lg">CN</AvatarFallback> */}
-                <span className="font-inter">LF</span>
+                <span className="font-inter">{`${first}${second}`}</span>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="text-primary truncate text-sm font-medium">
-                  Lukas Flick
+                  {user?.firstName}
                 </span>
                 <span className="text-subPrimary truncate text-sm">
-                  Lukas@wtf
+                  {user?.emailAddresses[0].emailAddress}
                 </span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
@@ -64,13 +63,15 @@ export function NavUser() {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="border-border text-primary flex h-8 w-8 items-center justify-center rounded-sm border">
-                  {/* <AvatarImage src={user.avatar} alt={user.name} /> */}
-                  {/* <AvatarFallback className="rounded-lg">CN</AvatarFallback> */}
-                  <span className="font-inter">LF</span>
+                  <span className="font-inter">{`${first}${second}`}</span>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">Lukas</span>
-                  <span className="truncate text-xs">Lukas@wtf</span>
+                  <span className="truncate font-medium">
+                    {user?.firstName}
+                  </span>
+                  <span className="truncate text-xs">
+                    {user?.emailAddresses[0].emailAddress}
+                  </span>
                 </div>
               </div>
             </DropdownMenuLabel>
@@ -100,11 +101,9 @@ export function NavUser() {
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <LogOut />
-                Log out
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <MdDangerous />
-                Delete Account
+                <SignOutButton>
+                  <span className="cursor-pointer">Log out</span>
+                </SignOutButton>
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>

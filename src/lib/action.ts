@@ -55,14 +55,14 @@ export async function VerifyBank({ accountNumber, bankCode }: Verify) {
   }
 }
 
-export async function checkUserProfileComplete() {
+export async function sellerProfile() {
   const user = await currentUser();
   if (!user) return null;
 
-  const dbUser = await db.seller.findUnique({
+  const dbSeller = await db.seller.findUnique({
     where: { sellerId: user.id },
     select: { isProfileComplete: true },
   });
 
-  return dbUser?.isProfileComplete || false;
+  return dbSeller?.isProfileComplete || false;
 }
