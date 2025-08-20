@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
@@ -15,96 +9,100 @@ datasource db {
 }
 
 model User {
-  id String @id @default(uuid())
-  clerkUserId String @unique
-  email String?
-  name String
-  imageUrl String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  wishList WishList []
-  order Order []
-  purchases Purchases []
+  id          String      @id @default(uuid())
+  clerkUserId String      @unique
+  email       String?
+  name        String
+  imageUrl    String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  order       Order[]
+  purchases   Purchases[]
+  wishList    WishList[]
+
   @@index([clerkUserId])
 }
 
 model Seller {
-  id String @id @default(uuid())
-  sellerId String @unique  
-  businessName String
-  businessEmail String
+  id                  String       @id @default(uuid())
+  sellerId            String       @unique
+  businessName        String
+  businessEmail       String
   businessPhoneNumber String
-  accountNumber String
-  accountName String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  carList CarListing[] @relation("PostedCars")
-
+  accountNumber       String
+  accountName         String
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+  isProfileComplete Boolean @default(false)
+  carList             CarListing[] @relation("PostedCars")
 }
 
-model CarListing{
-  id String @id @default(uuid())
-  listedById String  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  make String
-  model String
-  price Float
-  year Int
-  mileage Float
-  vin Float
-  condition String
-  location String
-  fuel String
+model CarListing {
+  id           String     @id @default(uuid())
+  listedById   String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  make         String
+  model        String
+  price        Float
+  year         Int
+  mileage      Float
+  condition    String
+  location     String
+  fuel         String
   transmission String
-  category String
-  description String?
-  images String[]
-  status String @default("pending")
-  listedBy Seller @relation("PostedCars", fields: [listedById], references: [sellerId])
-  wishList WishList[]
-  orders Order?
+  category     String
+  description  String?
+  images       String?
+  status       String     @default("pending")
+  vin          Float
+  listedBy     Seller     @relation("PostedCars", fields: [listedById], references: [sellerId])
+  orders       Order?
+  wishList     WishList[]
+
   @@index([make, model, year, location, fuel, transmission, category, status])
 }
 
 model WishList {
-  id String @id @default(uuid())
-  userId String 
+  id           String     @id @default(uuid())
+  userId       String
   carListingId String
-  price Float
-  make String
-  model String
-  location String
-  mileage Float
-  fuel String
-  createdAt DateTime @default(now())
-  user User @relation(fields: [userId], references: [clerkUserId], onDelete: Cascade)
-  carListing  CarListing @relation(fields: [carListingId], references: [id], onDelete: Cascade)
+  price        Float
+  make         String
+  model        String
+  location     String
+  mileage      Float
+  fuel         String
+  createdAt    DateTime   @default(now())
+  carListing   CarListing @relation(fields: [carListingId], references: [id], onDelete: Cascade)
+  user         User       @relation(fields: [userId], references: [clerkUserId], onDelete: Cascade)
+
   @@index([userId, carListingId])
 }
 
 model Order {
-  id String @id @default(uuid())
-  userId String
-  carListingId  String @unique
+  id            String     @id @default(uuid())
+  userId        String
+  carListingId  String     @unique
   transactionId String?
-  amount Float
-  status String @default("pending")
-  createdAt  DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  user User @relation(fields: [userId], references: [clerkUserId], onDelete: Cascade)
-  carListing CarListing @relation(fields: [carListingId], references: [id], onDelete: Cascade)
+  amount        Float
+  status        String     @default("pending")
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  carListing    CarListing @relation(fields: [carListingId], references: [id], onDelete: Cascade)
+  user          User       @relation(fields: [userId], references: [clerkUserId], onDelete: Cascade)
+
   @@index([userId, carListingId, status])
 }
 
 model Purchases {
-  id String @id @default(uuid())
-  userId String
-  carPuchasedId String 
-  amount Float
-  model String
-  make String
-  createdAt  DateTime  @default(now())
-  status String @default("completed")
-  user User @relation(fields: [userId], references: [clerkUserId], onDelete: Cascade)
+  id            String   @id @default(uuid())
+  userId        String
+  carPuchasedId String
+  amount        Float
+  model         String
+  make          String
+  createdAt     DateTime @default(now())
+  status        String   @default("completed")
+  user          User     @relation(fields: [userId], references: [clerkUserId], onDelete: Cascade)
 }

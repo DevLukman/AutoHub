@@ -1,5 +1,6 @@
 "use client";
 import { Separator } from "@/components/ui/separator";
+import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { IoBagOutline, IoMoonOutline } from "react-icons/io5";
@@ -13,10 +14,12 @@ const navLinks: Links[] = [
   { link: "Browse Cars", href: "/cars" },
   { link: "Wishlist", href: "/wishlist" },
   { link: "My Purchases", href: "/purchases" },
-  { link: "Dashboard", href: "/dashboard" },
+  { link: "Become a seller", href: "/becomeSeller" },
+  { link: "dashboard", href: "/dashboard" },
 ];
 export default function Navigation() {
   const pathName = usePathname();
+  const { isSignedIn } = useUser();
   return (
     <nav className="inner-container mt-4 hidden w-full items-center justify-between md:flex">
       <div>
@@ -55,9 +58,23 @@ export default function Navigation() {
           </button>
 
           <Separator orientation="vertical" className="mr-2" />
-          <button className="bg-btnBg text-main font-inter cursor-pointer rounded-sm px-3 py-1.5 text-sm">
-            Sign in
-          </button>
+          {!isSignedIn ? (
+            <SignInButton>
+              <button className="bg-btnBg text-main font-inter cursor-pointer rounded-sm px-3 py-1.5 text-sm">
+                Sign in
+              </button>
+            </SignInButton>
+          ) : (
+            <Link
+              href={"/becomeSeller"}
+              className="bg-btnBg text-main font-inter cursor-pointer rounded-sm px-3 py-1.5 text-sm"
+            >
+              Become a seller
+            </Link>
+          )}
+        </div>
+        <div className="cursor-pointer">
+          <SignOutButton />
         </div>
       </div>
     </nav>

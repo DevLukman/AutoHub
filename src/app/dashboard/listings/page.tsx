@@ -1,4 +1,4 @@
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "../../../components/ui/badge";
 import {
   Table,
   TableBody,
@@ -6,8 +6,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { formatToNaria } from "@/utils/helper";
+} from "../../../components/ui/table";
+import { formatToNaria } from "../../../utils/helper";
 import Link from "next/link";
 import { RxDotsVertical } from "react-icons/rx";
 export default function Overview() {

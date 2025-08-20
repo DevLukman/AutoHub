@@ -1,5 +1,6 @@
 "use client";
 import { Separator } from "@/components/ui/separator";
+import { SignInButton, useUser } from "@clerk/nextjs";
 import {
   Sheet,
   SheetContent,
@@ -22,6 +23,7 @@ const navLinks = [
 ];
 export default function MobileNavigation() {
   const pathName = usePathname();
+  const { isSignedIn } = useUser();
   return (
     <nav className="inner-container mt-4 flex w-full items-center justify-between md:hidden">
       <div>
@@ -30,7 +32,7 @@ export default function MobileNavigation() {
             <SheetTrigger asChild>
               <FaBars
                 size={"18px"}
-                className="text-subPrimary cursor-pointer"
+                className="text-subPrimary ml-2 cursor-pointer"
               />
             </SheetTrigger>
             <SheetContent
@@ -81,9 +83,20 @@ export default function MobileNavigation() {
             <IoMoonOutline size="1rem" />
           </button>
           <Separator orientation="vertical" className="mr-2" />
-          <button className="bg-btnBg text-main font-inter cursor-pointer rounded-sm px-3 py-1.5">
-            Sign in
-          </button>
+          {!isSignedIn ? (
+            <SignInButton>
+              <button className="bg-btnBg text-main font-inter cursor-pointer rounded-sm px-3 py-1.5 text-sm">
+                Sign in
+              </button>
+            </SignInButton>
+          ) : (
+            <Link
+              href={"/becomeSeller"}
+              className="bg-btnBg text-main font-inter cursor-pointer rounded-sm px-3 py-1.5 text-sm"
+            >
+              Become a seller
+            </Link>
+          )}
         </div>
       </div>
     </nav>

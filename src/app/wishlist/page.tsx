@@ -1,6 +1,6 @@
-import MainContainer from "@/components/MainContainer";
-import { carsData } from "@/lib/dataService";
-import { formatToNaria } from "@/utils/helper";
+import MainContainer from "../../components/MainContainer";
+import { carsData } from "../../lib/dataService";
+import { formatToNaria } from "../../utils/helper";
 import { LucideCircleGauge, LucideSquareArrowOutUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";

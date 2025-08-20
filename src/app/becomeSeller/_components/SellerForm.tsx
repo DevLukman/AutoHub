@@ -1,18 +1,17 @@
 "use client";
-import MainContainer from "@/components/MainContainer";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useOutsideClick } from "@/hooks/useOutsideClick";
-import { getAllBanks, VerifyBank } from "@/lib/action";
-import { BankDetails, PaystackBankResponse } from "@/lib/Types";
 import { ChevronDown } from "lucide-react";
 import Form from "next/form";
 import { useEffect, useRef, useState } from "react";
 import { FaXmark } from "react-icons/fa6";
 import { toast } from "react-toastify";
-import ListingInputContainer from "@/app/dashboard/_components/ListingInputContainer";
+import ListingInputContainer from "../../../app/dashboard/_components/ListingInputContainer";
+import MainContainer from "../../../components/MainContainer";
+import { Input } from "../../../components/ui/input";
+import { Label } from "../../../components/ui/label";
+import { useOutsideClick } from "../../../hooks/useOutsideClick";
+import { getAllBanks, VerifyBank } from "../../../lib/action";
+import { BankDetails, PaystackBankResponse } from "../../../lib/Types";
 import BankDetailsModal from "./BankDetail";
-
 export default function SellerForm() {
   const [banks, setBanks] = useState<PaystackBankResponse[]>([]);
   const [bankCode, setBankCode] = useState<string>("");
@@ -61,7 +60,7 @@ export default function SellerForm() {
   return (
     <MainContainer>
       <section className="mt-4 px-4 sm:px-6 lg:px-8">
-        <div className="bg-secondary border-border mx-auto h-fit w-full max-w-4xl rounded-lg border p-6">
+        <div className="bg-secondary border-border mx-auto h-fit w-full max-w-[850px] rounded-lg border p-6">
           <h1 className="text-lg font-bold">Become a Car Seller!</h1>
           <p className="text-subPrimary mt-3 text-sm">
             Unlock the potential of your vehicle. List it now and reach

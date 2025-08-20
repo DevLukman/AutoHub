@@ -1,5 +1,4 @@
 import SellerForm from "./_components/SellerForm";
-
-export default function Seller() {
+export default async function Seller() {
   return <SellerForm />;
 }

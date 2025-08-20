@@ -1,7 +1,7 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from "../../../components/ui/button";
+import { Input } from "../../../components/ui/input";
+import { Label } from "../../../components/ui/label";
 import {
   Select,
   SelectContent,
@@ -9,14 +9,13 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
+} from "../../../components/ui/select";
+import { Textarea } from "../../..//components/ui/textarea";
 import { IconPaperclip } from "@intentui/icons";
 import { ChevronLeft } from "lucide-react";
 import Form from "next/form";
 import Link from "next/link";
-
-import { NumberField } from "@/app/dashboard/_components/NumberInput";
+import { NumberField } from "../../../app/dashboard/_components/NumberInput";
 import { useState } from "react";
 import ListingInputContainer from "../_components/ListingInputContainer";
 

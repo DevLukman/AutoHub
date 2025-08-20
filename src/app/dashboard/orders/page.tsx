@@ -1,6 +1,6 @@
 import { Search } from "lucide-react";
 import Form from "next/form";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "../../../components/ui/badge";
 import {
   Table,
   TableBody,
@@ -8,8 +8,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { formatToNaria } from "@/utils/helper";
+} from "../../../components/ui/table";
+import { formatToNaria } from "../../../utils/helper";
 export default function Orders() {
   return (
     <section className="bg-secondary flex flex-1 flex-col gap-4 px-6 pt-6 pb-4">

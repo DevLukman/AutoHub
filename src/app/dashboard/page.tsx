@@ -1,5 +1,7 @@
-import { Badge } from "@/components/ui/badge";
-import { Card, CardDescription, CardHeader } from "@/components/ui/card";
+import { CiMoneyBill } from "react-icons/ci";
+import { IoBagOutline, IoCarSport } from "react-icons/io5";
+import { Badge } from "../../components/ui/badge";
+import { Card, CardDescription, CardHeader } from "../../components/ui/card";
 import {
   Table,
   TableBody,
@@ -7,12 +9,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { formatToNaria } from "@/utils/helper";
-import { CiMoneyBill } from "react-icons/ci";
-import { IoBagOutline, IoCarSport } from "react-icons/io5";
-
-export default function Overview() {
+} from "../../components/ui/table";
+import { formatToNaria } from "../../utils/helper";
+export default async function Overview() {
   return (
     <section className="bg-secondary flex flex-1 flex-col gap-4 overflow-x-hidden px-6 pt-6 pb-4">
       <h1 className="text-primary text-2xl font-[700]">Dashboard</h1>

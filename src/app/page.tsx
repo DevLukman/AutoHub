@@ -5,7 +5,6 @@ import MainContainer from "@/components/MainContainer";
 import PopularCategories from "@/components/PopularCategories";
 import SkeletonLoading from "@/components/SkeletonLoading";
 import { Suspense } from "react";
-
 export default async function Home() {
   return (
     <MainContainer>
