@@ -114,23 +114,3 @@ function FormButton() {
     </AlertDialogTrigger>
   );
 }
-
-{
-  /* <AlertDialogAction
-  onSelect={(e) => {
-    e.preventDefault(); // Prevent auto-close
-    handleContinue();
-  }}
-  disabled={isLoading}
-  className="bg-btnBg text-secondary hover:bg-btnBg hover:text-secondary w-full cursor-pointer font-semibold md:w-fit"
->
-  {isLoading ? (
-    <>
-      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-      Creating Account...
-    </>
-  ) : (
-    "Continue"
-  )}
-</AlertDialogAction> */
-}

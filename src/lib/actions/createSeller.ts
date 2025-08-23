@@ -1,20 +1,7 @@
 "use server";
 import { currentUser } from "@clerk/nextjs/server";
 import { db } from "../prisma";
-import { z } from "zod";
-const SellerSchema = z.object({
-  businessName: z.string().trim().min(1, "Business name is required").max(100),
-  businessEmail: z.email().max(255),
-  accountNumber: z
-    .string()
-    .trim()
-    .regex(/^\d{10}$/, "Account number must be 10 digits"),
-  businessPhone: z
-    .string()
-    .trim()
-    .regex(/^\d{10,11}$/, "Phone number must be 10-11 digits"),
-  bankName: z.string().trim().min(1, "Bank name is required").max(100),
-});
+import { SellerSchema } from "../Types";
 export async function createSeller(formData: FormData) {
   const user = await currentUser();
   if (!user?.id) return { error: "Unauthorized" };
@@ -31,6 +18,7 @@ export async function createSeller(formData: FormData) {
     accountNumber: formData.get("accountNumber"),
     bankName: formData.get("bankName"),
   };
+
   const schemaValidation = SellerSchema.safeParse(sellerData);
   if (!schemaValidation.success) {
     return { error: "there is an error with creating seller" };
@@ -53,9 +41,3 @@ export async function createSeller(formData: FormData) {
     return { error: "Failed to create seller profile. Please try again." };
   }
 }
-
-//  businessName: schemaValidation.data.businessName,
-//     businessEmail: schemaValidation.data.businessEmail,
-//     businessPhone: schemaValidation.data.businessPhone,
-//     accountNumber: schemaValidation.data.accountNumber,
-//     bankName: schemaValidation.data.bankName,

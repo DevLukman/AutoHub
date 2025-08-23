@@ -1,8 +1,10 @@
 "use client";
 import { useUser } from "@clerk/nextjs";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import { FaXmark } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import ListingInputContainer from "../../../app/dashboard/_components/ListingInputContainer";
@@ -12,7 +14,12 @@ import { Label } from "../../../components/ui/label";
 import { useOutsideClick } from "../../../hooks/useOutsideClick";
 import { getAllBanks, VerifyBank } from "../../../lib/actions/bankVerification";
 import { createSeller } from "../../../lib/actions/createSeller";
-import { BankDetails, PaystackBankResponse } from "../../../lib/Types";
+import {
+  BankDetails,
+  PaystackBankResponse,
+  SellerSchema,
+  TSellerSchema,
+} from "../../../lib/Types";
 import BankDetailsModal from "./BankDetail";
 export default function SellerForm() {
   const [banks, setBanks] = useState<PaystackBankResponse[]>([]);
@@ -28,7 +35,11 @@ export default function SellerForm() {
   const filteredBanks = banks.filter((bank) =>
     bank.name.toLowerCase().includes(inputValue.toLowerCase()),
   );
-
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<TSellerSchema>({ resolver: zodResolver(SellerSchema) });
   useEffect(() => {
     async function getBanks() {
       try {
@@ -41,8 +52,7 @@ export default function SellerForm() {
     getBanks();
   }, []);
 
-  async function handleVerifyBank(e: React.FormEvent): Promise<void> {
-    e.preventDefault();
+  async function handleVerifyBank(): Promise<void> {
     if (accountNumber.length === 10 && bankCode) {
       const data = await VerifyBank({ accountNumber, bankCode });
       if (!data.status) {
@@ -67,7 +77,6 @@ export default function SellerForm() {
       throw new Error(result?.error || "Creation failed");
     }
   }
-
   return (
     <MainContainer>
       <section className="mt-4 px-4 sm:px-6 lg:px-8">
@@ -79,7 +88,7 @@ export default function SellerForm() {
           </p>
           <form
             className="flex w-full flex-col"
-            onSubmit={handleVerifyBank}
+            onSubmit={handleSubmit(handleVerifyBank)}
             ref={formRef}
           >
             <ListingInputContainer>
@@ -87,55 +96,67 @@ export default function SellerForm() {
                 Business Name
               </Label>
               <Input
+                {...register("businessName", {
+                  required: "Email is required",
+                })}
                 className="border-border border"
                 id="businessName"
-                name="businessName"
-                required
                 type="text"
-                minLength={2}
-                maxLength={100}
               />
+              {errors.businessName?.message && (
+                <span className="pl-1 text-sm text-red-500">
+                  {errors.businessName.message}
+                </span>
+              )}
             </ListingInputContainer>
             <ListingInputContainer>
               <Label className="text-sm font-semibold" htmlFor="businessEmail">
                 Business Email
               </Label>
               <Input
+                {...register("businessEmail")}
                 className="border-border border"
                 id="businessEmail"
-                name="businessEmail"
                 type="text"
                 defaultValue={user?.emailAddresses[0].emailAddress}
-                required
               />
+              {errors.businessEmail?.message && (
+                <span className="pl-1 text-sm text-red-500">
+                  {errors.businessEmail.message}
+                </span>
+              )}
             </ListingInputContainer>
             <ListingInputContainer>
               <Label className="text-sm font-semibold" htmlFor="businessPhone">
                 Business Phone Number
               </Label>
               <Input
+                {...register("businessPhone")}
                 className="border-border border"
                 id="businessPhone"
-                name="businessPhone"
-                required
-                minLength={11}
-                maxLength={11}
               />
+              {errors.businessPhone?.message && (
+                <span className="pl-1 text-sm text-red-500">
+                  {errors.businessPhone.message}
+                </span>
+              )}
             </ListingInputContainer>
             <ListingInputContainer>
               <Label className="text-sm font-semibold" htmlFor="accountNumber">
                 Account Number
               </Label>
               <Input
+                {...register("accountNumber")}
                 className="border-border border"
                 id="accountNumber"
-                name="accountNumber"
-                required
-                minLength={10}
-                maxLength={10}
                 value={accountNumber}
                 onChange={(e) => setAccountNumber(e.target.value)}
               />
+              {errors.accountNumber?.message && (
+                <span className="pl-1 text-sm text-red-500">
+                  {errors.accountNumber.message}
+                </span>
+              )}
             </ListingInputContainer>
             <div
               className="relative mt-6 flex w-full flex-col gap-2"
@@ -164,15 +185,21 @@ export default function SellerForm() {
                 Select Bank
               </Label>
               <Input
+                {...register("bankName", {
+                  required: "BankName is required",
+                })}
                 className="border-border border"
                 id="bankName"
-                name="bankName"
-                required
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onFocus={() => setOpenBankModal(true)}
               />
+              {errors.bankName?.message && (
+                <span className="pl-1 text-sm text-red-500">
+                  {errors.bankName.message}
+                </span>
+              )}
               <button type="button">
                 {inputValue.length ? (
                   <FaXmark
@@ -202,8 +229,3 @@ export default function SellerForm() {
     </MainContainer>
   );
 }
-
-//   118 | Using the example below you can still execute your query with Prisma, but please note that it is vulnerable to SQL injection attacks and requires you to take care of input sanitization. {
-//   clientVersion: '6.13.0',
-//   errorCode: 'P1001'
-// }

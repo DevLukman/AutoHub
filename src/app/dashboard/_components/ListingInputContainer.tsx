@@ -1,9 +1,8 @@
-import { ReactElement } from "react";
-
+import { ReactNode } from "react";
 export default function ListingInputContainer({
   children,
 }: {
-  children: ReactElement[];
+  children: ReactNode;
 }) {
-  return <div className="mt-6 flex flex-col gap-2">{children}</div>;
+  return <div className="mt-4 flex flex-col gap-2">{children}</div>;
 }
