@@ -1,11 +1,10 @@
-import { carsData } from "@/lib/dataService";
-import { formatToNaria } from "@/utils/helper";
+import { carsData } from "../lib/dataService";
+import { formatToNaria } from "../utils/helper";
 import { Map } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { CiHeart } from "react-icons/ci";
 import { GoDotFill } from "react-icons/go";
-import { SonnerDemo } from "./ToastAlert";
 export default async function FeaturedVechicles() {
   const featruedCars = await carsData();
   return (

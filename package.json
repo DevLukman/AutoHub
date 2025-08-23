@@ -12,6 +12,7 @@
   "dependencies": {
     "@adobe/react-spectrum": "^3.43.0",
     "@clerk/nextjs": "^6.31.1",
+    "@hookform/resolvers": "^5.2.1",
     "@intentui/icons": "^1.11.0",
     "@prisma/client": "^6.13.0",
     "@prisma/extension-accelerate": "^2.0.2",
@@ -45,12 +46,14 @@
     "react-aria-components": "^1.11.0",
     "react-blurhash": "^0.3.0",
     "react-dom": "19.1.0",
+    "react-hook-form": "^7.62.0",
     "react-icons": "^5.5.0",
     "react-spinners": "^0.17.0",
     "react-toastify": "^11.0.5",
     "tailwind-merge": "^3.3.1",
     "tailwind-variants": "^2.1.0",
-    "uploadthing": "^7.7.4"
+    "uploadthing": "^7.7.4",
+    "zod": "^4.0.17"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

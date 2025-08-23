@@ -6,8 +6,8 @@ type Car = {
   images: string[];
   year: string;
 };
-import { useOutsideClick } from "@/hooks/useOutsideClick";
-import { carsData } from "@/lib/dataService";
+import { useOutsideClick } from "../hooks/useOutsideClick";
+import { carsData } from "../lib/dataService";
 import { Search } from "lucide-react";
 
 import Image from "next/image";

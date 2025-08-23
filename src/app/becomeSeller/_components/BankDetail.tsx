@@ -1,29 +1,45 @@
 "use client";
+import { useFormStatus } from "react-dom";
+import { Loader2 } from "lucide-react";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
+  AlertDialogAction,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { BankDetails } from "@/lib/Types";
-import { MouseEventHandler } from "react";
-import { useFormStatus } from "react-dom";
+} from "../../../components/ui/alert-dialog";
+import { Button } from "../../../components/ui/button";
+import { BankDetails } from "../../../lib/Types";
+import { useState } from "react";
 type FormActionType = {
   bankDetails: BankDetails | null;
-  onClick: MouseEventHandler<HTMLButtonElement> | undefined;
+  onClick: () => Promise<void>;
 };
 export default function BankDetailsModal({
   bankDetails,
   onClick,
 }: FormActionType) {
+  const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  async function handleContinue(e: React.MouseEvent) {
+    e.preventDefault();
+
+    try {
+      setIsLoading(true);
+      await onClick();
+      setOpen(false);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
   return (
-    <AlertDialog>
+    <AlertDialog open={open} onOpenChange={setOpen}>
       <FormButton />
       {bankDetails && (
         <AlertDialogContent className="bg-main border-border rounded-lg border">
@@ -56,14 +72,21 @@ export default function BankDetailsModal({
             <AlertDialogCancel className="bg-main border-border hover:bg-main hover:text-primary w-full cursor-pointer border font-semibold md:w-fit">
               Cancel
             </AlertDialogCancel>
-            <AlertDialogAction
-              asChild
+            <Button
               className="bg-btnBg text-secondary hover:bg-btnBg hover:text-secondary w-full cursor-pointer font-semibold md:w-fit"
+              type="button"
+              onClick={handleContinue}
+              disabled={isLoading}
             >
-              <Button type="button" onClick={onClick}>
-                Continue
-              </Button>
-            </AlertDialogAction>
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Creating Account...
+                </>
+              ) : (
+                "Continue"
+              )}
+            </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
       )}
@@ -79,8 +102,35 @@ function FormButton() {
         disabled={pending}
         className="bg-btnBg text-secondary hover:bg-btnBg mt-8 cursor-pointer py-4 text-sm font-semibold"
       >
-        {pending ? "becoming a seller" : "Become a seller"}
+        {pending ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Becoming a seller...
+          </>
+        ) : (
+          "Become a seller"
+        )}
       </Button>
     </AlertDialogTrigger>
   );
+}
+
+{
+  /* <AlertDialogAction
+  onSelect={(e) => {
+    e.preventDefault(); // Prevent auto-close
+    handleContinue();
+  }}
+  disabled={isLoading}
+  className="bg-btnBg text-secondary hover:bg-btnBg hover:text-secondary w-full cursor-pointer font-semibold md:w-fit"
+>
+  {isLoading ? (
+    <>
+      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+      Creating Account...
+    </>
+  ) : (
+    "Continue"
+  )}
+</AlertDialogAction> */
 }

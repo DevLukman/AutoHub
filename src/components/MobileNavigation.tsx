@@ -1,14 +1,4 @@
 "use client";
-import { Separator } from "@/components/ui/separator";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { sellerProfile } from "@/lib/action";
 import { SignInButton, useUser } from "@clerk/nextjs";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import Link from "next/link";
@@ -16,6 +6,16 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import { IoMoonOutline } from "react-icons/io5";
+import { Separator } from "../components/ui/separator";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "../components/ui/sheet";
+import { sellerProfile } from "../lib/action";
 import NavDropdown from "./NavDropdown";
 import SearchButton from "./Search";
 const navLinks = [
@@ -26,15 +26,22 @@ const navLinks = [
 ];
 export default function MobileNavigation() {
   const pathName = usePathname();
-  const [seller, setSeller] = useState<boolean | null>(true);
-  const { isSignedIn } = useUser();
-  useEffect(function () {
-    async function sellerCreated() {
-      const created = await sellerProfile();
-      setSeller(created);
-    }
-    sellerCreated();
-  }, []);
+  const [seller, setSeller] = useState<boolean | null>(null);
+  const { isSignedIn, isLoaded } = useUser();
+  useEffect(
+    function () {
+      async function sellerCreated() {
+        const created = await sellerProfile();
+        setSeller(created);
+      }
+      if (isSignedIn) {
+        sellerCreated();
+      }
+    },
+    [isSignedIn],
+  );
+  if (!isLoaded) return null;
+  if (isSignedIn && seller === null) return null;
   return (
     <nav className="inner-container mt-4 flex w-full items-center justify-between md:hidden">
       <div>
@@ -52,7 +59,7 @@ export default function MobileNavigation() {
             >
               <SheetHeader>
                 <SheetTitle className="text-primary">
-                  <Link href={"/"} className="text-primary font-inter">
+                  <Link href="/" className="text-primary font-inter">
                     AutoHub
                   </Link>
                 </SheetTitle>
@@ -82,7 +89,7 @@ export default function MobileNavigation() {
           </Sheet>
 
           <Separator orientation="vertical" />
-          <Link href={"/"} className="text-xl">
+          <Link href="/" className="text-xl">
             Auto
           </Link>
         </div>
@@ -91,7 +98,7 @@ export default function MobileNavigation() {
         <div className="flex h-5 items-center gap-2">
           <SearchButton />
           <button className="hover:bg-main cursor-pointer rounded-sm px-2 py-2 transition-all duration-300 ease-in-out">
-            <IoMoonOutline size="1rem" />
+            <IoMoonOutline size={16} />
           </button>
           <Separator orientation="vertical" className="mr-2" />
           {!isSignedIn && (
@@ -103,7 +110,7 @@ export default function MobileNavigation() {
           )}
           {isSignedIn && !seller && (
             <Link
-              href={"/becomeSeller"}
+              href="/becomeSeller"
               className="bg-btnBg text-main font-inter cursor-pointer rounded-sm px-3 py-1.5 text-sm"
             >
               Become a seller

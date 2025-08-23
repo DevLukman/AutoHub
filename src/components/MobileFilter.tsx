@@ -27,8 +27,11 @@ const fuelType = [
   { id: 10, name: "Hybrid", to: "Hybrid" },
 ];
 
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { CiFilter } from "react-icons/ci";
+import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
+import { Checkbox } from "../components/ui/checkbox";
+import { Label } from "../components/ui/label";
 import {
   Sheet,
   SheetContent,
@@ -36,10 +39,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { CiFilter } from "react-icons/ci";
-import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
+} from "../components/ui/sheet";
 
 export function MobileFilter() {
   return (

@@ -1,6 +1,7 @@
 "use client";
+import { useUser } from "@clerk/nextjs";
 import { ChevronDown } from "lucide-react";
-import Form from "next/form";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { FaXmark } from "react-icons/fa6";
 import { toast } from "react-toastify";
@@ -9,7 +10,8 @@ import MainContainer from "../../../components/MainContainer";
 import { Input } from "../../../components/ui/input";
 import { Label } from "../../../components/ui/label";
 import { useOutsideClick } from "../../../hooks/useOutsideClick";
-import { getAllBanks, VerifyBank } from "../../../lib/action";
+import { getAllBanks, VerifyBank } from "../../../lib/actions/bankVerification";
+import { createSeller } from "../../../lib/actions/createSeller";
 import { BankDetails, PaystackBankResponse } from "../../../lib/Types";
 import BankDetailsModal from "./BankDetail";
 export default function SellerForm() {
@@ -19,6 +21,8 @@ export default function SellerForm() {
   const [inputValue, setInputValue] = useState<string>("");
   const [accountNumber, setAccountNumber] = useState("");
   const [openBankModal, setOpenBankModal] = useState(false);
+  const router = useRouter();
+  const { user } = useUser();
   const formRef = useRef<HTMLFormElement>(null);
   const outsideRef = useOutsideClick(setOpenBankModal);
   const filteredBanks = banks.filter((bank) =>
@@ -37,7 +41,7 @@ export default function SellerForm() {
     getBanks();
   }, []);
 
-  async function handleVerifyBank(e: React.FormEvent) {
+  async function handleVerifyBank(e: React.FormEvent): Promise<void> {
     e.preventDefault();
     if (accountNumber.length === 10 && bankCode) {
       const data = await VerifyBank({ accountNumber, bankCode });
@@ -51,10 +55,17 @@ export default function SellerForm() {
     }
   }
 
-  function handleFormSubmission() {
+  async function handleFormSubmission(): Promise<void> {
     if (!formRef.current) return;
     const formData = new FormData(formRef.current);
-    console.log(formData);
+    const result = await createSeller(formData);
+    if (result.success) {
+      router.push("/dashboard");
+      toast.success("Account Created");
+    } else {
+      toast.error(result?.error || "Something went wrong");
+      throw new Error(result?.error || "Creation failed");
+    }
   }
 
   return (
@@ -66,8 +77,7 @@ export default function SellerForm() {
             Unlock the potential of your vehicle. List it now and reach
             thousands of buyers!
           </p>
-          <Form
-            action=""
+          <form
             className="flex w-full flex-col"
             onSubmit={handleVerifyBank}
             ref={formRef}
@@ -95,6 +105,7 @@ export default function SellerForm() {
                 id="businessEmail"
                 name="businessEmail"
                 type="text"
+                defaultValue={user?.emailAddresses[0].emailAddress}
                 required
               />
             </ListingInputContainer>
@@ -185,9 +196,14 @@ export default function SellerForm() {
               onClick={handleFormSubmission}
               bankDetails={bankDetails}
             />
-          </Form>
+          </form>
         </div>
       </section>
     </MainContainer>
   );
 }
+
+//   118 | Using the example below you can still execute your query with Prisma, but please note that it is vulnerable to SQL injection attacks and requires you to take care of input sanitization. {
+//   clientVersion: '6.13.0',
+//   errorCode: 'P1001'
+// }

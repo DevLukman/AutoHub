@@ -1,14 +1,10 @@
 "use client";
-import { SignInButton, useUser, SignOutButton } from "@clerk/nextjs";
+import { IoBagOutline, IoMoonOutline } from "react-icons/io5";
+import { Separator } from "../components/ui/separator";
+import SearchButton from "./Search";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { IoBagOutline, IoMoonOutline } from "react-icons/io5";
-import NavDropdown from "../components/NavDropdown";
-import { Separator } from "../components/ui/separator";
-import { sellerProfile } from "../lib/action";
-import SearchButton from "./Search";
-import { NavigationLoading } from "./NavLoading";
+import { FaBars } from "react-icons/fa";
 type Links = {
   link: string;
   href: string;
@@ -18,27 +14,9 @@ const navLinks: Links[] = [
   { link: "Browse Cars", href: "/cars" },
   { link: "Wishlist", href: "/wishlist" },
   { link: "My Purchases", href: "/purchases" },
-  // { link: "Become a seller", href: "/becomeSeller" },
-  // { link: "dashboard", href: "/dashboard" },
 ];
-export default function Navigation() {
+export function NavigationLoading() {
   const pathName = usePathname();
-  const [seller, setSeller] = useState<boolean | null>(null);
-  const { isSignedIn, isLoaded } = useUser();
-  useEffect(
-    function () {
-      async function sellerCreated() {
-        const created = await sellerProfile();
-        setSeller(created);
-      }
-      if (isSignedIn) {
-        sellerCreated();
-      }
-    },
-    [isSignedIn],
-  );
-  if (!isLoaded) return <NavigationLoading />;
-  if (isSignedIn && seller === null) return <NavigationLoading />;
   return (
     <nav className="inner-container mt-4 hidden w-full items-center justify-between md:flex">
       <div>
@@ -77,26 +55,43 @@ export default function Navigation() {
           </button>
 
           <Separator orientation="vertical" className="mr-2" />
-          {!isSignedIn && (
-            <SignInButton>
-              <button className="bg-btnBg text-main font-inter cursor-pointer rounded-sm px-3 py-1.5 text-sm">
-                Sign in
-              </button>
-            </SignInButton>
-          )}
-          {isSignedIn && !seller && (
-            <Link
-              href="/becomeSeller"
-              className="bg-btnBg text-main font-inter cursor-pointer rounded-sm px-3 py-1.5 text-sm"
-            >
-              Become a seller
-            </Link>
-          )}
-          {isSignedIn && seller && <NavDropdown />}
+
+          <button
+            disabled
+            className="bg-btnBg text-main font-inter cursor-pointer rounded-sm px-3 py-1.5 text-sm"
+          >
+            Sign in
+          </button>
         </div>
-        {/* <div className="cursor-pointer">
-          <SignOutButton />
-        </div> */}
+      </div>
+    </nav>
+  );
+}
+
+export function MobileNavLoading() {
+  return (
+    <nav className="inner-container mt-4 flex w-full items-center justify-between md:hidden">
+      <div>
+        <div className="flex h-5 items-center space-x-4 text-sm">
+          <FaBars size={18} className="text-subPrimary ml-2 cursor-pointer" />
+
+          <Separator orientation="vertical" />
+          <Link href="/" className="text-xl">
+            Auto
+          </Link>
+        </div>
+      </div>
+      <div>
+        <div className="flex h-5 items-center gap-2">
+          <SearchButton />
+          <button className="hover:bg-main cursor-pointer rounded-sm px-2 py-2 transition-all duration-300 ease-in-out">
+            <IoMoonOutline size={16} />
+          </button>
+          <Separator orientation="vertical" className="mr-2" />
+          <button className="bg-btnBg text-main font-inter cursor-pointer rounded-sm px-3 py-1.5 text-sm">
+            Sign in
+          </button>
+        </div>
       </div>
     </nav>
   );

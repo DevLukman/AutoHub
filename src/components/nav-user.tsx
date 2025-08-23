@@ -9,7 +9,8 @@ import {
   Sparkles,
 } from "lucide-react";
 
-import { Avatar } from "@/components/ui/avatar";
+import { useUser } from "@clerk/nextjs";
+import { Avatar } from "../components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,14 +19,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "../components/ui/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar";
-import { useUser } from "@clerk/nextjs";
+} from "../components/ui/sidebar";
 export function NavUser() {
   const { isMobile } = useSidebar();
   const { user } = useUser();

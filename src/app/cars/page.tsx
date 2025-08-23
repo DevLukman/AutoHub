@@ -1,8 +1,8 @@
-import Filter from "@/components/Filter";
-import MainContainer from "@/components/MainContainer";
-import { MobileFilter } from "@/components/MobileFilter";
-import { carsData } from "@/lib/dataService";
-import { formatToNaria } from "@/utils/helper";
+import Filter from "../../components/Filter";
+import MainContainer from "../../components/MainContainer";
+import { MobileFilter } from "../../components/MobileFilter";
+import { carsData } from "../../lib/dataService";
+import { formatToNaria } from "../../utils/helper";
 import Image from "next/image";
 import Link from "next/link";
 import { CiLocationOn } from "react-icons/ci";
