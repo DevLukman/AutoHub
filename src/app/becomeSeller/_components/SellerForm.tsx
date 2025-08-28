@@ -15,7 +15,7 @@ import { useOutsideClick } from "../../../hooks/useOutsideClick";
 import { getAllBanks, VerifyBank } from "../../../lib/actions/bankVerification";
 import { createSeller } from "../../../lib/actions/createSeller";
 import {
-  BankDetails,
+  accountInformation,
   PaystackBankResponse,
   SellerSchema,
   TSellerSchema,
@@ -24,7 +24,9 @@ import BankDetailsModal from "./BankDetail";
 export default function SellerForm() {
   const [banks, setBanks] = useState<PaystackBankResponse[]>([]);
   const [bankCode, setBankCode] = useState<string>("");
-  const [bankDetails, setBankDetails] = useState<BankDetails | null>(null);
+  const [bankDetails, setBankDetails] = useState<accountInformation | null>(
+    null,
+  );
   const [inputValue, setInputValue] = useState<string>("");
   const [accountNumber, setAccountNumber] = useState("");
   const [openBankModal, setOpenBankModal] = useState(false);
@@ -39,7 +41,12 @@ export default function SellerForm() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<TSellerSchema>({ resolver: zodResolver(SellerSchema) });
+  } = useForm<TSellerSchema>({
+    resolver: zodResolver(SellerSchema),
+    defaultValues: {
+      businessEmail: user?.emailAddresses[0].emailAddress || "",
+    },
+  });
   useEffect(() => {
     async function getBanks() {
       try {
@@ -118,7 +125,6 @@ export default function SellerForm() {
                 className="border-border border"
                 id="businessEmail"
                 type="text"
-                defaultValue={user?.emailAddresses[0].emailAddress}
               />
               {errors.businessEmail?.message && (
                 <span className="pl-1 text-sm text-red-500">

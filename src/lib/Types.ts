@@ -19,7 +19,7 @@ export type PaystackBankResponse = {
   updatedAt: string;
 };
 
-export type BankDetails = {
+export type accountInformation = {
   account_number: string;
   account_name: string;
 };
@@ -44,3 +44,58 @@ export const SellerSchema = z.object({
 });
 
 export type TSellerSchema = z.infer<typeof SellerSchema>;
+
+export const CarListingSchema = z.object({
+  make: z.string().trim().min(3, "make is required").max(20),
+  model: z.string().trim().min(3, "model is required").max(20),
+  price: z.number().min(1, "Price must be greater than 0"),
+  year: z
+    .number()
+    .int()
+    .min(2010, "Year must be 2010 or later")
+    .max(new Date().getFullYear() + 10, "Invalid year"),
+  mileage: z.number().min(0, "Mileage cannot be negative"),
+  condition: z.enum(["new", "used", "certified pre owned", "damaged"], {
+    message: "Select a condition",
+  }),
+  location: z.string().trim().min(3, "Location is required"),
+  fuel: z.enum(["petrol", "diesel", "hybrid", "electric"], {
+    message: "Slease select a fuel type",
+  }),
+  transmission: z.enum(["automatic", "manual"], {
+    message: "Please select a transmission type",
+  }),
+  category: z.enum(
+    [
+      "sedan",
+      "coupe",
+      "suv",
+      "crossover",
+      "wagon/hatchback",
+      "green car/hybrid",
+      "convertible",
+      "sports car",
+      "pickup truck",
+      "luxury car",
+    ],
+    {
+      message: "Select a category",
+    },
+  ),
+  description: z
+    .string()
+    .max(500, "Description cannot exceed 500 characters")
+    .optional(),
+  vin: z.string().min(17, "vin is required"),
+  images: z
+    .array(
+      z.object({
+        url: z.string(),
+        key: z.string(),
+        name: z.string(),
+      }),
+    )
+    .min(3, "Minimum 3 images required")
+    .max(6, "Maximum 6 images allowed"),
+});
+export type TCarLisingSchema = z.infer<typeof CarListingSchema>;

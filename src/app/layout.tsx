@@ -5,6 +5,7 @@ import { Inter, Nosifer } from "next/font/google";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
+import { auth } from "@clerk/nextjs/server";
 const fontInter = Inter({
   variable: "--font-inter",
   weight: "400",
@@ -27,6 +28,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   await checkUser();
+
   return (
     <ClerkProvider>
       <html lang="en">

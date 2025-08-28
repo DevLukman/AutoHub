@@ -6,6 +6,11 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
+        hostname: "*.ufs.sh",
+        pathname: "/f/**",
+      },
+      {
+        protocol: "https",
         hostname: "images.unsplash.com",
         pathname: "**",
       },
@@ -60,3 +65,7 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
+
+// Invalid src prop (https://utfs.io/f/i3CUzbIIBHUGBrxoupVMo5yTG0cIVPAZa8kFgi6pHKveCutq) on
+//    `next/image`, hostname "utfs.io" is not configured under images in your `next.config.js`
+//   See more info: https://nextjs.org/docs/messages/next-image-unconfigured-host

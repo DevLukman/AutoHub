@@ -24,22 +24,21 @@ const details = {
   VIN: "5FNRL5H49BB123456",
 };
 
-import MainContainer from "@/components/MainContainer";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import MainContainer from "../../../components/MainContainer";
+import { Button } from "../../../components/ui/button";
+import { Card } from "../../../components/ui/card";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/carousel";
-import { Separator } from "@/components/ui/separator";
-import { formatToNaria } from "@/utils/helper";
+} from "../../../components/ui/carousel";
+import { Separator } from "../../../components/ui/separator";
+import { formatToNaria } from "../../../utils/helper";
 import Image from "next/image";
 import { CiHeart, CiShoppingCart } from "react-icons/ci";
 export default async function Page({ params }: Params) {
-  // const { carId } = await params;
   const {
     images,
     location,

@@ -1,4 +1,4 @@
-import { sellerProfile } from "../../lib/action";
+import { sellerProfile } from "@/lib/actions/createSeller";
 import { DashboardSidebar } from "../../app/dashboard/_components/DashboardSidebar";
 import { SidebarInset, SidebarProvider } from "../../components/ui/sidebar";
 import DashboardHeader from "./_components/DashboardHeader";

@@ -1,10 +1,10 @@
 "use client";
-import { useFormStatus } from "react-dom";
 import { Loader2 } from "lucide-react";
+import { useState } from "react";
+import { useFormStatus } from "react-dom";
 import {
   AlertDialog,
   AlertDialogCancel,
-  AlertDialogAction,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -13,10 +13,9 @@ import {
   AlertDialogTrigger,
 } from "../../../components/ui/alert-dialog";
 import { Button } from "../../../components/ui/button";
-import { BankDetails } from "../../../lib/Types";
-import { useState } from "react";
+import { accountInformation } from "../../../lib/Types";
 type FormActionType = {
-  bankDetails: BankDetails | null;
+  bankDetails: accountInformation | null;
   onClick: () => Promise<void>;
 };
 export default function BankDetailsModal({

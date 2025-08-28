@@ -23,9 +23,7 @@ export function DashboardSidebar({
       <SidebarContent className="bg-main">
         <DashboardNavigation />
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser />
-      </SidebarFooter>
+      <SidebarFooter>{/* <NavUser /> */}</SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );

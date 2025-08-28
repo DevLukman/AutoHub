@@ -41,3 +41,19 @@ export async function createSeller(formData: FormData) {
     return { error: "Failed to create seller profile. Please try again." };
   }
 }
+
+export async function sellerProfile() {
+  const user = await currentUser();
+  if (!user) return null;
+
+  try {
+    const seller = await db.seller.findUnique({
+      where: { sellerId: user.id },
+      select: { isProfileComplete: true },
+    });
+    return !!seller?.isProfileComplete;
+  } catch (error) {
+    console.error(error);
+    throw new Error("there was an error with getting seller");
+  }
+}

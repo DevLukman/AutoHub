@@ -1,11 +1,11 @@
-import MainContainer from "../../components/MainContainer";
-import { carsData } from "../../lib/dataService";
-import { formatToNaria } from "../../utils/helper";
 import { LucideCircleGauge, LucideSquareArrowOutUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { CiHeart, CiLocationOn } from "react-icons/ci";
 import { GoDotFill } from "react-icons/go";
+import MainContainer from "../../components/MainContainer";
+import { carsData } from "../../lib/dataService";
+import { formatToNaria } from "../../utils/helper";
 
 export default async function Wishlist() {
   const browCars = await carsData();

@@ -14,6 +14,8 @@ const purchases = [
     purchaseDate: new Date().getDate(),
   },
 ];
+import { CiMoneyBill } from "react-icons/ci";
+import { IoBagOutline, IoCarSport } from "react-icons/io5";
 import MainContainer from "../../components/MainContainer";
 import { Badge } from "../../components/ui/badge";
 import { Card, CardDescription, CardHeader } from "../../components/ui/card";
@@ -26,8 +28,6 @@ import {
   TableRow,
 } from "../../components/ui/table";
 import { formatToNaria } from "../../utils/helper";
-import { CiMoneyBill } from "react-icons/ci";
-import { IoBagOutline, IoCarSport } from "react-icons/io5";
 
 export default function Purchases() {
   return (

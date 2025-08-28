@@ -1,4 +1,5 @@
 "use client";
+import { sellerProfile } from "@/lib/actions/createSeller";
 import { SignInButton, useUser } from "@clerk/nextjs";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import Link from "next/link";
@@ -15,7 +16,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../components/ui/sheet";
-import { sellerProfile } from "../lib/action";
 import NavDropdown from "./NavDropdown";
 import SearchButton from "./Search";
 const navLinks = [

@@ -13,7 +13,7 @@ import {
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
 
-import { useMediaQuery } from "@/utils/mediaQuery";
+import { useMediaQuery } from "../../../utils/mediaQuery";
 import { Description, FieldError, FieldGroup, Input, Label } from "./Field";
 import { composeTailwindRenderProps } from "./Primitive";
 import { type Ref, useImperativeHandle, useRef } from "react";

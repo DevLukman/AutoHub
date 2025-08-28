@@ -53,9 +53,9 @@ model CarListing {
   transmission String
   category     String
   description  String?
-  images       String?
+  images       Json
   status       String     @default("pending")
-  vin          Float
+  vin          String
   listedBy     Seller     @relation("PostedCars", fields: [listedById], references: [sellerId])
   orders       Order?
   wishList     WishList[]

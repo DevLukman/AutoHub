@@ -12,29 +12,18 @@ export async function checkUser() {
   });
   if (existingUser) return existingUser;
 
-  const newUser = await db.user.create({
-    data: {
-      clerkUserId: user.id,
-      name: `${user.firstName} ${user.lastName}`,
-      imageUrl: user.imageUrl,
-      email: user.emailAddresses[0].emailAddress,
-    },
-  });
-  return newUser;
-}
-
-export async function sellerProfile() {
-  const user = await currentUser();
-  if (!user) return null;
-
   try {
-    const seller = await db.seller.findUnique({
-      where: { sellerId: user.id },
-      select: { isProfileComplete: true },
+    const newUser = await db.user.create({
+      data: {
+        clerkUserId: user.id,
+        name: `${user.firstName} ${user.lastName}`,
+        imageUrl: user.imageUrl,
+        email: user.emailAddresses[0].emailAddress,
+      },
     });
-    return !!seller?.isProfileComplete;
+    return newUser;
   } catch (error) {
-    console.error(error);
-    throw new Error("there was an error with getting seller");
+    console.error("There was an error verfiy the user. Try again", error);
+    return { error };
   }
 }

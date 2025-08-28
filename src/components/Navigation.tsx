@@ -1,14 +1,14 @@
 "use client";
-import { SignInButton, useUser, SignOutButton } from "@clerk/nextjs";
+import { sellerProfile } from "@/lib/actions/createSeller";
+import { SignInButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IoBagOutline, IoMoonOutline } from "react-icons/io5";
 import NavDropdown from "../components/NavDropdown";
 import { Separator } from "../components/ui/separator";
-import { sellerProfile } from "../lib/action";
-import SearchButton from "./Search";
 import { NavigationLoading } from "./NavLoading";
+import SearchButton from "./Search";
 type Links = {
   link: string;
   href: string;
@@ -75,15 +75,31 @@ export default function Navigation() {
           <button className="hover:bg-main hover:text-primary cursor-pointer rounded-sm px-2 py-2 transition-all duration-300 ease-in-out">
             <IoMoonOutline size={16} />
           </button>
-
           <Separator orientation="vertical" className="mr-2" />
-          {!isSignedIn && (
-            <SignInButton>
-              <button className="bg-btnBg text-main font-inter cursor-pointer rounded-sm px-3 py-1.5 text-sm">
-                Sign in
-              </button>
-            </SignInButton>
-          )}
+          {/* {!isLoaded && isSignedIn && seller === null ? (
+            <span className="border-border bg-subPrimary text-primary h-[50px] w-[50px] rounded-full border">
+            ?
+          </span>
+          ) : (
+            <>
+              {!isSignedIn && (
+                <SignInButton>
+                  <button className="bg-btnBg text-main font-inter cursor-pointer rounded-sm px-3 py-1.5 text-sm">
+                    Sign in
+                  </button>
+                </SignInButton>
+              )}
+            </>
+          )} */}
+          <>
+            {!isSignedIn && (
+              <SignInButton>
+                <button className="bg-btnBg text-main font-inter cursor-pointer rounded-sm px-3 py-1.5 text-sm">
+                  Sign in
+                </button>
+              </SignInButton>
+            )}
+          </>
           {isSignedIn && !seller && (
             <Link
               href="/becomeSeller"
@@ -94,9 +110,6 @@ export default function Navigation() {
           )}
           {isSignedIn && seller && <NavDropdown />}
         </div>
-        {/* <div className="cursor-pointer">
-          <SignOutButton />
-        </div> */}
       </div>
     </nav>
   );
