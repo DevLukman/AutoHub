@@ -3,7 +3,6 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaBars } from "react-icons/fa";
-import { IoMoonOutline } from "react-icons/io5";
 import { Separator } from "../components/ui/separator";
 import {
   Sheet,
@@ -13,8 +12,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../components/ui/sheet";
-import SearchButton from "./Search";
 import NavAuth from "./NavAuth";
+import SearchButton from "./Search";
 const navLinks = [
   { link: "Home", href: "/" },
   { link: "Browse Cars", href: "/cars" },
@@ -79,9 +78,6 @@ export default function MobileNavigation() {
       <div>
         <div className="flex h-5 items-center gap-2">
           <SearchButton />
-          <button className="hover:bg-main cursor-pointer rounded-sm px-2 py-2 transition-all duration-300 ease-in-out">
-            <IoMoonOutline size={16} />
-          </button>
           <Separator orientation="vertical" className="mr-2" />
           <NavAuth />
         </div>

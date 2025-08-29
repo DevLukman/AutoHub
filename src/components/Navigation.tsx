@@ -1,9 +1,9 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import NavAuth from "./NavAuth";
-import { IoBagOutline, IoMoonOutline } from "react-icons/io5";
+import { IoBagOutline } from "react-icons/io5";
 import { Separator } from "../components/ui/separator";
+import NavAuth from "./NavAuth";
 import SearchButton from "./Search";
 type Links = {
   link: string;
@@ -55,10 +55,6 @@ export default function Navigation() {
           >
             <IoBagOutline size={16} aria-label="View your purchases" />
           </Link>
-
-          <button className="hover:bg-main hover:text-primary cursor-pointer rounded-sm px-2 py-2 transition-all duration-300 ease-in-out">
-            <IoMoonOutline size={16} aria-label="Toggle dark mode" />
-          </button>
 
           <Separator orientation="vertical" className="mr-2" />
           <NavAuth />

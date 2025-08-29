@@ -14,7 +14,7 @@ import { formatToNaria } from "../../utils/helper";
 export default async function Overview() {
   return (
     <section className="bg-secondary flex flex-1 flex-col gap-4 overflow-x-hidden px-6 pt-6 pb-4">
-      <h1 className="text-primary text-2xl font-[700]">Dashboard</h1>
+      <h1 className="text-primary text-2xl font-extrabold">Dashboard</h1>
       <div className="mt-1 grid grid-cols-1 gap-4 md:grid-cols-4">
         <Card className="bg-secondary border-border rounded-lg border py-4">
           <CardHeader>
@@ -77,8 +77,8 @@ export default async function Overview() {
           </CardHeader>
         </Card>
       </div>
-      <div className="mt-4">
-        <h2 className="mb-2 text-2xl font-semibold">Latest Car Listings</h2>
+      <div className="mt-3">
+        <h2 className="mb-1 text-xl font-semibold">Latest Car Listings</h2>
         <p className="text-subPrimary text-sm">
           Keep track of your recently added cars and their performance.
         </p>
