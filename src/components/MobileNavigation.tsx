@@ -1,10 +1,7 @@
 "use client";
-import { sellerProfile } from "@/lib/actions/createSeller";
-import { SignInButton, useUser } from "@clerk/nextjs";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import { IoMoonOutline } from "react-icons/io5";
 import { Separator } from "../components/ui/separator";
@@ -16,8 +13,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../components/ui/sheet";
-import NavDropdown from "./NavDropdown";
 import SearchButton from "./Search";
+import NavAuth from "./NavAuth";
 const navLinks = [
   { link: "Home", href: "/" },
   { link: "Browse Cars", href: "/cars" },
@@ -26,22 +23,7 @@ const navLinks = [
 ];
 export default function MobileNavigation() {
   const pathName = usePathname();
-  const [seller, setSeller] = useState<boolean | null>(null);
-  const { isSignedIn, isLoaded } = useUser();
-  useEffect(
-    function () {
-      async function sellerCreated() {
-        const created = await sellerProfile();
-        setSeller(created);
-      }
-      if (isSignedIn) {
-        sellerCreated();
-      }
-    },
-    [isSignedIn],
-  );
-  if (!isLoaded) return null;
-  if (isSignedIn && seller === null) return null;
+
   return (
     <nav className="inner-container mt-4 flex w-full items-center justify-between md:hidden">
       <div>
@@ -101,22 +83,7 @@ export default function MobileNavigation() {
             <IoMoonOutline size={16} />
           </button>
           <Separator orientation="vertical" className="mr-2" />
-          {!isSignedIn && (
-            <SignInButton>
-              <button className="bg-btnBg text-main font-inter cursor-pointer rounded-sm px-3 py-1.5 text-sm">
-                Sign in
-              </button>
-            </SignInButton>
-          )}
-          {isSignedIn && !seller && (
-            <Link
-              href="/becomeSeller"
-              className="bg-btnBg text-main font-inter cursor-pointer rounded-sm px-3 py-1.5 text-sm"
-            >
-              Become a seller
-            </Link>
-          )}
-          {isSignedIn && seller && <NavDropdown />}
+          <NavAuth />
         </div>
       </div>
     </nav>

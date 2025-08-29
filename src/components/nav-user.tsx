@@ -28,9 +28,13 @@ import {
 } from "../components/ui/sidebar";
 export function NavUser() {
   const { isMobile } = useSidebar();
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
   const first = user?.fullName?.split(" ")[0].split("")[0];
   const second = user?.fullName?.split(" ")[1].split("")[0];
+  if (!isLoaded)
+    return (
+      <div className="bg-subPrimary flex h-10 w-full animate-pulse items-center justify-center rounded-lg"></div>
+    );
   return (
     <SidebarMenu className="bg-main rounded-lg">
       <SidebarMenuItem>
@@ -38,7 +42,7 @@ export function NavUser() {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-mainHover hover:text-primary text-primary bg-main data-[state=open]:text-primary"
+              className="data-[state=open]:bg-mainHover border-border hover:text-primary text-primary bg-main data-[state=open]:text-primary cursor-pointer border"
             >
               <Avatar className="border-border text-primary flex h-8 w-8 items-center justify-center rounded-sm border">
                 <span className="font-inter">{`${first}${second}`}</span>
