@@ -1,3 +1,13 @@
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { FiEdit } from "react-icons/fi";
+import { MdDelete } from "react-icons/md";
+import Link from "next/link";
+import { RxDotsVertical } from "react-icons/rx";
 import { Badge } from "../../../components/ui/badge";
 import {
   Table,
@@ -8,8 +18,6 @@ import {
   TableRow,
 } from "../../../components/ui/table";
 import { formatToNaria } from "../../../utils/helper";
-import Link from "next/link";
-import { RxDotsVertical } from "react-icons/rx";
 export default function Overview() {
   return (
     <section className="bg-secondary flex flex-1 flex-col gap-4 px-6 pt-6 pb-4">
@@ -50,7 +58,7 @@ export default function Overview() {
               </TableCell>
               <TableCell>12 August 2025</TableCell>
               <TableCell>
-                <RxDotsVertical className="cursor-pointer" size={"20px"} />
+                <DropDownActions id="w9imq25x2hgts8263wgnk1x1" />
               </TableCell>
             </TableRow>
           </TableBody>
@@ -60,3 +68,46 @@ export default function Overview() {
     </section>
   );
 }
+
+function DropDownActions({ id }: { id: string }) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger className="cursor-pointer" asChild>
+        <button>
+          <span className="sr-only">Open menu</span>
+          <RxDotsVertical className="cursor-pointer" size={18} />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="center" className="bg-main">
+        <DropdownMenuItem className="focus:bg-btnBg focus:text-main text-primary">
+          <Link
+            href={`/dashboard/updateListing/${id}`}
+            className="flex items-center gap-2"
+          >
+            <FiEdit />
+            <span className="">Edit</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer text-red-500 focus:bg-red-500 focus:text-white">
+          <button className="flex cursor-pointer items-center gap-1">
+            <span>
+              <MdDelete />
+            </span>
+            <span>Delete</span>
+          </button>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+//  href={`/keyword/${keyword.id}-${keyword.name}`}
+
+//  const relatedKeyword = keywordId.split("-")[1];
+//   const decodeRealtedKeyword = relatedKeyword.includes("%")
+//     ? decodeURIComponent(relatedKeyword)
+//     : null;
+//   return {
+//     title: `CinePluse | ${decodeRealtedKeyword}`,
+//   };
+// }

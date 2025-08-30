@@ -40,7 +40,7 @@ export default function SellerForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<TSellerSchema>({
     resolver: zodResolver(SellerSchema),
     defaultValues: {
@@ -228,6 +228,7 @@ export default function SellerForm() {
             <BankDetailsModal
               onClick={handleFormSubmission}
               bankDetails={bankDetails}
+              isSubmitting={isSubmitting}
             />
           </form>
         </div>

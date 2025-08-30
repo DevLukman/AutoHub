@@ -1,7 +1,6 @@
 "use client";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
-import { useFormStatus } from "react-dom";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -17,10 +16,12 @@ import { accountInformation } from "../../../lib/Types";
 type FormActionType = {
   bankDetails: accountInformation | null;
   onClick: () => Promise<void>;
+  isSubmitting: boolean;
 };
 export default function BankDetailsModal({
   bankDetails,
   onClick,
+  isSubmitting,
 }: FormActionType) {
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -39,7 +40,22 @@ export default function BankDetailsModal({
   }
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <FormButton />
+      <AlertDialogTrigger asChild>
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          className="bg-btnBg text-secondary hover:bg-btnBg mt-8 cursor-pointer py-4 text-sm font-semibold"
+        >
+          {isSubmitting ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Becoming a seller...
+            </>
+          ) : (
+            "Become a seller"
+          )}
+        </Button>
+      </AlertDialogTrigger>
       {bankDetails && (
         <AlertDialogContent className="bg-main border-border rounded-lg border">
           <AlertDialogHeader>
@@ -90,26 +106,5 @@ export default function BankDetailsModal({
         </AlertDialogContent>
       )}
     </AlertDialog>
-  );
-}
-function FormButton() {
-  const { pending } = useFormStatus();
-  return (
-    <AlertDialogTrigger asChild>
-      <Button
-        type="submit"
-        disabled={pending}
-        className="bg-btnBg text-secondary hover:bg-btnBg mt-8 cursor-pointer py-4 text-sm font-semibold"
-      >
-        {pending ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Becoming a seller...
-          </>
-        ) : (
-          "Become a seller"
-        )}
-      </Button>
-    </AlertDialogTrigger>
   );
 }
