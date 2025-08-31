@@ -1,8 +1,8 @@
 "use server";
-import { CarListingSchema, TCarLisingSchema } from "../Types";
+import { CarListingSchema, TCarListingSchema } from "../Types";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "../prisma";
-export async function createCar(data: TCarLisingSchema) {
+export async function createCar(data: TCarListingSchema) {
   const { userId } = await auth();
   if (!userId) return { error: "Unauthorized" };
 

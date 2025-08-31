@@ -1,3 +1,4 @@
+import { CarListing } from "@/generated/prisma";
 import { z } from "zod";
 export type PaystackBankResponse = {
   message: string;
@@ -55,33 +56,12 @@ export const CarListingSchema = z.object({
     .min(2010, "Year must be 2010 or later")
     .max(new Date().getFullYear() + 10, "Invalid year"),
   mileage: z.number().min(0, "Mileage cannot be negative"),
-  condition: z.enum(["new", "used", "certified pre owned", "damaged"], {
-    message: "Select a condition",
-  }),
+  condition: z.string(),
   location: z.string().trim().min(3, "Location is required"),
-  fuel: z.enum(["petrol", "diesel", "hybrid", "electric"], {
-    message: "Slease select a fuel type",
-  }),
-  transmission: z.enum(["automatic", "manual"], {
-    message: "Please select a transmission type",
-  }),
-  category: z.enum(
-    [
-      "sedan",
-      "coupe",
-      "suv",
-      "crossover",
-      "wagon/hatchback",
-      "green car/hybrid",
-      "convertible",
-      "sports car",
-      "pickup truck",
-      "luxury car",
-    ],
-    {
-      message: "Select a category",
-    },
-  ),
+  fuel: z.string(),
+  transmission: z.string(),
+
+  category: z.string(),
   description: z
     .string()
     .max(500, "Description cannot exceed 500 characters")
@@ -98,4 +78,12 @@ export const CarListingSchema = z.object({
     .min(3, "Minimum 3 images required")
     .max(6, "Maximum 6 images allowed"),
 });
-export type TCarLisingSchema = z.infer<typeof CarListingSchema>;
+export type TCarListingSchema = z.infer<typeof CarListingSchema>;
+
+type GetCar =
+  | { success: boolean; data: CarListing | null; error?: null }
+  | { success?: null; error: string; data?: null };
+
+export type GetCarProps = {
+  updateData: GetCar;
+};

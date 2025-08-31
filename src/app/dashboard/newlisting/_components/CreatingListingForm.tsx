@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from "../../../../components/ui/select";
 import { Textarea } from "../../../../components/ui/textarea";
-import { CarListingSchema, TCarLisingSchema } from "../../../../lib/Types";
+import { CarListingSchema, TCarListingSchema } from "../../../../lib/Types";
 import { useUploadThing } from "../../../../utils/uploadthing";
 import ListingInputContainer from "../../_components/ListingInputContainer";
 type UploadedFile = {
@@ -47,7 +47,7 @@ export default function CreatingListingForm() {
     watch,
     setValue,
     formState: { errors, isSubmitting },
-  } = useForm<TCarLisingSchema>({
+  } = useForm<TCarListingSchema>({
     resolver: zodResolver(CarListingSchema),
     defaultValues: {
       year: new Date().getFullYear(),
@@ -59,15 +59,6 @@ export default function CreatingListingForm() {
 
   async function handleFileSelect(files: File[]) {
     if (!files || files.length === 0) return;
-    const validFiles = files.filter((file) => {
-      const isValidSize = file.size <= 8 * 1024 * 1024;
-      if (!isValidSize) {
-        toast.error(`${file.name} is too large (max 5MB)`);
-        return false;
-      }
-    });
-    if (validFiles.length === 0) return;
-
     const currentImages = imagesValue;
     if (currentImages.length + files.length > 6) {
       toast.error("Maximum 6 images allowed");
@@ -96,7 +87,7 @@ export default function CreatingListingForm() {
     setValue("images", newImages);
   }
 
-  async function handleCarListing(data: TCarLisingSchema) {
+  async function handleCarListing(data: TCarListingSchema) {
     const results = await createCar(data);
     if (results.success) {
       toast.success("Car listing successfully created");
@@ -450,7 +441,7 @@ export default function CreatingListingForm() {
             </span>
           </ListingInputContainer>
           {/* For Images */}
-          <div className="mt-6 flex flex-col gap-2">
+          <div className="mt-6 flex w-fit flex-col gap-2">
             <span className="text-sm font-semibold">
               {imagesValue.length}/6 images{" "}
               {imagesValue.length < 3 && "(minimum 3 required)"}

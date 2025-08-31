@@ -17,7 +17,7 @@ import {
   CardTitle,
 } from "../components/ui/card";
 
-export const blogPosts: BlogPost[] = [
+const blogPosts: BlogPost[] = [
   {
     id: 1,
     title: "World Full Year 2024: Discover the Top 500 best-selling models",

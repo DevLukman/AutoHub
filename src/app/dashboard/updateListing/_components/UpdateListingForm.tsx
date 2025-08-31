@@ -1,4 +1,5 @@
 "use client";
+import { UpdateListing } from "@/lib/actions/updateListing";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IconPaperclip } from "@intentui/icons";
 import { ChevronLeft, Loader2, Upload, X } from "lucide-react";
@@ -7,7 +8,6 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { NumberField } from "../../_components/NumberInput";
 import { Button } from "../../../../components/ui/button";
 import { Input } from "../../../../components/ui/input";
 import { Label } from "../../../../components/ui/label";
@@ -20,16 +20,22 @@ import {
   SelectValue,
 } from "../../../../components/ui/select";
 import { Textarea } from "../../../../components/ui/textarea";
-import { createCar } from "../../../../lib/actions/createCarListing";
-import { CarListingSchema, TCarLisingSchema } from "../../../../lib/Types";
+import {
+  CarListingSchema,
+  GetCarProps,
+  TCarListingSchema,
+} from "../../../../lib/Types";
 import { useUploadThing } from "../../../../utils/uploadthing";
 import ListingInputContainer from "../../_components/ListingInputContainer";
+import { NumberField } from "../../_components/NumberInput";
 type UploadedFile = {
   url: string;
   key: string;
   name: string;
 };
-export default function UpdateListingForm() {
+
+export default function UpdateListingForm({ updateData }: GetCarProps) {
+  const results = updateData.data;
   const { startUpload, isUploading } = useUploadThing("imageUploader", {
     onClientUploadComplete: () => {
       toast.success("Image upload sucessful");
@@ -47,10 +53,12 @@ export default function UpdateListingForm() {
     watch,
     setValue,
     formState: { errors, isSubmitting },
-  } = useForm<TCarLisingSchema>({
+  } = useForm<TCarListingSchema>({
     resolver: zodResolver(CarListingSchema),
     defaultValues: {
-      year: new Date().getFullYear(),
+      ...results,
+      description: results?.description || undefined,
+      images: results?.images as { url: string; key: string; name: string }[],
     },
   });
 
@@ -58,16 +66,7 @@ export default function UpdateListingForm() {
   const imagesValue = watch("images") || [];
 
   async function handleFileSelect(files: File[]) {
-    if (!files || files.length === 0) return;
-    const validFiles = files.filter((file) => {
-      const isValidSize = file.size <= 8 * 1024 * 1024;
-      if (!isValidSize) {
-        toast.error(`${file.name} is too large (max 5MB)`);
-        return false;
-      }
-    });
-    if (validFiles.length === 0) return;
-
+    if (!files || files.length === 0 || files.length < 3) return;
     const currentImages = imagesValue;
     if (currentImages.length + files.length > 6) {
       toast.error("Maximum 6 images allowed");
@@ -96,15 +95,16 @@ export default function UpdateListingForm() {
     setValue("images", newImages);
   }
 
-  async function handleCarListing(data: TCarLisingSchema) {
-    console.log(data);
-    // const results = await createCar(data);
-    // if (results.success) {
-    //   toast.success("Car listing successfully created");
-    //   redirect("/dashboard/listings");
-    // } else {
-    //   toast.error(results.error);
-    // }
+  async function handleCarListing(data: TCarListingSchema) {
+    const results = updateData.data;
+    const id = results?.id as string;
+    const updateResults = await UpdateListing({ id, data });
+    if (updateResults.success) {
+      toast.success("Car successfully updated");
+      redirect("/dashboard/listings");
+    } else {
+      toast.error(updateResults.error);
+    }
   }
   return (
     <section className="bg-secondary flex flex-1 flex-col gap-4 px-6 pt-6 pb-8">
@@ -118,10 +118,10 @@ export default function UpdateListingForm() {
         <span className="font-inter text-white">Back</span>
       </Link>
       <div>
-        <h1 className="mb-2 text-2xl font-extrabold">Create New Listing</h1>
+        <h1 className="mb-2 text-2xl font-extrabold">Update Listing</h1>
         <p className="text-subPrimary text-sm">
           Fill out the form below with accurate details about your vechicle to
-          create a new listing.
+          upadate listing.
         </p>
       </div>
       <div className="mt-3">
@@ -451,7 +451,7 @@ export default function UpdateListingForm() {
             </span>
           </ListingInputContainer>
           {/* For Images */}
-          <div className="mt-6 flex flex-col gap-2">
+          <div className="mt-6 flex w-fit flex-col gap-2">
             <span className="text-sm font-semibold">
               {imagesValue.length}/6 images{" "}
               {imagesValue.length < 3 && "(minimum 3 required)"}
@@ -533,10 +533,10 @@ export default function UpdateListingForm() {
             {isSubmitting ? (
               <>
                 <Loader2 className="mr-1 h-4 w-4 animate-spin" />
-                Creating Listing
+                Upadate Listing
               </>
             ) : (
-              "Create Listing"
+              "Updating Listing"
             )}
           </Button>
         </form>

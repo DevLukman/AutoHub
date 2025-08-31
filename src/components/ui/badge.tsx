@@ -12,12 +12,15 @@ const badgeVariants = cva(
         default:
           "border-transparent bg-primary text-primary-foreground [a&]:hover:bg-primary/90",
         secondary:
-          "border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90",
+          "border-transparent px-4 font-semibold uppercase py-1 bg-secondary text-primary border border-[#02150f] [a&]:hover:bg-secondary/90",
         destructive:
-          "border-transparent bg-destructive text-primary [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+          "border-transparent bg-destructive px-4 font-semibold uppercase py-1 text-primary [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
           "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
-        sucess: "bg-[#02150F] border-0 text-[#00D492] capitalize",
+        sucess:
+          "bg-[#02150F] border-0 px-4 font-semibold uppercase py-1 text-[#00D492] uppercase",
+        pending:
+          "bg-yellow-300 text-main px-4 font-semibold uppercase py-1 font-semibold px-2 ",
       },
     },
     defaultVariants: {

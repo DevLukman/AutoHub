@@ -60,8 +60,11 @@ model CarListing {
   orders       Order?
   wishList     WishList[]
 
-  @@index([make, model, year, location, fuel, transmission, category, status])
+  @@index([make, model, year, location, fuel, transmission, category, status, listedById])
 }
+
+
+
 
 model WishList {
   id           String     @id @default(uuid())

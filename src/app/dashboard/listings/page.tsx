@@ -1,14 +1,7 @@
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { FiEdit } from "react-icons/fi";
-import { MdDelete } from "react-icons/md";
+import { carListing } from "../../../lib/actions/getCarListing";
 import Link from "next/link";
-import { RxDotsVertical } from "react-icons/rx";
 import { Badge } from "../../../components/ui/badge";
+import DropDownAction from "./components/DropDownActions";
 import {
   Table,
   TableBody,
@@ -18,7 +11,10 @@ import {
   TableRow,
 } from "../../../components/ui/table";
 import { formatToNaria } from "../../../utils/helper";
-export default function Overview() {
+
+export default async function Page() {
+  const carListingData = await carListing();
+
   return (
     <section className="bg-secondary flex flex-1 flex-col gap-4 px-6 pt-6 pb-4">
       <div className="flex w-full items-center justify-between">
@@ -30,11 +26,12 @@ export default function Overview() {
           Add new listing
         </Link>
       </div>
+
       <div className="mt-10 w-full">
         <Table>
           <TableHeader className="bg-main">
-            <TableRow className="">
-              <TableHead> Id</TableHead>
+            <TableRow>
+              <TableHead>Id</TableHead>
               <TableHead>Price</TableHead>
               <TableHead>Make</TableHead>
               <TableHead>Model</TableHead>
@@ -45,69 +42,92 @@ export default function Overview() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell>w9imq25x2hgts8263wgnk1x1</TableCell>
-              <TableCell className="font-semibold">
-                {formatToNaria(57100000)}
-              </TableCell>
-              <TableCell>Lexus</TableCell>
-              <TableCell>Lx 700</TableCell>
-              <TableCell> 2024</TableCell>
-              <TableCell>
-                <Badge variant={"sucess"}>Active</Badge>
-              </TableCell>
-              <TableCell>12 August 2025</TableCell>
-              <TableCell>
-                <DropDownActions id="w9imq25x2hgts8263wgnk1x1" />
-              </TableCell>
-            </TableRow>
+            {carListingData.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={8} className="h-64 text-center">
+                  <div className="flex w-full flex-col items-center justify-center py-8">
+                    <div className="mb-4">
+                      <svg
+                        className="text-subPrimary mx-auto h-12 w-12"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1.5}
+                          d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1.5}
+                          d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0M15 17a2 2 0 104 0"
+                        />
+                      </svg>
+                    </div>
+                    <h2 className="text-primary mb-2 text-lg font-semibold">
+                      No car listings yet
+                    </h2>
+                    <p className="text-subPrimary mb-6 text-center text-sm">
+                      Get started by creating your first car listing.
+                    </p>
+                    <Link
+                      href={"/dashboard/newlisting"}
+                      className="bg-btnBg text-secondary hover:bg-opacity-90 rounded-lg px-4 py-2 text-sm font-medium transition-colors"
+                    >
+                      Create your listing
+                    </Link>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ) : (
+              carListingData.map((car) => (
+                <TableRow key={car.id}>
+                  <TableCell>{car.id}</TableCell>
+                  <TableCell className="font-medium">
+                    {formatToNaria(car.price)}
+                  </TableCell>
+                  <TableCell>{car.make}</TableCell>
+                  <TableCell>{car.model}</TableCell>
+                  <TableCell>{car.year}</TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={`${
+                        car.status === "pending"
+                          ? "pending"
+                          : car.status === "active"
+                            ? "sucess"
+                            : car.status === "sold"
+                              ? "secondary"
+                              : "destructive"
+                      }`}
+                    >
+                      {car.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    {car.createdAt.toLocaleDateString("en-NG", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </TableCell>
+                  <TableCell>
+                    {car.status === "sold" ? (
+                      ""
+                    ) : (
+                      <DropDownAction id={car.id} />
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>
-      <div></div>
     </section>
   );
 }
-
-function DropDownActions({ id }: { id: string }) {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger className="cursor-pointer" asChild>
-        <button>
-          <span className="sr-only">Open menu</span>
-          <RxDotsVertical className="cursor-pointer" size={18} />
-        </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="center" className="bg-main">
-        <DropdownMenuItem className="focus:bg-btnBg focus:text-main text-primary">
-          <Link
-            href={`/dashboard/updateListing/${id}`}
-            className="flex items-center gap-2"
-          >
-            <FiEdit />
-            <span className="">Edit</span>
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer text-red-500 focus:bg-red-500 focus:text-white">
-          <button className="flex cursor-pointer items-center gap-1">
-            <span>
-              <MdDelete />
-            </span>
-            <span>Delete</span>
-          </button>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-}
-
-//  href={`/keyword/${keyword.id}-${keyword.name}`}
-
-//  const relatedKeyword = keywordId.split("-")[1];
-//   const decodeRealtedKeyword = relatedKeyword.includes("%")
-//     ? decodeURIComponent(relatedKeyword)
-//     : null;
-//   return {
-//     title: `CinePluse | ${decodeRealtedKeyword}`,
-//   };
-// }

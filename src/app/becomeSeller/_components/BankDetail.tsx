@@ -27,7 +27,6 @@ export default function BankDetailsModal({
   const [isLoading, setIsLoading] = useState(false);
   async function handleContinue(e: React.MouseEvent) {
     e.preventDefault();
-
     try {
       setIsLoading(true);
       await onClick();
