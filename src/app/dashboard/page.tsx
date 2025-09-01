@@ -89,7 +89,7 @@ export default async function Overview() {
           Keep track of your recently added cars and their performance.
         </p>
 
-        <div className="mt-10 w-full">
+        <div className="mt-5 w-full">
           <Table>
             <TableHeader className="bg-main">
               <TableRow>
