@@ -1,3 +1,5 @@
+import { carListing, listingStatus } from "@/lib/actions/getCarListing";
+import Link from "next/link";
 import { CiMoneyBill } from "react-icons/ci";
 import { IoBagOutline, IoCarSport } from "react-icons/io5";
 import { Badge } from "../../components/ui/badge";
@@ -11,10 +13,11 @@ import {
   TableRow,
 } from "../../components/ui/table";
 import { formatToNaria } from "../../utils/helper";
-import { carListing } from "@/lib/actions/getCarListing";
-import Link from "next/link";
+import { getCarStatus } from "@/lib/actions/getRevenue";
 export default async function Overview() {
-  const carListingData = await carListing();
+  const { data } = await carListing();
+  const { totalOrders, totalRevenue, carListed, activeCars } =
+    await getCarStatus();
   return (
     <section className="bg-secondary flex flex-1 flex-col gap-4 overflow-x-hidden px-6 pt-6 pb-4">
       <h1 className="text-primary text-2xl font-extrabold">Dashboard</h1>
@@ -29,7 +32,7 @@ export default async function Overview() {
             </CardDescription>
             <CardDescription>
               <p className="text-primary mt-3 text-lg font-extrabold md:text-xl lg:text-2xl">
-                {formatToNaria(0)}
+                {formatToNaria(totalRevenue || 0)}
               </p>
             </CardDescription>
           </CardHeader>
@@ -44,7 +47,7 @@ export default async function Overview() {
             </CardDescription>
             <CardDescription>
               <p className="text-primary mt-2 text-lg font-extrabold md:text-xl lg:text-2xl">
-                0
+                {activeCars}
               </p>
             </CardDescription>
           </CardHeader>
@@ -59,7 +62,7 @@ export default async function Overview() {
             </CardDescription>
             <CardDescription>
               <p className="text-primary mt-2 text-lg font-extrabold md:text-xl lg:text-2xl">
-                0
+                {carListed}
               </p>
             </CardDescription>
           </CardHeader>
@@ -74,7 +77,7 @@ export default async function Overview() {
             </CardDescription>
             <CardDescription>
               <p className="text-primary mt-2 text-lg font-extrabold md:text-xl lg:text-2xl">
-                0
+                {totalOrders}
               </p>
             </CardDescription>
           </CardHeader>
@@ -101,7 +104,7 @@ export default async function Overview() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {carListingData.length === 0 ? (
+              {data.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={8} className="h-64 text-center">
                     <div className="flex w-full flex-col items-center justify-center py-8">
@@ -143,7 +146,7 @@ export default async function Overview() {
                   </TableCell>
                 </TableRow>
               ) : (
-                carListingData.map((car) => (
+                data.map((car) => (
                   <TableRow key={car.id}>
                     <TableCell>{car.id}</TableCell>
                     <TableCell className="font-medium">

@@ -108,4 +108,5 @@ model Purchases {
   createdAt     DateTime @default(now())
   status        String   @default("completed")
   user          User     @relation(fields: [userId], references: [clerkUserId], onDelete: Cascade)
+  @@index([userId])
 }

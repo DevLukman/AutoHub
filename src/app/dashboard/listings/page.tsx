@@ -13,8 +13,7 @@ import {
 import { formatToNaria } from "../../../utils/helper";
 
 export default async function Page() {
-  const carListingData = await carListing();
-
+  const { data } = await carListing();
   return (
     <section className="bg-secondary flex flex-1 flex-col gap-4 px-6 pt-6 pb-4">
       <div className="flex w-full items-center justify-between">
@@ -42,7 +41,7 @@ export default async function Page() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {carListingData.length === 0 ? (
+            {data.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={8} className="h-64 text-center">
                   <div className="flex w-full flex-col items-center justify-center py-8">
@@ -84,7 +83,7 @@ export default async function Page() {
                 </TableCell>
               </TableRow>
             ) : (
-              carListingData.map((car) => (
+              data.map((car) => (
                 <TableRow key={car.id}>
                   <TableCell>{car.id}</TableCell>
                   <TableCell className="font-medium">
