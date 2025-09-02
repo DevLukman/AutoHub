@@ -20,7 +20,7 @@ model User {
   purchases   Purchases[]
   wishList    WishList[]
 
-  @@index([clerkUserId])
+  @@index([clerkUserId, email, name])
 }
 
 model Seller {

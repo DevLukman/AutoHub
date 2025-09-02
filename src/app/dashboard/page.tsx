@@ -1,4 +1,5 @@
-import { carListing, listingStatus } from "@/lib/actions/getCarListing";
+import { carListing } from "../../lib/actions/getCarListing";
+import { getCarStatus } from "@/lib/actions/getStatus";
 import Link from "next/link";
 import { CiMoneyBill } from "react-icons/ci";
 import { IoBagOutline, IoCarSport } from "react-icons/io5";
@@ -13,9 +14,14 @@ import {
   TableRow,
 } from "../../components/ui/table";
 import { formatToNaria } from "../../utils/helper";
-import { getCarStatus } from "@/lib/actions/getRevenue";
-export default async function Overview() {
-  const { data } = await carListing();
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+type PageProps = {
+  searchParams: Promise<{ page?: string }>;
+};
+export default async function Overview({ searchParams }: PageProps) {
+  const params = await searchParams;
+  const page = Math.max(1, Number(params.page) || 1);
+  const { data, pagination } = await carListing(page);
   const { totalOrders, totalRevenue, carListed, activeCars } =
     await getCarStatus();
   return (
@@ -182,6 +188,49 @@ export default async function Overview() {
               )}
             </TableBody>
           </Table>
+          {pagination.totalCount > 0 && (
+            <div className="mt-6 flex items-center justify-between">
+              <Link
+                href={
+                  pagination.hasPrevious
+                    ? `/dashboard?page=${pagination.currentPage - 1}`
+                    : "#"
+                }
+                className={`flex items-center gap-2 text-sm ${
+                  pagination.hasPrevious
+                    ? "text-subPrimary hover:text-primary"
+                    : "cursor-not-allowed text-gray-400"
+                }`}
+                aria-disabled={!pagination.hasPrevious}
+              >
+                <span>
+                  <ChevronLeftIcon size={14} />
+                </span>
+                <span> Previous</span>
+              </Link>
+              <span className="text-subPrimary text-sm">
+                Page {pagination.currentPage} of {pagination.totalPages}
+              </span>
+              <Link
+                href={
+                  pagination.hasNext
+                    ? `/dashboard?page=${pagination.currentPage + 1}`
+                    : "#"
+                }
+                className={`flex items-center gap-2 text-sm ${
+                  pagination.hasNext
+                    ? "text-subPrimary hover:text-primary"
+                    : "cursor-not-allowed text-gray-400"
+                }`}
+                aria-disabled={!pagination.hasNext}
+              >
+                <span>Next</span>
+                <span>
+                  <ChevronRightIcon size={14} />
+                </span>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </section>

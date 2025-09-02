@@ -11,9 +11,14 @@ import {
   TableRow,
 } from "../../../components/ui/table";
 import { formatToNaria } from "../../../utils/helper";
-
-export default async function Page() {
-  const { data } = await carListing();
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+type PageProps = {
+  searchParams: Promise<{ page?: string }>;
+};
+export default async function Page({ searchParams }: PageProps) {
+  const params = await searchParams;
+  const page = Math.max(1, Number(params.page) || 1);
+  const { data, pagination } = await carListing(page);
   return (
     <section className="bg-secondary flex flex-1 flex-col gap-4 px-6 pt-6 pb-4">
       <div className="flex w-full items-center justify-between">
@@ -26,7 +31,7 @@ export default async function Page() {
         </Link>
       </div>
 
-      <div className="mt-10 w-full">
+      <div className="mt-6 w-full">
         <Table>
           <TableHeader className="bg-main">
             <TableRow>
@@ -126,6 +131,49 @@ export default async function Page() {
             )}
           </TableBody>
         </Table>
+        {pagination.totalCount > 0 && (
+          <div className="mt-6 flex items-center justify-between">
+            <Link
+              href={
+                pagination.hasPrevious
+                  ? `/dashboard/listings?page=${pagination.currentPage - 1}`
+                  : "#"
+              }
+              className={`flex items-center gap-2 text-sm ${
+                pagination.hasPrevious
+                  ? "text-subPrimary hover:text-primary"
+                  : "cursor-not-allowed text-gray-400"
+              }`}
+              aria-disabled={!pagination.hasPrevious}
+            >
+              <span>
+                <ChevronLeftIcon size={14} />
+              </span>
+              <span> Previous</span>
+            </Link>
+            <span className="text-subPrimary text-sm">
+              Page {pagination.currentPage} of {pagination.totalPages}
+            </span>
+            <Link
+              href={
+                pagination.hasNext
+                  ? `/dashboard/listings?page=${pagination.currentPage + 1}`
+                  : "#"
+              }
+              className={`flex items-center gap-2 text-sm ${
+                pagination.hasNext
+                  ? "text-subPrimary hover:text-primary"
+                  : "cursor-not-allowed text-gray-400"
+              }`}
+              aria-disabled={!pagination.hasNext}
+            >
+              <span>Next</span>
+              <span>
+                <ChevronRightIcon size={14} />
+              </span>
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );

@@ -1,7 +1,7 @@
-import { Search } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon, Search } from "lucide-react";
 import Form from "next/form";
+import Link from "next/link";
 import { Badge } from "../../../components/ui/badge";
-import { Orders } from "../../../lib/actions/getOrder";
 import {
   Table,
   TableBody,
@@ -10,26 +10,36 @@ import {
   TableHeader,
   TableRow,
 } from "../../../components/ui/table";
+import { Orders } from "../../../lib/actions/getOrder";
 import { formatToNaria } from "../../../utils/helper";
-export default async function Order() {
-  const { data } = await Orders();
-
+type PageProps = {
+  searchParams: Promise<{
+    page?: string;
+    query?: string;
+  }>;
+};
+export default async function Order({ searchParams }: PageProps) {
+  const parmas = await searchParams;
+  const search = parmas.query;
+  const page = Math.max(1, Number(parmas.page) || 1);
+  const { data, pagination } = await Orders(search, page);
   return (
     <section className="bg-secondary flex flex-1 flex-col gap-4 px-6 pt-6 pb-4">
       <h1 className="text-primary text-2xl font-[700]">Orders</h1>
       <Form
-        action={"/"}
+        action={"/dashboard/orders"}
         className="relative mt-6 flex w-full items-center gap-3 text-sm"
       >
         <Search className="text-subPrimary absolute left-[2%]" size={"17px"} />
         <input
           className="border-border placeholder:text-subPrimary flex-1 rounded-sm border px-11 py-2.5"
           placeholder="Search..."
+          name="query"
         ></input>
         <button
-          type="submit"
-          className="bg-btnBg text-secondary cursor-pointer rounded-sm px-4 py-2.5 text-sm disabled:opacity-40"
           disabled={data.length === 0}
+          type="submit"
+          className="bg-btnBg text-secondary cursor-pointer rounded-sm px-4 py-2.5 text-sm disabled:cursor-not-allowed disabled:opacity-40"
         >
           Search
         </button>
@@ -97,6 +107,50 @@ export default async function Order() {
             )}
           </TableBody>
         </Table>
+
+        {pagination.totalCount > 0 && (
+          <div className="mt-6 flex items-center justify-between">
+            <Link
+              href={
+                pagination.hasPrevious
+                  ? `/dashboard/orders?page=${pagination.currentPage - 1}`
+                  : "#"
+              }
+              className={`flex items-center gap-2 text-sm ${
+                pagination.hasPrevious
+                  ? "text-subPrimary hover:text-primary"
+                  : "cursor-not-allowed text-gray-400"
+              }`}
+              aria-disabled={!pagination.hasPrevious}
+            >
+              <span>
+                <ChevronLeftIcon size={14} />
+              </span>
+              <span> Previous</span>
+            </Link>
+            <span className="text-subPrimary text-sm">
+              Page {pagination.currentPage} of {pagination.totalPages}
+            </span>
+            <Link
+              href={
+                pagination.hasNext
+                  ? `/dashboard/orders?page=${pagination.currentPage + 1}`
+                  : "#"
+              }
+              className={`flex items-center gap-2 text-sm ${
+                pagination.hasNext
+                  ? "text-subPrimary hover:text-primary"
+                  : "cursor-not-allowed text-gray-400"
+              }`}
+              aria-disabled={!pagination.hasNext}
+            >
+              <span>Next</span>
+              <span>
+                <ChevronRightIcon size={14} />
+              </span>
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );
