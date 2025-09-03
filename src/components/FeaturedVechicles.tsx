@@ -1,4 +1,4 @@
-import { carsData } from "../lib/dataService";
+import { db } from "../lib/prisma";
 import { formatToNaria } from "../utils/helper";
 import { Map } from "lucide-react";
 import Image from "next/image";
@@ -6,19 +6,25 @@ import Link from "next/link";
 import { CiHeart } from "react-icons/ci";
 import { GoDotFill } from "react-icons/go";
 export default async function FeaturedVechicles() {
-  const featruedCars = await carsData();
+  const results = await db.carListing.findMany({
+    include: { images: { select: { url: true } } },
+    orderBy: {
+      id: "desc",
+    },
+    take: 8,
+  });
   return (
-    <div className="mt-[30px] grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-      {featruedCars.map((cars, index) => (
+    <div className="mt-[30px] grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+      {results.map((cars) => (
         <div
           className="border-border hover:border-hover relative rounded-lg border transition-all duration-300 ease-in-out"
-          key={cars.sellerId}
+          key={cars.id}
         >
-          <Link href={`/cars/${cars.sellerId}`} className="">
-            <div className="relative h-[12.5rem] w-full">
+          <Link href={`/cars/${cars.id}`} className="">
+            <div className="relative h-[11.5rem] w-full">
               <Image
-                src={cars.images[index]}
-                alt={cars.fuelType}
+                src={cars.images[1].url}
+                alt={cars.make}
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 fill
                 priority
@@ -27,7 +33,7 @@ export default async function FeaturedVechicles() {
             </div>
 
             <div className="flex flex-col gap-2 px-4 py-4">
-              <p className="text-primary truncate text-lg font-semibold">
+              <p className="text-primary truncate text-xl font-bold">
                 {`${cars.make} ${cars.model}`}
               </p>
               <p className="text-subPrimary flex items-center gap-2 text-sm">
@@ -39,15 +45,15 @@ export default async function FeaturedVechicles() {
                 <span>
                   <GoDotFill size={"10px"} />
                 </span>
-                <span>{cars.transmission}</span>
+                <span className="capitalize">{cars.transmission}</span>
               </p>
               <p className="text-subPrimary flex items-center gap-2 text-sm">
                 <span>
                   <Map size={"14px"} />
                 </span>
-                <span>{cars.location}</span>
+                <span>{cars.location}, Nigeria</span>
               </p>
-              <p className="text-primary text-lg font-semibold">
+              <p className="text-primary text-xl font-bold">
                 {formatToNaria(cars.price)}
               </p>
             </div>

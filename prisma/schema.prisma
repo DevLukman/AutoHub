@@ -53,18 +53,24 @@ model CarListing {
   transmission String
   category     String
   description  String?
-  images       Json
+  images       CarImage[]
   status       String     @default("pending")
   vin          String
   listedBy     Seller     @relation("PostedCars", fields: [listedById], references: [sellerId])
   orders       Order?
   wishList     WishList[]
-
   @@index([make, model, year, location, fuel, transmission, category, status, listedById])
 }
-
-
-
+model CarImage {
+  id          String     @id @default(uuid())
+  url         String
+  key         String
+  name        String
+  carId       String
+  car         CarListing @relation(fields: [carId], references: [id], onDelete: Cascade)
+  createdAt   DateTime   @default(now())
+  @@index([carId])
+}
 
 model WishList {
   id           String     @id @default(uuid())
@@ -110,3 +116,6 @@ model Purchases {
   user          User     @relation(fields: [userId], references: [clerkUserId], onDelete: Cascade)
   @@index([userId])
 }
+
+
+

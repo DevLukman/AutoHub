@@ -3,6 +3,7 @@ export function formatToNaria(amount: number, locale: string = "en-NG") {
     style: "currency",
     currency: "NGN",
     currencyDisplay: "symbol",
-    minimumFractionDigits: 0,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   }).format(amount);
 }

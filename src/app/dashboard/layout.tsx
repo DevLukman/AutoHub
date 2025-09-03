@@ -13,6 +13,7 @@ export default async function DashboardLayout({
   if (!alreadyASeller) {
     redirect("/becomeSeller");
   }
+
   return (
     <SidebarProvider>
       <DashboardSidebar />

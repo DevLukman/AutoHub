@@ -10,6 +10,7 @@ export async function GetCarToUpdate(id: string) {
   try {
     const data = await db.carListing.findUnique({
       where: { id: id },
+      include: { images: true },
     });
     return { success: true, data };
   } catch (error) {
@@ -51,6 +52,7 @@ export async function UpdateListing({
       data: {
         ...schemaValidation.data,
         status: "pending",
+        images: {},
       },
     });
     return { success: true, updateData };

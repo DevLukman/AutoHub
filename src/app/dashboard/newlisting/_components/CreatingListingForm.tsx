@@ -24,6 +24,7 @@ import { Textarea } from "../../../../components/ui/textarea";
 import { CarListingSchema, TCarListingSchema } from "../../../../lib/Types";
 import { useUploadThing } from "../../../../utils/uploadthing";
 import ListingInputContainer from "../../_components/ListingInputContainer";
+import { useTransition } from "react";
 type UploadedFile = {
   url: string;
   key: string;
@@ -88,6 +89,7 @@ export default function CreatingListingForm() {
   }
 
   async function handleCarListing(data: TCarListingSchema) {
+    console.log(data);
     const results = await createCar(data);
     if (results.success) {
       toast.success("Car listing successfully created");

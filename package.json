@@ -6,8 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "server": "json-server --watch data/db.json --port 8000"
+    "lint": "next lint"
   },
   "dependencies": {
     "@adobe/react-spectrum": "^3.43.0",

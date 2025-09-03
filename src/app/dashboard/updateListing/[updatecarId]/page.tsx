@@ -7,5 +7,6 @@ export default async function Update({
 }) {
   const { updatecarId } = await params;
   const data = await GetCarToUpdate(updatecarId);
+  console.log(data.data?.images);
   return <UpdateListingForm updateData={data} />;
 }

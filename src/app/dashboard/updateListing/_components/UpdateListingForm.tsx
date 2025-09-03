@@ -1,5 +1,4 @@
 "use client";
-import { UpdateListing } from "@/lib/actions/updateListing";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IconPaperclip } from "@intentui/icons";
 import { ChevronLeft, Loader2, Upload, X } from "lucide-react";
@@ -20,6 +19,7 @@ import {
   SelectValue,
 } from "../../../../components/ui/select";
 import { Textarea } from "../../../../components/ui/textarea";
+import { UpdateListing } from "../../../../lib/actions/updateListing";
 import {
   CarListingSchema,
   GetCarProps,
@@ -58,7 +58,7 @@ export default function UpdateListingForm({ updateData }: GetCarProps) {
     defaultValues: {
       ...results,
       description: results?.description || undefined,
-      images: results?.images as { url: string; key: string; name: string }[],
+      images: results?.images,
     },
   });
 

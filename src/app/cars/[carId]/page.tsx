@@ -4,25 +4,6 @@ import Link from "next/link";
 type Params = {
   params: Promise<{ carId: string }>;
 };
-const details = {
-  images: [
-    "https://images.unsplash.com/photo-1469285994282-454ceb49e63c",
-    "https://images.unsplash.com/photo-1591076366941-20154e816ce3",
-    "https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e",
-    "https://images.unsplash.com/photo-1642479950692-f9894104e741",
-  ],
-  make: "Aston Martin",
-  model: "DBX707",
-  year: 2024,
-  price: 16500000000,
-  condition: "new",
-  mileage: "0",
-  transmission: "automatic",
-  fuelType: "petrol",
-  category: "suv",
-  location: "Abuja, Nigeria",
-  VIN: "5FNRL5H49BB123456",
-};
 
 import MainContainer from "../../../components/MainContainer";
 import { Button } from "../../../components/ui/button";
@@ -37,22 +18,15 @@ import {
 import { Separator } from "../../../components/ui/separator";
 import { formatToNaria } from "../../../utils/helper";
 import Image from "next/image";
+
 import { CiHeart, CiShoppingCart } from "react-icons/ci";
+import { db } from "../../../lib/prisma";
 export default async function Page({ params }: Params) {
-  const {
-    images,
-    location,
-    category,
-    mileage,
-    VIN,
-    transmission,
-    fuelType,
-    year,
-    make,
-    model,
-    price,
-    condition,
-  } = details;
+  const { carId } = await params;
+  const detail = await db.carListing.findUnique({
+    where: { id: carId },
+    include: { images: true, listedBy: true },
+  });
   return (
     <MainContainer>
       <section className="inner-container">
@@ -77,11 +51,11 @@ export default async function Page({ params }: Params) {
               }}
             >
               <CarouselContent>
-                {images.map((image, index) => (
+                {detail?.images.map((image, index) => (
                   <CarouselItem key={index}>
                     <div className="relative h-[18.75rem] sm:h-[25rem] md:h-[28.13rem] xl:h-[31.25rem]">
                       <Image
-                        src={image}
+                        src={image.url}
                         alt="cars"
                         fill
                         priority
@@ -101,11 +75,11 @@ export default async function Page({ params }: Params) {
           <div className="w-full">
             <div className="mt-8 md:mt-0">
               <h1 className="mb-2 text-lg font-medium md:text-2xl">
-                {year} {make}
-                {model}
+                {detail?.year} {detail?.make}
+                {detail?.model}
               </h1>
               <h2 className="text-lg font-bold md:text-2xl">
-                {formatToNaria(price)}
+                {formatToNaria(detail?.price ?? 0)}
               </h2>
             </div>
             <div className="mt-2 grid grid-cols-1 text-base/6 sm:grid-cols-[min(50%,calc(var(--spacing)*80))_auto] sm:text-sm/6">
@@ -113,49 +87,49 @@ export default async function Page({ params }: Params) {
                 Mileage
               </p>
               <p className="text-primary border-border pt-1 pb-3 sm:border-t sm:py-3 sm:nth-2:border-none">
-                {`${mileage}km`}
+                {`${detail?.mileage}km`}
               </p>
 
               <p className="text-subPrimary border-border col-start-1 border-t pt-3 first:border-none sm:py-3">
                 Condition
               </p>
               <p className="text-primary border-border pt-1 pb-3 capitalize sm:border-t sm:py-3 sm:nth-2:border-none">
-                {condition}
+                {detail?.condition}
               </p>
 
               <p className="text-subPrimary border-border col-start-1 border-t pt-3 first:border-none sm:py-3">
                 Transmission
               </p>
               <p className="text-primary border-border pt-1 pb-3 capitalize sm:border-t sm:py-3 sm:nth-2:border-none">
-                {transmission}
+                {detail?.transmission}
               </p>
 
               <p className="text-subPrimary border-border col-start-1 border-t pt-3 first:border-none sm:py-3">
                 Fuel Type
               </p>
               <p className="text-primary border-border pt-1 pb-3 capitalize sm:border-t sm:py-3 sm:nth-2:border-none">
-                {fuelType}
+                {detail?.fuel}
               </p>
 
               <p className="text-subPrimary border-border col-start-1 border-t pt-3 first:border-none sm:py-3">
                 Category
               </p>
               <p className="text-primary border-border pt-1 pb-3 capitalize sm:border-t sm:py-3 sm:nth-2:border-none">
-                {category}
+                {detail?.category}
               </p>
 
               <p className="text-subPrimary border-border col-start-1 border-t pt-3 first:border-none sm:py-3">
                 Location
               </p>
               <p className="text-primary border-border pt-1 pb-3 capitalize sm:border-t sm:py-3 sm:nth-2:border-none">
-                {location}
+                {detail?.location}
               </p>
 
               <p className="text-subPrimary border-border col-start-1 border-t pt-3 first:border-none sm:py-3">
                 VIN
               </p>
               <p className="text-primary border-border pt-1 pb-3 capitalize sm:border-t sm:py-3 sm:nth-2:border-none">
-                {VIN}
+                {detail?.vin}
               </p>
             </div>
             <div className="mt-6 flex flex-col gap-4 md:flex-row">
@@ -178,19 +152,19 @@ export default async function Page({ params }: Params) {
                 Business Name
               </p>
               <p className="text-primary border-border pt-1 pb-3 sm:border-t sm:py-3 sm:nth-2:border-none">
-                Lukas Flick
+                {detail?.listedBy.businessName}
               </p>
               <p className="text-subPrimary border-border col-start-1 border-t pt-3 first:border-none sm:py-3">
                 Contact Email
               </p>
               <p className="text-primary border-border pt-1 pb-3 sm:border-t sm:py-3 sm:nth-2:border-none">
-                LukasFlick@WTF
+                {detail?.listedBy.businessEmail}
               </p>
               <p className="text-subPrimary border-border col-start-1 border-t pt-3 first:border-none sm:py-3">
                 Phone Number
               </p>
               <p className="text-primary border-border pt-1 pb-3 sm:border-t sm:py-3 sm:nth-2:border-none">
-                080105776132
+                {detail?.listedBy.businessPhone}
               </p>
             </div>
           </Card>

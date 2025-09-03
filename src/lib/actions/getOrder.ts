@@ -1,8 +1,8 @@
 "use server";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "../prisma";
-import { PAGE_SIZE } from "@/utils/Constants";
-const PLATFORM_FEE_PERCENTAGE: number = 0.02;
+import { PAGE_SIZE, PLATFORM_FEE_PERCENTAGE } from "@/utils/Constants";
+
 export async function Orders(search: string = "", page: number = 1) {
   const { userId } = await auth();
   if (!userId) {

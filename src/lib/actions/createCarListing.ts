@@ -5,7 +5,6 @@ import { db } from "../prisma";
 export async function createCar(data: TCarListingSchema) {
   const { userId } = await auth();
   if (!userId) return { error: "Unauthorized" };
-
   const carListingData = {
     model: data.model,
     make: data.make,
@@ -15,11 +14,11 @@ export async function createCar(data: TCarListingSchema) {
     description: data.description,
     category: data.category,
     location: data.location,
-    images: data.images,
     fuel: data.fuel,
     condition: data.condition,
     transmission: data.transmission,
     vin: data.vin,
+    images: data.images,
   };
   const schemaValidation = CarListingSchema.safeParse(carListingData);
 
@@ -31,6 +30,13 @@ export async function createCar(data: TCarListingSchema) {
       data: {
         ...schemaValidation.data,
         listedById: userId,
+        images: {
+          create: schemaValidation.data.images.map((image) => ({
+            url: image.url,
+            key: image.key,
+            name: image.name,
+          })),
+        },
       },
     });
     return { success: true };

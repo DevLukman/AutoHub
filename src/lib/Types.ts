@@ -1,5 +1,33 @@
-import { CarListing } from "@/generated/prisma";
+// import { CarListing } from "@/generated/prisma";
 import { z } from "zod";
+
+type CarListing = {
+  id: string;
+  listedById: string;
+  createdAt: Date;
+  updatedAt: Date;
+  make: string;
+  model: string;
+  price: number;
+  year: number;
+  mileage: number;
+  condition: string;
+  location: string;
+  fuel: string;
+  transmission: string;
+  category: string;
+  description: string | null;
+  status: string;
+  vin: string;
+  images: {
+    id: string;
+    createdAt: Date;
+    name: string;
+    url: string;
+    key: string;
+    carId: string;
+  }[];
+} | null;
 export type PaystackBankResponse = {
   message: string;
   status: boolean;
