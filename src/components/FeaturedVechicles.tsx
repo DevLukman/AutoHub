@@ -14,7 +14,7 @@ export default async function FeaturedVechicles() {
     take: 8,
   });
   return (
-    <div className="mt-[30px] grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="mt-[30px] grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
       {results.map((cars) => (
         <div
           className="border-border hover:border-hover relative rounded-lg border transition-all duration-300 ease-in-out"
@@ -23,7 +23,7 @@ export default async function FeaturedVechicles() {
           <Link href={`/cars/${cars.id}`} className="">
             <div className="relative h-[11.5rem] w-full">
               <Image
-                src={cars.images[1].url}
+                src={cars.images[0].url}
                 alt={cars.make}
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 fill
@@ -33,7 +33,7 @@ export default async function FeaturedVechicles() {
             </div>
 
             <div className="flex flex-col gap-2 px-4 py-4">
-              <p className="text-primary truncate text-xl font-bold">
+              <p className="text-primary truncate text-xl font-bold capitalize">
                 {`${cars.make} ${cars.model}`}
               </p>
               <p className="text-subPrimary flex items-center gap-2 text-sm">

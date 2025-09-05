@@ -1,7 +1,7 @@
 // import { CarListing } from "@/generated/prisma";
 import { z } from "zod";
 
-type CarListing = {
+export type CarListing = {
   id: string;
   listedById: string;
   createdAt: Date;
@@ -114,4 +114,15 @@ type GetCar =
 
 export type GetCarProps = {
   updateData: GetCar;
+};
+
+export type SearchAndFilterProps = {
+  brand: string;
+  model: string;
+  year: string;
+  condition: string;
+  category: string;
+  transmission: string;
+  fuel: string;
+  page: string;
 };

@@ -1,4 +1,3 @@
-"use client";
 import Form from "next/form";
 import {
   Select,

@@ -37,7 +37,7 @@ export default async function Order({ searchParams }: PageProps) {
           name="query"
         ></input>
         <button
-          disabled={data.length === 0}
+          // disabled={data.length === 0}
           type="submit"
           className="bg-btnBg text-secondary cursor-pointer rounded-sm px-4 py-2.5 text-sm disabled:cursor-not-allowed disabled:opacity-40"
         >

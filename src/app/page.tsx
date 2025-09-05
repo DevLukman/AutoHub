@@ -3,7 +3,7 @@ import FeaturedVechicles from "@/components/FeaturedVechicles";
 import HeroContent from "@/components/HeroContent";
 import MainContainer from "@/components/MainContainer";
 import PopularCategories from "@/components/PopularCategories";
-import SkeletonLoading from "@/components/SkeletonLoading";
+import FeaturedLoading from "@/components/FeaturedLoading";
 import { Suspense } from "react";
 export default async function Home() {
   return (
@@ -11,7 +11,7 @@ export default async function Home() {
       <HeroContent />
       <section className="inner-container mt-[70px]">
         <h1 className="text-3xl font-bold">Featured Vechicles</h1>
-        <Suspense fallback={<SkeletonLoading />}>
+        <Suspense fallback={<FeaturedLoading />}>
           <FeaturedVechicles />
         </Suspense>
       </section>

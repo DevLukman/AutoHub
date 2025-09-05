@@ -1,33 +1,37 @@
-const categorys = [
+"use client";
+const categories = [
   { id: 1, name: "sedan", to: "sedan" },
   { id: 2, name: "coupe", to: "coupe" },
   { id: 3, name: "suv", to: "suv" },
   { id: 10, name: "crossover", to: "crossover" },
   { id: 4, name: "wagon/hatchback", to: "wagon/hatchback" },
-  { id: 5, name: "Green car/hybrid", to: "Green car/hybrid" },
+  { id: 5, name: "Green car/hybrid", to: "green car/hybrid" },
   { id: 6, name: "convertible", to: "convertible" },
   { id: 7, name: "sports Car", to: "sports Car" },
   { id: 8, name: "Pick up truck", to: "pickup truck" },
-  { id: 9, name: "Luxury car", to: "Luxury car" },
-];
-const condition = [
-  { id: 1, name: "new", to: "new" },
-  { id: 2, name: "Used", to: "Used" },
-  { id: 3, name: "Certified pre owned", to: "Certified pre owned" },
-  { id: 10, name: "Damaged", to: "Damaged" },
-];
-const transmission = [
-  { id: 1, name: "Automatic", to: "Automatic" },
-  { id: 2, name: "manual", to: "manual" },
-];
-const fuelType = [
-  { id: 1, name: "petrol", to: "petrol" },
-  { id: 2, name: "Diesel", to: "Diesel" },
-  { id: 3, name: "Electric", to: "Electric" },
-  { id: 10, name: "Hybrid", to: "Hybrid" },
+  { id: 9, name: "Luxury car", to: "luxury car" },
 ];
 
+const conditions = [
+  { id: 1, name: "new", to: "new" },
+  { id: 2, name: "Used", to: "used" },
+  { id: 3, name: "Certified pre owned", to: "certified pre owned" },
+  { id: 10, name: "Damaged", to: "damaged" },
+];
+
+const transmissions = [
+  { id: 1, name: "Automatic", to: "automatic" },
+  { id: 2, name: "manual", to: "manual" },
+];
+
+const fuelTypes = [
+  { id: 1, name: "petrol", to: "petrol" },
+  { id: 2, name: "Diesel", to: "diesel" },
+  { id: 3, name: "Electric", to: "electric" },
+  { id: 10, name: "Hybrid", to: "hybrid" },
+];
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { CiFilter } from "react-icons/ci";
 import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { Checkbox } from "../components/ui/checkbox";
@@ -42,6 +46,36 @@ import {
 } from "../components/ui/sheet";
 
 export function MobileFilter() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  function handleFilter(paramName: string, value: string) {
+    const params = new URLSearchParams(searchParams);
+    const currentValues = params.get(paramName);
+    if (currentValues) {
+      const valuesArray = currentValues.split(",");
+      if (valuesArray.includes(value)) {
+        const filteredValues = valuesArray.filter((v) => v !== value);
+        if (filteredValues.length > 0) {
+          params.set(paramName, filteredValues.join(","));
+        } else {
+          params.delete(paramName);
+        }
+      } else {
+        params.set(paramName, [...valuesArray, value].join(","));
+      }
+    } else {
+      params.set(paramName, value);
+    }
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  }
+
+  function isSelected(paramName: string, value: string): boolean {
+    const currentValues = searchParams.get(paramName);
+    if (!currentValues) return false;
+    return currentValues.split(",").includes(value);
+  }
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -69,15 +103,18 @@ export function MobileFilter() {
                 <MdOutlineKeyboardArrowLeft className="cursor-pointer" />
               </span>
             </p>
-            {categorys.map((category) => (
+            {categories.map((category) => (
               <div key={category.id} className="flex items-center gap-2">
                 <Checkbox
                   id={category.name}
                   className="cursor-pointer rounded-[3px] accent-amber-300"
+                  checked={isSelected("category", category.to)}
+                  onClick={() => handleFilter("category", category.to)}
                 />
                 <Label
                   htmlFor={category.name}
                   className="text-subPrimary cursor-pointer capitalize"
+                  onClick={() => handleFilter("category", category.to)}
                 >
                   {category.name}
                 </Label>
@@ -91,17 +128,20 @@ export function MobileFilter() {
                 <MdOutlineKeyboardArrowLeft className="cursor-pointer" />
               </span>
             </p>
-            {condition.map((category) => (
-              <div key={category.id} className="flex items-center gap-2">
+            {conditions.map((condition) => (
+              <div key={condition.id} className="flex items-center gap-2">
                 <Checkbox
-                  id={category.name}
+                  id={condition.name}
                   className="cursor-pointer rounded-[3px] accent-amber-300"
+                  checked={isSelected("condition", condition.to)}
+                  onClick={() => handleFilter("condition", condition.to)}
                 />
                 <Label
-                  htmlFor={category.name}
+                  htmlFor={condition.name}
                   className="text-subPrimary cursor-pointer capitalize"
+                  onClick={() => handleFilter("condition", condition.to)}
                 >
-                  {category.name}
+                  {condition.name}
                 </Label>
               </div>
             ))}
@@ -113,17 +153,20 @@ export function MobileFilter() {
                 <MdOutlineKeyboardArrowLeft className="cursor-pointer" />
               </span>
             </p>
-            {transmission.map((category) => (
-              <div key={category.id} className="flex items-center gap-2">
+            {transmissions.map((transmission) => (
+              <div key={transmission.id} className="flex items-center gap-2">
                 <Checkbox
-                  id={category.name}
+                  id={transmission.name}
                   className="cursor-pointer rounded-[3px] accent-amber-300"
+                  checked={isSelected("transmission", transmission.to)}
+                  onClick={() => handleFilter("transmission", transmission.to)}
                 />
                 <Label
-                  htmlFor={category.name}
+                  htmlFor={transmission.name}
                   className="text-subPrimary cursor-pointer capitalize"
+                  onClick={() => handleFilter("transmission", transmission.to)}
                 >
-                  {category.name}
+                  {transmission.name}
                 </Label>
               </div>
             ))}
@@ -135,17 +178,20 @@ export function MobileFilter() {
                 <MdOutlineKeyboardArrowLeft className="cursor-pointer" />
               </span>
             </p>
-            {fuelType.map((category) => (
-              <div key={category.id} className="flex items-center gap-2">
+            {fuelTypes.map((fuel) => (
+              <div key={fuel.id} className="flex items-center gap-2">
                 <Checkbox
-                  id={category.name}
+                  id={fuel.name}
                   className="cursor-pointer rounded-[3px] accent-amber-300"
+                  checked={isSelected("fuel", fuel.to)}
+                  onClick={() => handleFilter("fuel", fuel.to)}
                 />
                 <Label
-                  htmlFor={category.name}
+                  htmlFor={fuel.name}
                   className="text-subPrimary cursor-pointer capitalize"
+                  onClick={() => handleFilter("fuel", fuel.to)}
                 >
-                  {category.name}
+                  {fuel.name}
                 </Label>
               </div>
             ))}
