@@ -1,9 +1,9 @@
-import { checkUser } from "../lib/action";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Inter, Nosifer } from "next/font/google";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { checkUser } from "../lib/action";
 import "./globals.css";
 const fontInter = Inter({
   variable: "--font-inter",

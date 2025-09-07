@@ -1,3 +1,5 @@
+"use server";
+
 import { buildCarFilters } from "@/utils/helper";
 import { db } from "../prisma";
 import { SearchAndFilterProps } from "../Types";
@@ -52,15 +54,38 @@ export async function carListings(
   }
 }
 
-export function getCarsCount(searchParams: SearchAndFilterProps) {
+export async function getCarsCount(searchParams: SearchAndFilterProps) {
   try {
     const filters = buildCarFilters(searchParams);
-    const count = db.carListing.count({
+    const count = await db.carListing.count({
       where: filters,
     });
     return count;
   } catch (error) {
     console.error("Error fetching car count:", error);
     throw new Error("Failed to fetch car count");
+  }
+}
+
+export async function getSearch(search: string) {
+  if (!search.trim()) {
+    return [];
+  }
+
+  try {
+    const data = await db.carListing.findMany({
+      where: {
+        OR: [
+          { make: { contains: search, mode: "insensitive" } },
+          { model: { contains: search, mode: "insensitive" } },
+        ],
+      },
+      include: { images: { take: 1 } },
+      take: 5,
+    });
+    return data;
+  } catch (error) {
+    console.error("Search error:", error);
+    return [];
   }
 }

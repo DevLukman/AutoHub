@@ -3,12 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { CiHeart, CiLocationOn } from "react-icons/ci";
 import { GoDotFill } from "react-icons/go";
-import MainContainer from "../../components/MainContainer";
-import { carsData } from "../../lib/dataService";
-import { formatToNaria } from "../../utils/helper";
-
+import { formatToNaria } from "../../../utils/helper";
+import { getWishlist } from "../../../lib/actions/wishlist";
 export default async function Wishlist() {
-  const browCars = await carsData();
+  const { data } = await getWishlist();
+  const browCars = [];
   if (!browCars.length)
     return (
       <div className="inner-container mt-[45px] flex w-full flex-col items-center">
@@ -29,7 +28,7 @@ export default async function Wishlist() {
       </div>
     );
   return (
-    <MainContainer>
+    <>
       <section className="inner-container pb-6">
         <div className="mt-[50px]">
           <h1 className="text-2xl font-[700]">My Wishlist</h1>
@@ -38,15 +37,15 @@ export default async function Wishlist() {
           </p>
         </div>
         <div className="mt-[30px] grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {browCars.map((cars, index) => (
+          {data.map((wish) => (
             <div
-              key={cars.sellerId}
+              key={wish.id}
               className="border-border bg-secondary rounded-lg border"
             >
               <div className="relative h-[19rem] w-full">
                 <Image
-                  src={cars.images[index]}
-                  alt={cars.fuelType}
+                  src={wish.image}
+                  alt={`${wish.make} ${wish.model}`}
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   fill
                   priority
@@ -56,31 +55,31 @@ export default async function Wishlist() {
 
               <div className="flex flex-col gap-2 px-4 py-4">
                 <p className="text-primary truncate text-base font-semibold">
-                  {`${cars.make} ${cars.model}`}
+                  {`${wish.make} ${wish.model}`}
                 </p>
                 <p className="text-primary text-xl font-[700]">
-                  {formatToNaria(cars.price)}
+                  {formatToNaria(wish.price)}
                 </p>
                 <p className="text-subPrimary flex items-center gap-[120px] capitalize">
                   <span className="flex items-center gap-1.5 text-sm">
                     <LucideCircleGauge size={"14px"} />
-                    {cars.mileage}km
+                    {wish.mileage}km
                   </span>
                   <span className="flex items-center gap-1.5 truncate text-sm">
                     <CiLocationOn />
-                    {cars.location}
+                    {wish.location}
                   </span>
                 </p>
                 <p className="text-subPrimary flex flex-wrap items-center gap-2 capitalize">
-                  <span className="text-sm">{cars.year}</span>
+                  <span className="text-sm">{wish.year}</span>
                   <span>
                     <GoDotFill />
                   </span>
-                  <span className="text-sm">{cars.transmission}</span>
+                  <span className="text-sm">{wish.transmission}</span>
                   <span>
                     <GoDotFill />
                   </span>
-                  <span className="text-sm">{cars.fuelType}</span>
+                  <span className="text-sm">{wish.fuel}</span>
                 </p>
                 <div className="flex items-center justify-end gap-2">
                   <button className="border-border flex cursor-pointer items-center gap-2 rounded-sm border px-3 py-1.5">
@@ -90,7 +89,7 @@ export default async function Wishlist() {
                     <span className="text-sm"> Remove</span>
                   </button>
                   <Link
-                    href={`/cars/${cars.sellerId}`}
+                    href={`/cars/${wish.id}`}
                     className="border-border bg-main flex cursor-pointer items-center gap-2 rounded-sm border px-3 py-1.5"
                   >
                     <span>
@@ -104,6 +103,6 @@ export default async function Wishlist() {
           ))}
         </div>
       </section>
-    </MainContainer>
+    </>
   );
 }

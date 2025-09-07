@@ -189,7 +189,7 @@ export default async function Overview({ searchParams }: PageProps) {
             </TableBody>
           </Table>
           {pagination.totalCount > 0 && (
-            <div className="mt-6 flex items-center justify-between">
+            <div className="mt-6 mb-4 flex items-center justify-between">
               <Link
                 href={
                   pagination.hasPrevious

@@ -76,9 +76,12 @@ model WishList {
   id           String     @id @default(uuid())
   userId       String
   carListingId String
+  year         Int
+  transmission String
   price        Float
   make         String
   model        String
+  image        String
   location     String
   mileage      Float
   fuel         String
@@ -116,6 +119,5 @@ model Purchases {
   user          User     @relation(fields: [userId], references: [clerkUserId], onDelete: Cascade)
   @@index([userId])
 }
-
 
 

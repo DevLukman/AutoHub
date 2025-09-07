@@ -7,19 +7,21 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaXmark } from "react-icons/fa6";
 import { toast } from "react-toastify";
-import ListingInputContainer from "../../../app/dashboard/_components/ListingInputContainer";
-import MainContainer from "../../../components/MainContainer";
-import { Input } from "../../../components/ui/input";
-import { Label } from "../../../components/ui/label";
-import { useOutsideClick } from "../../../hooks/useOutsideClick";
-import { getAllBanks, VerifyBank } from "../../../lib/actions/bankVerification";
-import { createSeller } from "../../../lib/actions/createSeller";
+import ListingInputContainer from "../../../dashboard/_components/ListingInputContainer";
+import { Input } from "../../../../components/ui/input";
+import { Label } from "../../../../components/ui/label";
+import { useOutsideClick } from "../../../../hooks/useOutsideClick";
+import {
+  getAllBanks,
+  VerifyBank,
+} from "../../../../lib/actions/bankVerification";
+import { createSeller } from "../../../../lib/actions/createSeller";
 import {
   accountInformation,
   PaystackBankResponse,
   SellerSchema,
   TSellerSchema,
-} from "../../../lib/Types";
+} from "../../../../lib/Types";
 import BankDetailsModal from "./BankDetail";
 export default function SellerForm() {
   const [banks, setBanks] = useState<PaystackBankResponse[]>([]);
@@ -85,7 +87,7 @@ export default function SellerForm() {
     }
   }
   return (
-    <MainContainer>
+    <>
       <section className="mt-4 px-4 sm:px-6 lg:px-8">
         <div className="bg-secondary border-border mx-auto h-fit w-full max-w-[850px] rounded-lg border p-6">
           <h1 className="text-lg font-bold">Become a Car Seller!</h1>
@@ -233,6 +235,6 @@ export default function SellerForm() {
           </form>
         </div>
       </section>
-    </MainContainer>
+    </>
   );
 }

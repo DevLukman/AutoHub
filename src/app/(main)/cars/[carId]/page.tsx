@@ -5,22 +5,21 @@ type Params = {
   params: Promise<{ carId: string }>;
 };
 
-import MainContainer from "../../../components/MainContainer";
-import { Button } from "../../../components/ui/button";
-import { Card } from "../../../components/ui/card";
+import { Button } from "../../../../components/ui/button";
+import { Card } from "../../../../components/ui/card";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "../../../components/ui/carousel";
-import { Separator } from "../../../components/ui/separator";
-import { formatToNaria } from "../../../utils/helper";
+} from "../../../../components/ui/carousel";
+import { Separator } from "../../../../components/ui/separator";
+import { formatToNaria } from "../../../../utils/helper";
 import Image from "next/image";
 
 import { CiHeart, CiShoppingCart } from "react-icons/ci";
-import { db } from "../../../lib/prisma";
+import { db } from "../../../../lib/prisma";
 export default async function Page({ params }: Params) {
   const { carId } = await params;
   const detail = await db.carListing.findUnique({
@@ -28,7 +27,7 @@ export default async function Page({ params }: Params) {
     include: { images: true, listedBy: true },
   });
   return (
-    <MainContainer>
+    <>
       <section className="inner-container">
         <div className="mt-6">
           <Link
@@ -170,6 +169,6 @@ export default async function Page({ params }: Params) {
           </Card>
         </div>
       </section>
-    </MainContainer>
+    </>
   );
 }

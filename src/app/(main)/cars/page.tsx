@@ -1,17 +1,16 @@
-import { carListings, getCarsCount } from "../../lib/actions/getBrowseCars";
-import Filter from "../../components/Filter";
-import MainContainer from "../../components/MainContainer";
-import { MobileFilter } from "../../components/MobileFilter";
-import { formatToNaria } from "../../utils/helper";
+import { carListings, getCarsCount } from "../../../lib/actions/getBrowseCars";
+import Filter from "../../../components/Filter";
+import { MobileFilter } from "../../../components/MobileFilter";
+import { formatToNaria } from "../../../utils/helper";
 import Image from "next/image";
 import Link from "next/link";
 import { CiLocationOn } from "react-icons/ci";
 import { FaTachometerAlt } from "react-icons/fa";
 import { GoDotFill } from "react-icons/go";
-import { SearchAndFilterProps as CarSearchParams } from "../../lib/Types";
+import { SearchAndFilterProps as CarSearchParams } from "../../../lib/Types";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { Suspense } from "react";
-import CarsLoading from "../../components/CarsLoading.tsx";
+import CarsLoading from "../../../components/CarsLoading.tsx";
 type SearchAndFilterProps = {
   searchParams: Promise<CarSearchParams>;
 };
@@ -23,7 +22,7 @@ export default async function Cars({ searchParams }: SearchAndFilterProps) {
     getCarsCount(params),
   ]);
   return (
-    <MainContainer>
+    <>
       <section className="inner-container pb-6">
         <div className="mt-10 w-[100%] gap-6 md:grid md:grid-cols-[15rem_1fr]">
           <Filter />
@@ -152,6 +151,6 @@ export default async function Cars({ searchParams }: SearchAndFilterProps) {
           </div>
         </div>
       </section>
-    </MainContainer>
+    </>
   );
 }

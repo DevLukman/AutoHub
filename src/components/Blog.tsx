@@ -49,7 +49,7 @@ const blogPosts: BlogPost[] = [
 
 export default function Blog() {
   return (
-    <section className="inner-container mt-[100px]">
+    <section className="inner-container mt-[80px]">
       <h1 className="text-3xl font-bold">Latest Blog Posts</h1>
       <div className="mt-[30px] grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {blogPosts.map((blog) => (

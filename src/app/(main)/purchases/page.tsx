@@ -16,9 +16,8 @@ const purchases = [
 ];
 import { CiMoneyBill } from "react-icons/ci";
 import { IoBagOutline, IoCarSport } from "react-icons/io5";
-import MainContainer from "../../components/MainContainer";
-import { Badge } from "../../components/ui/badge";
-import { Card, CardDescription, CardHeader } from "../../components/ui/card";
+import { Badge } from "../../../components/ui/badge";
+import { Card, CardDescription, CardHeader } from "../../../components/ui/card";
 import {
   Table,
   TableBody,
@@ -26,12 +25,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../../components/ui/table";
-import { formatToNaria } from "../../utils/helper";
+} from "../../../components/ui/table";
+import { formatToNaria } from "../../../utils/helper";
 
 export default function Purchases() {
   return (
-    <MainContainer>
+    <>
       <section className="inner-container">
         <div className="mt-10">
           <h1 className="text-2xl font-extrabold">My Purchases</h1>
@@ -114,6 +113,6 @@ export default function Purchases() {
           </Table>
         </div>
       </section>
-    </MainContainer>
+    </>
   );
 }

@@ -9,7 +9,7 @@ export default function MainContainer({
 }>) {
   return (
     <>
-      <Navigation />
+      {/* <Navigation /> */}
       <MobileNavigation />
       <main className="outer-container mt-[16px] w-full">
         {children}

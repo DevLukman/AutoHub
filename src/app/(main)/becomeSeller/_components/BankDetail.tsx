@@ -10,9 +10,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "../../../components/ui/alert-dialog";
-import { Button } from "../../../components/ui/button";
-import { accountInformation } from "../../../lib/Types";
+} from "../../../../components/ui/alert-dialog";
+import { Button } from "../../../../components/ui/button";
+import { accountInformation } from "../../../../lib/Types";
 type FormActionType = {
   bankDetails: accountInformation | null;
   onClick: () => Promise<void>;

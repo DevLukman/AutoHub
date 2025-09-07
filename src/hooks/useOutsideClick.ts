@@ -1,14 +1,17 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef } from "react";
 
-export function useOutsideClick(close, capturingPhase: boolean = true) {
+export function useOutsideClick(
+  close: Dispatch<SetStateAction<boolean>>,
+  capturingPhase: boolean = true,
+) {
   const closeRef = useRef(null);
   useEffect(
     function () {
-      function handleClick(e) {
+      function handleClick(e: MouseEvent) {
         if (closeRef.current && !closeRef.current.contains(e.target)) {
-          close();
+          close(false);
         }
       }
       document.addEventListener("click", handleClick, capturingPhase);
@@ -17,5 +20,6 @@ export function useOutsideClick(close, capturingPhase: boolean = true) {
     },
     [capturingPhase, close],
   );
+
   return closeRef;
 }
