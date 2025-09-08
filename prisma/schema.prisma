@@ -75,7 +75,7 @@ model CarImage {
 model WishList {
   id           String     @id @default(uuid())
   userId       String
-  carListingId String
+  carListingId String      @unique
   year         Int
   transmission String
   price        Float

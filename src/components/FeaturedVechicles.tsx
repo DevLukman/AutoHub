@@ -1,10 +1,10 @@
-import { db } from "../lib/prisma";
-import { formatToNaria } from "../utils/helper";
 import { Map } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { CiHeart } from "react-icons/ci";
 import { GoDotFill } from "react-icons/go";
+import { db } from "../lib/prisma";
+import { formatToNaria } from "../utils/helper";
+import AddToWishlist from "./AddToWishlist";
 export default async function FeaturedVechicles() {
   const results = await db.carListing.findMany({
     include: { images: { select: { url: true } } },
@@ -58,9 +58,18 @@ export default async function FeaturedVechicles() {
               </p>
             </div>
           </Link>
-          <button className="bg-main/75 border-border absolute top-0 right-0 z-10 m-2 cursor-pointer rounded-lg border p-2">
-            <CiHeart size={"18px"} />
-          </button>
+          <AddToWishlist
+            image={cars.images[0].url}
+            make={cars.make}
+            model={cars.make}
+            price={cars.price}
+            transmission={cars.transmission}
+            location={cars.location}
+            fuel={cars.fuel}
+            mileage={cars.mileage}
+            carListingId={cars.id}
+            year={cars.year}
+          />
         </div>
       ))}
     </div>

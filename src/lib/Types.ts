@@ -126,3 +126,18 @@ export type SearchAndFilterProps = {
   fuel: string;
   page: string;
 };
+
+export const WishListSchema = z.object({
+  make: z.string().trim(),
+  model: z.string(),
+  location: z.string(),
+  price: z.number(),
+  year: z.number(),
+  mileage: z.number().min(0, "Mileage cannot be negative"),
+  fuel: z.string(),
+  transmission: z.string(),
+  image: z.string(),
+  carListingId: z.string(),
+});
+
+export type TWishListSchema = z.infer<typeof WishListSchema>;

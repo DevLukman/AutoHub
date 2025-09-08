@@ -1,10 +1,7 @@
 import { ChevronLeft } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
-
-type Params = {
-  params: Promise<{ carId: string }>;
-};
-
+import { CiShoppingCart } from "react-icons/ci";
 import { Button } from "../../../../components/ui/button";
 import { Card } from "../../../../components/ui/card";
 import {
@@ -15,11 +12,12 @@ import {
   CarouselPrevious,
 } from "../../../../components/ui/carousel";
 import { Separator } from "../../../../components/ui/separator";
-import { formatToNaria } from "../../../../utils/helper";
-import Image from "next/image";
-
-import { CiHeart, CiShoppingCart } from "react-icons/ci";
 import { db } from "../../../../lib/prisma";
+import { formatToNaria } from "../../../../utils/helper";
+import HandleRemove from "../_components/HandleRemove";
+type Params = {
+  params: Promise<{ carId: string }>;
+};
 export default async function Page({ params }: Params) {
   const { carId } = await params;
   const detail = await db.carListing.findUnique({
@@ -132,9 +130,18 @@ export default async function Page({ params }: Params) {
               </p>
             </div>
             <div className="mt-6 flex flex-col gap-4 md:flex-row">
-              <Button className="bg-secondary/40 hover:bg-main border-border flex-grow cursor-pointer border text-base font-medium transition duration-300 ease-in-out">
-                <CiHeart /> Add to Wishlist
-              </Button>
+              <HandleRemove
+                image={detail?.images[0].url ?? ""}
+                make={detail?.make ?? ""}
+                model={detail?.make ?? ""}
+                price={detail?.price ?? 0}
+                transmission={detail?.transmission ?? ""}
+                location={detail?.location ?? ""}
+                fuel={detail?.fuel ?? ""}
+                mileage={detail?.mileage ?? 0}
+                carListingId={detail?.id ?? ""}
+                year={detail?.year ?? 0}
+              />
               <Button className="bg-btnBg text-secondary hover:bg-btnBg flex-grow cursor-pointer font-medium">
                 <CiShoppingCart />
                 Buy Now

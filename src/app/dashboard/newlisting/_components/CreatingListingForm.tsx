@@ -88,7 +88,6 @@ export default function CreatingListingForm() {
   }
 
   async function handleCarListing(data: TCarListingSchema) {
-    console.log(data);
     const results = await createCar(data);
     if (results.success) {
       toast.success("Car listing successfully created");

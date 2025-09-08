@@ -61,7 +61,8 @@ export async function carListing(page: number = 1) {
     console.error("Failed to fetch car listings:", error);
     return {
       success: false,
-      error: "Failed to load listings. Please try again.",
+      error:
+        "OOps, something went wrong. But don't worry - it is not your fault. Try Again",
       data: [],
       pagination: {
         currentPage: 1,

@@ -9,11 +9,6 @@ const nextConfig: NextConfig = {
         hostname: "*.ufs.sh",
         pathname: "/f/**",
       },
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-        pathname: "**",
-      },
     ],
   },
   reactStrictMode: true,

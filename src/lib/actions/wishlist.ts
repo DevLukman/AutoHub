@@ -1,11 +1,16 @@
+"use server";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "../prisma";
+import { TWishListSchema, WishListSchema } from "../Types";
+import { revalidatePath } from "next/cache";
 
 export async function getWishlist() {
   const { userId } = await auth();
   if (!userId) {
     return {
-      error: "You have to be logged view this page",
+      error: "You need to be logged in to add to wishlist",
+      success: false,
+      count: 0,
       data: [],
     };
   }
@@ -15,9 +20,13 @@ export async function getWishlist() {
       where: {
         user: { clerkUserId: userId },
       },
-      include: { carListing: { include: { images: true } } },
+      orderBy: { createdAt: "desc" },
     });
-    const count = await db.wishList.count({});
+    const count = await db.wishList.count({
+      where: {
+        user: { clerkUserId: userId },
+      },
+    });
     return { data, success: true, error: null, count };
   } catch (error) {
     console.error(error);
@@ -25,6 +34,75 @@ export async function getWishlist() {
       error: "There was an error with wishlist",
       success: false,
       data: [],
+      count: 0,
     };
+  }
+}
+
+export async function createWishlist(wishData: TWishListSchema) {
+  const { userId } = await auth();
+  if (!userId) {
+    return {
+      error: "OOps, you have to be logged in to creat wishlist",
+    };
+  }
+  const wishListData = {
+    make: wishData.make,
+    model: wishData.make,
+    location: wishData.location,
+    price: wishData.price,
+    year: wishData.year,
+    mileage: wishData.mileage,
+    fuel: wishData.fuel,
+    transmission: wishData.transmission,
+    image: wishData.image,
+    carListingId: wishData.carListingId,
+  };
+  const WishListSchemaValidation = WishListSchema.safeParse(wishListData);
+
+  if (!WishListSchemaValidation.success) {
+    return { error: "There is an error with creating the car list" };
+  }
+  try {
+    const data = db.wishList.create({
+      data: {
+        ...WishListSchemaValidation.data,
+        userId: userId,
+      },
+    });
+    return { success: true, data };
+  } catch (error) {
+    console.error("Error creating car listing", error);
+    return { error: "Failed to create car listing. Please try again." };
+  }
+}
+
+export async function deleteWishlist(id: string) {
+  const { userId } = await auth();
+  if (!userId) return { error: "You have to be logged in" };
+
+  try {
+    const existingItem = await db.wishList.findFirst({
+      where: {
+        carListingId: id,
+        userId: userId,
+      },
+    });
+
+    if (!existingItem) {
+      return { error: "Wishlist item not found" };
+    }
+
+    await db.wishList.delete({
+      where: {
+        id: existingItem.id,
+      },
+    });
+
+    revalidatePath("/wishlist");
+    return { success: true };
+  } catch (error) {
+    console.error("Delete wishlist error:", error);
+    return { error: "Failed to delete from wishlist" };
   }
 }
