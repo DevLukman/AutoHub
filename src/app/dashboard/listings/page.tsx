@@ -1,3 +1,8 @@
+export const metadata: Metadata = {
+  title: "Auto Hub | Listings",
+  description: "Your Best Automobile Marketplace",
+};
+
 import { carListing } from "../../../lib/actions/getCarListing";
 import Link from "next/link";
 import { Badge } from "../../../components/ui/badge";
@@ -12,6 +17,7 @@ import {
 } from "../../../components/ui/table";
 import { formatToNaria } from "../../../utils/helper";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { Metadata } from "next";
 type PageProps = {
   searchParams: Promise<{ page?: string }>;
 };

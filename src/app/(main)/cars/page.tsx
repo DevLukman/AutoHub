@@ -1,16 +1,21 @@
-import { carListings, getCarsCount } from "../../../lib/actions/getBrowseCars";
-import Filter from "../../../components/Filter";
-import { MobileFilter } from "../../../components/MobileFilter";
-import { formatToNaria } from "../../../utils/helper";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 import { CiLocationOn } from "react-icons/ci";
 import { FaTachometerAlt } from "react-icons/fa";
 import { GoDotFill } from "react-icons/go";
-import { SearchAndFilterProps as CarSearchParams } from "../../../lib/Types";
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { Suspense } from "react";
 import CarsLoading from "../../../components/CarsLoading.tsx";
+import Filter from "../../../components/Filter";
+import { MobileFilter } from "../../../components/MobileFilter";
+import { carListings, getCarsCount } from "../../../lib/actions/getBrowseCars";
+import { SearchAndFilterProps as CarSearchParams } from "../../../lib/Types";
+import { formatToNaria } from "../../../utils/helper";
+export const metadata: Metadata = {
+  title: "Auto Hub | Home for AutoMobile",
+  description: "Your Best Automobile Marketplace",
+};
 type SearchAndFilterProps = {
   searchParams: Promise<CarSearchParams>;
 };

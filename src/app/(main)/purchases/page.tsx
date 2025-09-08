@@ -1,3 +1,8 @@
+export const metadata: Metadata = {
+  title: "Auto Hub | Purchases",
+  description: "Your Best Automobile Marketplace",
+};
+
 const purchases = [
   {
     id: "mdv5e84zzbps5obymwat2osf",
@@ -14,6 +19,7 @@ const purchases = [
     purchaseDate: new Date().getDate(),
   },
 ];
+import { Metadata } from "next";
 import { CiMoneyBill } from "react-icons/ci";
 import { IoBagOutline, IoCarSport } from "react-icons/io5";
 import { Badge } from "../../../components/ui/badge";

@@ -1,4 +1,9 @@
+export const metadata: Metadata = {
+  title: "Auto Hub | Orders",
+  description: "Your Best Automobile Marketplace",
+};
 import { ChevronLeftIcon, ChevronRightIcon, Search } from "lucide-react";
+import { Metadata } from "next";
 import Form from "next/form";
 import Link from "next/link";
 import { Badge } from "../../../components/ui/badge";

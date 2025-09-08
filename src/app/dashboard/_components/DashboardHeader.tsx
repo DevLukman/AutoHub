@@ -6,9 +6,9 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Separator } from "@/components/ui/separator";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+} from "../../../components/ui/breadcrumb";
+import { Separator } from "../../../components/ui/separator";
+import { SidebarTrigger } from "../../../components/ui/sidebar";
 import { usePathname } from "next/navigation";
 export default function DashboardHeader() {
   const pathName = usePathname();

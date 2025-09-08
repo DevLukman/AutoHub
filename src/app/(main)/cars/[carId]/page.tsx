@@ -1,3 +1,17 @@
+type Params = {
+  params: Promise<{ carId: string }>;
+};
+
+export async function generateMetadata({ params }: Params) {
+  const { carId } = await params;
+  const detail = await db.carListing.findUnique({
+    where: { id: carId },
+  });
+  return {
+    title: `AutoHub | ${detail?.make || "AutoHub"}-${detail?.model || "AutoHub"}`,
+  };
+}
+
 import { ChevronLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -15,9 +29,6 @@ import { Separator } from "../../../../components/ui/separator";
 import { db } from "../../../../lib/prisma";
 import { formatToNaria } from "../../../../utils/helper";
 import HandleRemove from "../_components/HandleRemove";
-type Params = {
-  params: Promise<{ carId: string }>;
-};
 export default async function Page({ params }: Params) {
   const { carId } = await params;
   const detail = await db.carListing.findUnique({

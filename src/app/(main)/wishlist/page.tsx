@@ -1,10 +1,16 @@
+export const metadata: Metadata = {
+  title: "Auto Hub | Wish List",
+  description: "Your Best Automobile Marketplace",
+};
+
 import { LucideCircleGauge, LucideSquareArrowOutUpRight } from "lucide-react";
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { CiHeart, CiLocationOn } from "react-icons/ci";
 import { GoDotFill } from "react-icons/go";
-import { formatToNaria } from "../../../utils/helper";
 import { getWishlist } from "../../../lib/actions/wishlist";
+import { formatToNaria } from "../../../utils/helper";
 import HandleRemoveFromWish from "./_components/HandleRemoveFromWish";
 export default async function Wishlist() {
   const { data, count } = await getWishlist();
@@ -82,12 +88,6 @@ export default async function Wishlist() {
                   <span className="text-sm">{wish.fuel}</span>
                 </p>
                 <div className="flex items-center justify-end gap-2">
-                  {/* <button className="border-border flex cursor-pointer items-center gap-2 rounded-sm border px-3 py-1.5">
-                    <span>
-                      <CiHeart size={"14px"} />
-                    </span>
-                    <span className="text-sm"> Remove</span>
-                  </button> */}
                   <HandleRemoveFromWish id={wish.carListingId} />
                   <Link
                     href={`/cars/${wish.id}`}
