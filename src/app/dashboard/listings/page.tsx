@@ -26,7 +26,7 @@ type PageProps = {
 export default async function Page({ searchParams }: PageProps) {
   const params = await searchParams;
   const page = Math.max(1, Number(params.page) || 1);
-  const { data, pagination } = await carListing(page);
+  const { data, pagination, count } = await carListing(page);
   return (
     <section className="bg-secondary flex flex-1 flex-col gap-4 px-6 pt-6 pb-4">
       <div className="flex w-full items-center justify-between">
@@ -55,7 +55,7 @@ export default async function Page({ searchParams }: PageProps) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data.length === 0 ? (
+              {count === 0 ? (
                 <TableRow>
                   <TableCell colSpan={8} className="h-64 text-center">
                     <div className="flex w-full flex-col items-center justify-center py-8">

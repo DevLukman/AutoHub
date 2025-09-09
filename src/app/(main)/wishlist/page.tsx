@@ -12,6 +12,8 @@ import { GoDotFill } from "react-icons/go";
 import { getWishlist } from "../../../lib/actions/wishlist";
 import { formatToNaria } from "../../../utils/helper";
 import HandleRemoveFromWish from "./_components/HandleRemoveFromWish";
+import { CarsLoading } from "../../../components/LoadingSkeleton";
+import { Suspense } from "react";
 export default async function Wishlist() {
   const { data, count } = await getWishlist();
   if (count < 1)
@@ -42,67 +44,69 @@ export default async function Wishlist() {
             You&apos;ve {count} saved cars
           </p>
         </div>
-        <div className="mt-[30px] grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {data.map((wish) => (
-            <div
-              key={wish.id}
-              className="border-border bg-secondary rounded-lg border"
-            >
-              <div className="relative h-[19rem] w-full">
-                <Image
-                  src={wish.image}
-                  alt={`${wish.make} ${wish.model}`}
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  fill
-                  priority
-                  className="rounded-t-lg object-cover"
-                />
-              </div>
+        <Suspense fallback={<CarsLoading />}>
+          <div className="mt-[30px] grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {data.map((wish) => (
+              <div
+                key={wish.id}
+                className="border-border bg-secondary rounded-lg border"
+              >
+                <div className="relative h-[19rem] w-full">
+                  <Image
+                    src={wish.image}
+                    alt={`${wish.make} ${wish.model}`}
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    fill
+                    priority
+                    className="rounded-t-lg object-cover"
+                  />
+                </div>
 
-              <div className="flex flex-col gap-2 px-4 py-4">
-                <p className="text-primary truncate text-base font-semibold">
-                  {`${wish.make} ${wish.model}`}
-                </p>
-                <p className="text-primary text-xl font-[700]">
-                  {formatToNaria(wish.price)}
-                </p>
-                <p className="text-subPrimary flex items-center gap-[120px] capitalize">
-                  <span className="flex items-center gap-1.5 text-sm">
-                    <LucideCircleGauge size={"14px"} />
-                    {wish.mileage}km
-                  </span>
-                  <span className="flex items-center gap-1.5 truncate text-sm">
-                    <CiLocationOn />
-                    {wish.location}
-                  </span>
-                </p>
-                <p className="text-subPrimary flex flex-wrap items-center gap-2 capitalize">
-                  <span className="text-sm">{wish.year}</span>
-                  <span>
-                    <GoDotFill />
-                  </span>
-                  <span className="text-sm">{wish.transmission}</span>
-                  <span>
-                    <GoDotFill />
-                  </span>
-                  <span className="text-sm">{wish.fuel}</span>
-                </p>
-                <div className="flex items-center justify-end gap-2">
-                  <HandleRemoveFromWish id={wish.carListingId} />
-                  <Link
-                    href={`/cars/${wish.id}`}
-                    className="border-border bg-main flex cursor-pointer items-center gap-2 rounded-sm border px-3 py-1.5"
-                  >
-                    <span>
-                      <LucideSquareArrowOutUpRight size={"14px"} />
+                <div className="flex flex-col gap-2 px-4 py-4">
+                  <p className="text-primary truncate text-base font-semibold">
+                    {`${wish.make} ${wish.model}`}
+                  </p>
+                  <p className="text-primary text-xl font-[700]">
+                    {formatToNaria(wish.price)}
+                  </p>
+                  <p className="text-subPrimary flex items-center gap-[120px] capitalize">
+                    <span className="flex items-center gap-1.5 text-sm">
+                      <LucideCircleGauge size={"14px"} />
+                      {wish.mileage}km
                     </span>
-                    <span className="text-sm">View Details</span>
-                  </Link>
+                    <span className="flex items-center gap-1.5 truncate text-sm">
+                      <CiLocationOn />
+                      {wish.location}
+                    </span>
+                  </p>
+                  <p className="text-subPrimary flex flex-wrap items-center gap-2 capitalize">
+                    <span className="text-sm">{wish.year}</span>
+                    <span>
+                      <GoDotFill />
+                    </span>
+                    <span className="text-sm">{wish.transmission}</span>
+                    <span>
+                      <GoDotFill />
+                    </span>
+                    <span className="text-sm">{wish.fuel}</span>
+                  </p>
+                  <div className="flex items-center justify-end gap-2">
+                    <HandleRemoveFromWish id={wish.carListingId} />
+                    <Link
+                      href={`/cars/${wish.id}`}
+                      className="border-border bg-main flex cursor-pointer items-center gap-2 rounded-sm border px-3 py-1.5"
+                    >
+                      <span>
+                        <LucideSquareArrowOutUpRight size={"14px"} />
+                      </span>
+                      <span className="text-sm">View Details</span>
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </Suspense>
       </section>
     </>
   );

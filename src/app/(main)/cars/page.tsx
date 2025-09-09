@@ -6,7 +6,7 @@ import { Suspense } from "react";
 import { CiLocationOn } from "react-icons/ci";
 import { FaTachometerAlt } from "react-icons/fa";
 import { GoDotFill } from "react-icons/go";
-import CarsLoading from "../../../components/CarsLoading.tsx";
+import { CarsLoading } from "../../../components/LoadingSkeleton";
 import Filter from "../../../components/Filter";
 import { MobileFilter } from "../../../components/MobileFilter";
 import { carListings, getCarsCount } from "../../../lib/actions/getBrowseCars";

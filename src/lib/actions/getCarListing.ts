@@ -13,6 +13,7 @@ export async function carListing(page: number = 1) {
         currentPage: 1,
         totalPages: 0,
         totalCount: 0,
+        count: 0,
         hasNext: false,
         hasPrevious: false,
       },
@@ -44,8 +45,13 @@ export async function carListing(page: number = 1) {
       take: PAGE_SIZE,
     });
 
+    const count = db.carListing.count({
+      where: { listedById: userId },
+    });
+
     return {
       data,
+      count,
       success: true,
       error: null,
       pagination: {
@@ -68,6 +74,7 @@ export async function carListing(page: number = 1) {
         currentPage: 1,
         totalPages: 0,
         totalCount: 0,
+        count: 0,
         hasNext: false,
         hasPrevious: false,
       },

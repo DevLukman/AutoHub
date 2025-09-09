@@ -1,5 +1,5 @@
-import FeaturedLoading from "@/components/FeaturedLoading";
-import PopularCategories from "@/components/PopularCategories";
+import { FeaturedLoading } from "../../components/LoadingSkeleton";
+import PopularCategories from "../../components/PopularCategories";
 import { Suspense } from "react";
 import Blog from "../../components/Blog";
 import FeaturedVechicles from "../../components/FeaturedVechicles";
