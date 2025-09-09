@@ -9,7 +9,7 @@ export async function generateMetadata({
   const { updatecarId } = await params;
   const { data } = await GetCarToUpdate(updatecarId);
   return {
-    title: `AutoHub | ${data.model || "AutoHub"}-${data.model || "AutoHub"}`,
+    title: `AutoHub | ${data?.make || "AutoHub"}-${data?.model || "AutoHub"}`,
   };
 }
 export default async function Update({

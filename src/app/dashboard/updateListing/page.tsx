@@ -1,3 +1,3 @@
 export default async function Update() {
-  return;
+  return <h1>Update listing</h1>;
 }
