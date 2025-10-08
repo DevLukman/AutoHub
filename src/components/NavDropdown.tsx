@@ -37,7 +37,9 @@ export default function NavDropdown({ session }: { session: Session }) {
       <DropdownMenuTrigger asChild>
         <button type="button" className="cursor-pointer">
           <Avatar className="border-border text-primary flex h-7 w-7 items-center justify-center rounded-sm border text-center">
-            <span className="font-inter text-center text-xs">{name}</span>
+            <span className="font-inter text-center text-base capitalize">
+              {name}
+            </span>
           </Avatar>
         </button>
       </DropdownMenuTrigger>

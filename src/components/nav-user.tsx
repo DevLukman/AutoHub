@@ -52,7 +52,9 @@ export function NavUser({ session }: { session: Session | null }) {
               className="data-[state=open]:bg-mainHover border-border hover:text-primary text-primary bg-main data-[state=open]:text-primary cursor-pointer border"
             >
               <Avatar className="border-border text-primary flex h-8 w-8 items-center justify-center rounded-sm border">
-                <span className="font-inter">{name}</span>
+                <span className="font-inter text-center text-base capitalize">
+                  {name}
+                </span>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="text-primary truncate text-sm font-medium">
