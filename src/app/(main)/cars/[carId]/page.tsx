@@ -1,22 +1,6 @@
-type Params = {
-  params: Promise<{ carId: string }>;
-};
-
-export async function generateMetadata({ params }: Params) {
-  const { carId } = await params;
-  const detail = await db.carListing.findUnique({
-    where: { id: carId },
-  });
-  return {
-    title: `AutoHub | ${detail?.make || "AutoHub"}-${detail?.model || "AutoHub"}`,
-  };
-}
-
 import { ChevronLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { CiShoppingCart } from "react-icons/ci";
-import { Button } from "../../../../components/ui/button";
 import { Card } from "../../../../components/ui/card";
 import {
   Carousel,
@@ -28,7 +12,33 @@ import {
 import { Separator } from "../../../../components/ui/separator";
 import { db } from "../../../../lib/prisma";
 import { formatToNaria } from "../../../../utils/helper";
+import HandlePurchase from "../_components/HandlePurchase";
 import HandleRemove from "../_components/HandleRemove";
+
+type Params = {
+  params: Promise<{ carId: string }>;
+};
+
+export async function generateMetadata({ params }: Params) {
+  const { carId } = await params;
+  const detail = await db.carListing.findUnique({
+    where: { id: carId },
+  });
+
+  if (!detail) {
+    return {
+      title: "AutoHub | Car Not Found",
+    };
+  }
+
+  return {
+    title: `AutoHub | ${detail.year} ${detail.make} ${detail.model}`,
+    description:
+      detail.description ||
+      `${detail.year} ${detail.make} ${detail.model} for sale`,
+  };
+}
+
 export default async function Page({ params }: Params) {
   const { carId } = await params;
   const detail = await db.carListing.findUnique({
@@ -44,7 +54,7 @@ export default async function Page({ params }: Params) {
             className="border-border flex w-fit items-center gap-2 rounded-lg border px-3 py-2 text-sm"
           >
             <span>
-              <ChevronLeft size={"11px"} className="text-subPrimary" />
+              <ChevronLeft size={11} className="text-subPrimary" />
             </span>
             <span className="font-inter text-primary">Back</span>
           </Link>
@@ -144,7 +154,7 @@ export default async function Page({ params }: Params) {
               <HandleRemove
                 image={detail?.images[0].url ?? ""}
                 make={detail?.make ?? ""}
-                model={detail?.make ?? ""}
+                model={detail?.model ?? ""}
                 price={detail?.price ?? 0}
                 transmission={detail?.transmission ?? ""}
                 location={detail?.location ?? ""}
@@ -153,10 +163,12 @@ export default async function Page({ params }: Params) {
                 carListingId={detail?.id ?? ""}
                 year={detail?.year ?? 0}
               />
-              <Button className="bg-btnBg text-secondary hover:bg-btnBg flex-grow cursor-pointer font-medium">
-                <CiShoppingCart />
-                Buy Now
-              </Button>
+              <HandlePurchase
+                carListingId={detail?.id ?? ""}
+                amount={detail?.price ?? 0}
+                make={detail?.make ?? ""}
+                model={detail?.model ?? ""}
+              />
             </div>
           </div>
         </div>

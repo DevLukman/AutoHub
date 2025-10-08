@@ -1,6 +1,6 @@
 "use client";
 import { Loader2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -13,30 +13,33 @@ import {
 } from "../../../../components/ui/alert-dialog";
 import { Button } from "../../../../components/ui/button";
 import { accountInformation } from "../../../../lib/Types";
+
 type FormActionType = {
   bankDetails: accountInformation | null;
   onClick: () => Promise<void>;
   isSubmitting: boolean;
 };
+
 export default function BankDetailsModal({
   bankDetails,
   onClick,
   isSubmitting,
 }: FormActionType) {
   const [open, setOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
+
   async function handleContinue(e: React.MouseEvent) {
     e.preventDefault();
-    try {
-      setIsLoading(true);
-      await onClick();
-      setOpen(false);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
+    startTransition(async () => {
+      try {
+        await onClick();
+        setOpen(false);
+      } catch (error) {
+        console.error(error);
+      }
+    });
   }
+
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
@@ -90,9 +93,9 @@ export default function BankDetailsModal({
               className="bg-btnBg text-secondary hover:bg-btnBg hover:text-secondary w-full cursor-pointer font-semibold md:w-fit"
               type="button"
               onClick={handleContinue}
-              disabled={isLoading}
+              disabled={isPending}
             >
-              {isLoading ? (
+              {isPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Creating Account...

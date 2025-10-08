@@ -9,36 +9,83 @@ datasource db {
 }
 
 model User {
-  id          String      @id @default(uuid())
-  clerkUserId String      @unique
-  email       String?
-  name        String
-  imageUrl    String?
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  order       Order[]
-  purchases   Purchases[]
-  wishList    WishList[]
+  id            String     @id @default(cuid())
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now()) @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+  order         Order[]
+  purchases     Purchases[]
+  wishList      WishList[]
+  @@unique([email])
+  @@map("user")
+}
 
-  @@index([clerkUserId, email, name])
+model Session {
+  id        String   @id @default(cuid())
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+
+  @@map("verification")
 }
 
 model Seller {
-  id                  String       @id @default(uuid())
-  sellerId            String       @unique
-  businessName        String
-  businessEmail       String
-  businessPhone       String
-  accountNumber       String
-  bankName            String
-  createdAt           DateTime     @default(now())
-  updatedAt           DateTime     @updatedAt
-  isProfileComplete   Boolean @default(false)
-  carList             CarListing[] @relation("PostedCars")
+  id                String       @id @default(cuid())
+  sellerId          String       @unique
+  businessName      String
+  businessEmail     String
+  businessPhone     String
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  isProfileComplete Boolean      @default(false)
+  carList           CarListing[] @relation("PostedCars")
+
+  @@index([sellerId, isProfileComplete])
 }
 
 model CarListing {
-  id           String     @id @default(uuid())
+  id           String     @id @default(cuid())
   listedById   String
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
@@ -59,23 +106,26 @@ model CarListing {
   listedBy     Seller     @relation("PostedCars", fields: [listedById], references: [sellerId])
   orders       Order?
   wishList     WishList[]
-  @@index([make, model, year, location, fuel, transmission, category, status, listedById])
+
+  @@index([make, model, year, location, fuel, transmission, condition, category, status, vin, listedById])
 }
+
 model CarImage {
-  id          String     @id @default(uuid())
-  url         String
-  key         String
-  name        String
-  carId       String
-  car         CarListing @relation(fields: [carId], references: [id], onDelete: Cascade)
-  createdAt   DateTime   @default(now())
-  @@index([carId])
+  id        String     @id @default(cuid())
+  url       String
+  key       String
+  name      String
+  carId     String
+  car       CarListing @relation(fields: [carId], references: [id], onDelete: Cascade)
+  createdAt DateTime   @default(now())
+
+  @@index([carId, id])
 }
 
 model WishList {
-  id           String     @id @default(uuid())
+  id           String     @id @default(cuid())
   userId       String
-  carListingId String      @unique
+  carListingId String     @unique
   year         Int
   transmission String
   price        Float
@@ -87,13 +137,13 @@ model WishList {
   fuel         String
   createdAt    DateTime   @default(now())
   carListing   CarListing @relation(fields: [carListingId], references: [id], onDelete: Cascade)
-  user         User       @relation(fields: [userId], references: [clerkUserId], onDelete: Cascade)
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, carListingId])
 }
 
 model Order {
-  id            String     @id @default(uuid())
+  id            String     @id @default(cuid())
   userId        String
   carListingId  String     @unique
   transactionId String?
@@ -102,13 +152,13 @@ model Order {
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
   carListing    CarListing @relation(fields: [carListingId], references: [id], onDelete: Cascade)
-  user          User       @relation(fields: [userId], references: [clerkUserId], onDelete: Cascade)
+  user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, carListingId, status])
 }
 
 model Purchases {
-  id            String   @id @default(uuid())
+  id            String   @id @default(cuid())
   userId        String
   carPuchasedId String
   amount        Float
@@ -116,8 +166,33 @@ model Purchases {
   make          String
   createdAt     DateTime @default(now())
   status        String   @default("completed")
-  user          User     @relation(fields: [userId], references: [clerkUserId], onDelete: Cascade)
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@index([userId])
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

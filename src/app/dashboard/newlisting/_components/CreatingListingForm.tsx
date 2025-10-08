@@ -1,11 +1,10 @@
 "use client";
-import { createCar } from "../../../../lib/actions/createCarListing";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IconPaperclip } from "@intentui/icons";
-import { ChevronLeft, Loader2, Upload, X } from "lucide-react";
+import { ChevronLeft, Loader2, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { NumberField } from "../../../../app/dashboard/_components/NumberInput";
@@ -21,25 +20,31 @@ import {
   SelectValue,
 } from "../../../../components/ui/select";
 import { Textarea } from "../../../../components/ui/textarea";
+import { createCar } from "../../../../lib/actions/createCarListing";
 import { CarListingSchema, TCarListingSchema } from "../../../../lib/Types";
 import { useUploadThing } from "../../../../utils/uploadthing";
 import ListingInputContainer from "../../_components/ListingInputContainer";
+import { ALLOWED_FILE_TYPES, MAX_FILE_SIZE } from "../../../../utils/Constants";
+
 type UploadedFile = {
   url: string;
   key: string;
   name: string;
 };
+
 export default function CreatingListingForm() {
+  const router = useRouter();
   const { startUpload, isUploading } = useUploadThing("imageUploader", {
     onClientUploadComplete: () => {
-      toast.success("Image upload sucessful");
+      toast.success("Image upload successful");
     },
     onUploadError: (error) => {
       toast.error(
-        `There was error with file upload: ${error.message || error}`,
+        `There was error with file upload: ${error.message || "There was an error"}`,
       );
     },
   });
+
   const {
     control,
     handleSubmit,
@@ -59,11 +64,24 @@ export default function CreatingListingForm() {
 
   async function handleFileSelect(files: File[]) {
     if (!files || files.length === 0) return;
+
     const currentImages = imagesValue;
     if (currentImages.length + files.length > 6) {
       toast.error("Maximum 6 images allowed");
       return;
     }
+    const invalidFiles = files.filter(
+      (file) =>
+        file.size > MAX_FILE_SIZE || !ALLOWED_FILE_TYPES.includes(file.type),
+    );
+
+    if (invalidFiles.length > 0) {
+      toast.error(
+        "Some files are too large (max 8MB) or invalid format. Please use JPEG, PNG, or WebP.",
+      );
+      return;
+    }
+
     try {
       const uploadImages = await startUpload(files);
       if (uploadImages) {
@@ -81,36 +99,42 @@ export default function CreatingListingForm() {
     }
   }
 
-  function handleRemoveimage(index: number) {
+  function handleRemoveImage(index: number) {
     const currentImages = imagesValue;
     const newImages = currentImages.filter((_, i) => i !== index);
     setValue("images", newImages);
   }
 
   async function handleCarListing(data: TCarListingSchema) {
-    const results = await createCar(data);
-    if (results.success) {
-      toast.success("Car listing successfully created");
-      redirect("/dashboard");
-    } else {
-      toast.error(results.error);
+    try {
+      const results = await createCar(data);
+      if (results.success) {
+        toast.success("Car listing successfully created");
+        router.push("/dashboard");
+      } else {
+        toast.error(results.error);
+      }
+    } catch (error) {
+      console.error("Listing creation error:", error);
+      toast.error("Failed to create listing. Please try again.");
     }
   }
+
   return (
-    <section className="bg-secondary flex flex-1 flex-col gap-4 px-6 pt-6 pb-8">
+    <section className="bg-secondary flex flex-1 flex-col gap-4 px-4 pt-6 pb-8 sm:px-6">
       <Link
         href="/dashboard"
-        className="border-border flex w-fit items-center gap-2 rounded-lg border px-3 py-2 text-xs"
+        className="border-border hover:bg-main flex w-fit items-center gap-2 rounded-lg border px-3 py-2 text-xs transition-colors"
       >
-        <span>
-          <ChevronLeft size={"11px"} className="text-subPrimary" />
-        </span>
-        <span className="font-inter text-white">Back</span>
+        <ChevronLeft size={11} className="text-subPrimary" />
+        <span className="font-inter">Back</span>
       </Link>
       <div>
-        <h1 className="mb-2 text-2xl font-extrabold">Create New Listing</h1>
-        <p className="text-subPrimary text-sm">
-          Fill out the form below with accurate details about your vechicle to
+        <h1 className="mb-2 text-xl font-extrabold sm:text-2xl">
+          Create New Listing
+        </h1>
+        <p className="text-subPrimary text-xs sm:text-sm">
+          Fill out the form below with accurate details about your vehicle to
           create a new listing.
         </p>
       </div>
@@ -123,7 +147,7 @@ export default function CreatingListingForm() {
               </Label>
               <Input
                 {...register("make")}
-                placeholder="Lexus"
+                placeholder="Toyota"
                 className="border-border border"
                 id="make"
               />
@@ -139,7 +163,7 @@ export default function CreatingListingForm() {
               </Label>
               <Input
                 {...register("model")}
-                placeholder="Lexus"
+                placeholder="Camry"
                 className="border-border border"
                 id="model"
               />
@@ -164,7 +188,7 @@ export default function CreatingListingForm() {
                       currency: "NGN",
                       currencyDisplay: "narrowSymbol",
                     }}
-                    step={1000000}
+                    step={100000}
                     placeholder="₦0.00"
                     minValue={0}
                     id="price"
@@ -193,8 +217,8 @@ export default function CreatingListingForm() {
                       minimumIntegerDigits: 4,
                       useGrouping: false,
                     }}
-                    minValue={2010}
-                    maxValue={new Date().getFullYear() + 10}
+                    minValue={1990}
+                    maxValue={new Date().getFullYear() + 1}
                     id="year"
                     value={field.value}
                     onChange={field.onChange}
@@ -239,7 +263,7 @@ export default function CreatingListingForm() {
           </div>
           <ListingInputContainer>
             <Label className="text-sm font-semibold" htmlFor="condition">
-              Condition
+              Condition *
             </Label>
             <Controller
               control={control}
@@ -283,6 +307,7 @@ export default function CreatingListingForm() {
               placeholder="Enter Vehicle Identification Number"
               className="border-border border"
               id="vin"
+              maxLength={17}
             />
             {errors.vin?.message && (
               <span className="pl-1 text-sm text-red-500">
@@ -296,7 +321,7 @@ export default function CreatingListingForm() {
             </Label>
             <Input
               {...register("location")}
-              placeholder="Enter Vehicle Location"
+              placeholder="e.g., Lagos, Nigeria"
               className="border-border border"
               id="location"
             />
@@ -435,16 +460,18 @@ export default function CreatingListingForm() {
                 {errors.description.message}
               </span>
             )}
-
             <span className="text-subPrimary text-sm">
               {descriptionValue.length}/500
             </span>
           </ListingInputContainer>
+
           {/* For Images */}
-          <div className="mt-6 flex w-fit flex-col gap-2">
+          <div className="mt-6 flex w-full flex-col gap-2">
             <span className="text-sm font-semibold">
               {imagesValue.length}/6 images{" "}
-              {imagesValue.length < 3 && "(minimum 3 required)"}
+              {imagesValue.length < 3 && (
+                <span className="text-red-500">(minimum 3 required)</span>
+              )}
             </span>
             <label htmlFor="imageUpload" className="cursor-pointer">
               <Button
@@ -456,7 +483,7 @@ export default function CreatingListingForm() {
                 <div>
                   {isUploading ? (
                     <>
-                      <Upload
+                      <Loader2
                         className="text-subPrimary animate-spin"
                         size={16}
                       />
@@ -465,17 +492,18 @@ export default function CreatingListingForm() {
                   ) : (
                     <>
                       <IconPaperclip className="text-subPrimary rotate-45" />
-                      <span>Browse Files...</span>
+                      <span>Browse Files</span>
                     </>
                   )}
                 </div>
               </Button>
             </label>
+
             <input
               id="imageUpload"
               type="file"
               multiple
-              accept="image/*"
+              accept="image/jpeg,image/png,image/webp"
               onChange={(e) => {
                 const files = Array.from(e.target.files || []);
                 handleFileSelect(files);
@@ -483,6 +511,7 @@ export default function CreatingListingForm() {
               }}
               className="hidden"
               disabled={isUploading || imagesValue.length >= 6}
+              aria-label="Upload vehicle images"
             />
             {errors.images?.message && (
               <span className="pl-1 text-sm text-red-500">
@@ -490,40 +519,43 @@ export default function CreatingListingForm() {
               </span>
             )}
           </div>
-          {/* show the uploaded images */}
+
+          {/* Show the uploaded images */}
           {imagesValue.length > 0 && (
-            <div className="mt-2 grid grid-cols-2 gap-2 md:grid-cols-4">
+            <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
               {imagesValue.map((image: UploadedFile, index: number) => (
-                <div key={index} className="group relative">
+                <div key={image.key} className="group relative">
                   <div className="border-border relative aspect-video overflow-hidden rounded-lg border">
                     <Image
                       src={image.url}
-                      alt={image.name}
+                      alt={`Vehicle image ${index + 1}`}
                       fill
                       className="object-cover"
-                      sizes="(max-width: 768px) 50vw, 33vw"
+                      sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
                     />
                     <button
                       type="button"
-                      onClick={() => handleRemoveimage(index)}
-                      className="absolute top-2 right-2 cursor-pointer rounded-full bg-red-500 p-1 text-white"
+                      onClick={() => handleRemoveImage(index)}
+                      className="absolute top-2 right-2 cursor-pointer rounded-full bg-red-500 p-1.5 text-white opacity-0 transition-opacity group-hover:opacity-100 hover:bg-red-600"
+                      aria-label={`Remove image ${index + 1}`}
                     >
-                      <X size={12} />
+                      <X size={14} />
                     </button>
                   </div>
                 </div>
               ))}
             </div>
           )}
+
           <Button
             type="submit"
-            disabled={isSubmitting || isUploading}
-            className="bg-btnBg text-secondary hover:bg-btnBg mt-6 w-full cursor-pointer rounded-lg py-4 text-sm font-semibold"
+            disabled={isSubmitting || isUploading || imagesValue.length < 3}
+            className="bg-btnBg text-secondary hover:bg-btnBg mt-6 w-full cursor-pointer rounded-lg py-4 text-sm font-semibold hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isSubmitting ? (
               <>
                 <Loader2 className="mr-1 h-4 w-4 animate-spin" />
-                Creating Listing
+                Creating Listing...
               </>
             ) : (
               "Create Listing"

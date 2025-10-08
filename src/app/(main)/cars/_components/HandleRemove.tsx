@@ -1,8 +1,8 @@
 "use client";
 import { CiHeart } from "react-icons/ci";
 import { Button } from "../../../../components/ui/button";
-import { TWishListSchema } from "@/lib/Types";
-import { useWishlist } from "@/hooks/useWishlist";
+import { TWishListSchema } from "../../../../lib/Types";
+import { useWishlist } from "../../../../hooks/useWishlist";
 export default function HandleRemove({
   image,
   make,
@@ -50,13 +50,3 @@ export default function HandleRemove({
     </Button>
   );
 }
-
-//  <Button
-//       {isPending ? (
-//         ""
-//       ) : (
-//         <span>
-//           <CiHeart /> Add to Wishlist
-//         </span>
-//       )}
-//     </Button>

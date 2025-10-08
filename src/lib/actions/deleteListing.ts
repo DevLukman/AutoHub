@@ -1,11 +1,11 @@
 "use server";
-import { auth } from "@clerk/nextjs/server";
-import { db } from "../prisma";
 import { revalidatePath } from "next/cache";
+import { db } from "../prisma";
+import { getUserSession } from "./getSession";
 
 export async function DeleteListing(id: string) {
-  const { userId } = await auth();
-  if (!userId) return { error: "unauthorised" };
+  const session = await getUserSession();
+  if (!session) return { error: "Unauthorized" };
   try {
     await db.carListing.delete({
       where: {
@@ -15,7 +15,11 @@ export async function DeleteListing(id: string) {
     revalidatePath("/dashboard/listings");
     return { success: true };
   } catch (error) {
-    console.error("There was error", error);
-    throw new Error("There was an error deleting listing");
+    const e = error as Error;
+    console.error(error);
+    return {
+      success: false,
+      message: e.message || "There is an error with deleting listing",
+    };
   }
 }

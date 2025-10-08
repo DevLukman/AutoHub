@@ -3,6 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { IoBagOutline } from "react-icons/io5";
 import { Separator } from "../components/ui/separator";
+import { auth } from "../lib/auth";
 import NavAuth from "./NavAuth";
 import SearchButton from "./Search";
 type Links = {
@@ -17,7 +18,9 @@ const navLinks: Links[] = [
   { link: "My Purchases", href: "/purchases" },
 ];
 
-export default function Navigation() {
+type Session = typeof auth.$Infer.Session;
+
+export default function Navigation({ session }: { session: Session | null }) {
   const pathName = usePathname();
   return (
     <nav
@@ -57,7 +60,7 @@ export default function Navigation() {
           </Link>
 
           <Separator orientation="vertical" className="mr-2" />
-          <NavAuth />
+          <NavAuth session={session} />
         </div>
       </div>
     </nav>

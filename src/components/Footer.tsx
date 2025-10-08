@@ -25,18 +25,18 @@ export default function Footer() {
                 <Link href="/">Home</Link>
               </li>
               <li className="text-sm">
-                <Link href="/">Search</Link>
+                <Link href="/cars">Search</Link>
               </li>
               <li className="text-sm">
-                <Link href="/">Sell your car</Link>
+                <Link href="/becomeSeller">Sell your car</Link>
               </li>
               <li className="text-sm">
-                <Link href="/">Blog</Link>
+                <Link href="/blog">Blog</Link>
               </li>
             </ul>
           </div>
         </div>
-        <div className="flex flex-col gap-10 md:flex-row md:gap-12">
+        <div className="mt-8 flex flex-col gap-10 md:mt-0 md:flex-row md:gap-12">
           <div>
             <h1 className="mb-4 text-xl font-semibold">Contact us</h1>
             <p className="text-subPrimary mb-2 text-sm">
@@ -45,22 +45,26 @@ export default function Footer() {
             <p className="text-subPrimary mb-2 text-sm">
               Phone: (123) 456-7890
             </p>
-            <p className="text-subPrimary text-sm">
-              Email: info@carmarketplace.com
-            </p>
+            <p className="text-subPrimary text-sm">Email: info@autohub.com</p>
           </div>
           <div>
             <h2 className="mb-4 text-xl font-semibold">Follow Us</h2>
             <div className="flex space-x-4">
-              <Link href="/" className="transition duration-300">
+              <Link
+                href="https://facebook.com/autohub"
+                className="transition duration-300"
+              >
                 <IoLogoFacebook className="text-subPrimary hover:text-primary size-6" />
               </Link>
-              <Link className="transition duration-300" href="/">
+              <Link
+                className="transition duration-300"
+                href="https://twitter.com/autohub"
+              >
                 <IoLogoTwitter className="text-subPrimary hover:text-primary size-6" />
               </Link>
               <Link
-                className="text-muted-fg hover:text-fg transition duration-300"
-                href="/"
+                className="transition duration-300"
+                href="https://instagram.com/autohub"
               >
                 <IoLogoInstagram className="text-subPrimary hover:text-primary size-6" />
               </Link>
@@ -68,16 +72,29 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className="border-border mt-4 flex flex-col items-center justify-between gap-3 border-t pt-6 md:flex-row">
+      <div className="border-border mt-4 flex flex-col items-center justify-between gap-3 border-t pt-6 text-center md:flex-row md:text-left">
         <p className="text-subPrimary text-sm">
-          Inspiration: <a href="https://www.olamidee.tech/">Olamide.tech</a>
+          Design Inspiration:
+          <a
+            href="https://www.olamidee.tech/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Olamide.tech
+          </a>
         </p>
         <p className="text-subPrimary text-sm">
-          &copy; {new Date().getFullYear()} Car Marketplace. All rights
-          reserved.
+          &copy; {new Date().getFullYear()} AutoHub. All rights reserved.
         </p>
         <p className="text-subPrimary text-sm">
-          Developed: <a href="https://lukasfolio.vercel.app">Lukas Flick</a>
+          Developed by:{" "}
+          <a
+            href="https://lukasfolio.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Lukas Flick
+          </a>
         </p>
       </div>
     </footer>

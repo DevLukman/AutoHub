@@ -1,3 +1,4 @@
+import { Search } from "lucide-react";
 import Form from "next/form";
 import {
   Select,
@@ -8,7 +9,6 @@ import {
   SelectValue,
 } from "../components/ui/select";
 import { Button } from "./ui/button";
-import { Search } from "lucide-react";
 
 export default function HeroSearch() {
   return (
@@ -46,9 +46,9 @@ export default function HeroSearch() {
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectItem value="2024">2024</SelectItem>
-            <SelectItem value="2023">2023</SelectItem>
-            <SelectItem value="2022">2022</SelectItem>
+            <SelectItem value="2024">2025</SelectItem>
+            <SelectItem value="2023">2024</SelectItem>
+            <SelectItem value="2022">2023</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>

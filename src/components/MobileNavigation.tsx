@@ -1,4 +1,5 @@
 "use client";
+import { auth } from "../lib/auth";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -20,7 +21,12 @@ const navLinks = [
   { link: "Wishlist", href: "/wishlist" },
   { link: "My Purchases", href: "/purchases" },
 ];
-export default function MobileNavigation() {
+type Session = typeof auth.$Infer.Session;
+export default function MobileNavigation({
+  session,
+}: {
+  session: Session | null;
+}) {
   const pathName = usePathname();
 
   return (
@@ -79,7 +85,7 @@ export default function MobileNavigation() {
         <div className="flex h-5 items-center gap-2">
           <SearchButton />
           <Separator orientation="vertical" className="mr-2" />
-          <NavAuth />
+          <NavAuth session={session} />
         </div>
       </div>
     </nav>

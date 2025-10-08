@@ -14,6 +14,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  TableCaption,
 } from "../../../components/ui/table";
 import { Orders } from "../../../lib/actions/getOrder";
 import { formatToNaria } from "../../../utils/helper";
@@ -25,28 +26,38 @@ type PageProps = {
     query?: string;
   }>;
 };
+
 export default async function Order({ searchParams }: PageProps) {
-  const parmas = await searchParams;
-  const search = parmas.query;
-  const page = Math.max(1, Number(parmas.page) || 1);
+  const params = await searchParams;
+  const search = params.query;
+  const page = Math.max(1, parseInt(params.page || "1", 10) || 1);
   const { data, pagination } = await Orders(search, page);
   return (
     <section className="bg-secondary flex flex-1 flex-col gap-4 px-6 pt-6 pb-4">
-      <h1 className="text-primary text-2xl font-[700]">Orders</h1>
+      <h1 className="text-primary text-2xl font-bold">Orders</h1>
       <Form
         action={"/dashboard/orders"}
         className="relative mt-6 flex w-full items-center gap-3 text-sm"
+        role="search"
+        aria-label="Search orders"
       >
-        <Search className="text-subPrimary absolute left-[2%]" size={"17px"} />
+        <Search
+          className="text-subPrimary absolute top-1/2 left-3 -translate-y-1/2"
+          size={17}
+          aria-hidden="true"
+        />
+
         <input
-          className="border-border placeholder:text-subPrimary flex-1 rounded-sm border px-11 py-2.5"
-          placeholder="Search..."
+          className="border-border placeholder:text-subPrimary w-full rounded-sm border py-2.5 pr-4 pl-11 focus:ring-2 focus:outline-none"
+          placeholder="Search by vehicle, buyer name, or email..."
           name="query"
-        ></input>
+          type="search"
+          defaultValue={search}
+          aria-label="Search orders"
+        />
         <button
-          disabled={data.length === 0}
           type="submit"
-          className="bg-btnBg text-secondary cursor-pointer rounded-sm px-4 py-2.5 text-sm disabled:cursor-not-allowed disabled:opacity-40"
+          className="bg-btnBg text-secondary hover:bg-opacity-90 cursor-pointer rounded-sm px-6 py-2.5 text-sm font-medium whitespace-nowrap transition-colors"
         >
           Search
         </button>
@@ -55,6 +66,7 @@ export default async function Order({ searchParams }: PageProps) {
       <div className="mt-4">
         <Suspense fallback={<OrderLoading />}>
           <Table>
+            <TableCaption className="sr-only">List of your orders</TableCaption>
             <TableHeader className="bg-main">
               <TableRow>
                 <TableHead> Vehicle</TableHead>
@@ -72,12 +84,38 @@ export default async function Order({ searchParams }: PageProps) {
                 <TableRow>
                   <TableCell colSpan={8} className="h-64 text-center">
                     <div className="flex w-full flex-col items-center justify-center py-8">
-                      <h2 className="text-primary mb-2 text-lg font-semibold">
-                        You have no orders yet
-                      </h2>
-                      <p className="text-subPrimary mb-6 text-center text-sm">
-                        All your will show when there is an order
+                      <div className="mb-4">
+                        <svg
+                          className="text-subPrimary mx-auto h-12 w-12"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                          />
+                        </svg>
+                      </div>
+                      <p className="text-primary mb-2 text-lg font-semibold">
+                        {search ? "No orders found" : "You have no orders yet"}
                       </p>
+                      <p className="text-subPrimary mb-6 max-w-md text-center text-sm">
+                        {search
+                          ? "Try adjusting your search terms"
+                          : "All your orders will show here when there is an order"}
+                      </p>
+                      {search && (
+                        <Link
+                          href="/dashboard/orders"
+                          className="text-subPrimary hover:text-subPrimary text-sm font-medium underline"
+                        >
+                          Clear search
+                        </Link>
+                      )}
                     </div>
                   </TableCell>
                 </TableRow>
@@ -122,7 +160,7 @@ export default async function Order({ searchParams }: PageProps) {
             <Link
               href={
                 pagination.hasPrevious
-                  ? `/dashboard/orders?page=${pagination.currentPage - 1}`
+                  ? `/dashboard/orders?page=${pagination.currentPage - 1}${search ? `&query=${search}` : ""}`
                   : "#"
               }
               className={`flex items-center gap-2 text-sm ${
@@ -143,7 +181,7 @@ export default async function Order({ searchParams }: PageProps) {
             <Link
               href={
                 pagination.hasNext
-                  ? `/dashboard/orders?page=${pagination.currentPage + 1}`
+                  ? `/dashboard/orders?page=${pagination.currentPage + 1}${search ? `&query=${search}` : ""}`
                   : "#"
               }
               className={`flex items-center gap-2 text-sm ${

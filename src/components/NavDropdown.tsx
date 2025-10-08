@@ -1,5 +1,4 @@
 "use client";
-import { SignOutButton, useUser } from "@clerk/nextjs";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
 import { CiViewList } from "react-icons/ci";
@@ -16,25 +15,38 @@ import {
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu";
 import { Avatar } from "./ui/avatar";
-export default function NavDropdown() {
-  const { user } = useUser();
-  const first = user?.fullName?.split(" ")[0].split("")[0];
-  const second = user?.fullName?.split(" ")[1].split("")[0];
+import { auth } from "../lib/auth";
+import { useRouter } from "next/navigation";
+import { logout } from "../lib/actions/authAction";
+import { toast } from "react-toastify";
+type Session = typeof auth.$Infer.Session;
+export default function NavDropdown({ session }: { session: Session }) {
+  const name: string = session.user.name.split("")[0];
+  const router = useRouter();
+  async function handleLogout() {
+    const result = await logout();
+    if (result.success) {
+      toast.success(result.message);
+      router.push("/");
+    } else {
+      toast.error(result.message);
+    }
+  }
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button type="button" className="cursor-pointer">
           <Avatar className="border-border text-primary flex h-7 w-7 items-center justify-center rounded-sm border text-center">
-            <span className="font-inter text-center text-xs">{`${first}${second}`}</span>
+            <span className="font-inter text-center text-xs">{name}</span>
           </Avatar>
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-main text-primary w-56" align="end">
         <DropdownMenuLabel className="truncate py-1 text-sm">
-          {user?.fullName}
+          {session.user.name}
         </DropdownMenuLabel>
         <DropdownMenuLabel className="text-subPrimary py-0 text-sm">
-          {user?.emailAddresses[0].emailAddress}
+          {session.user.email}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
@@ -59,7 +71,7 @@ export default function NavDropdown() {
         <DropdownMenuSeparator />
         <DropdownMenuItem className="focus:bg-btnBg focus:text-secondary py-2">
           <LogOut />
-          <SignOutButton>Log out</SignOutButton>
+          <button onClick={handleLogout}>Logout</button>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

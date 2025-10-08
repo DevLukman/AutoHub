@@ -1,5 +1,4 @@
 "use client";
-import { SignOutButton } from "@clerk/nextjs";
 import {
   BadgeCheck,
   Bell,
@@ -8,8 +7,10 @@ import {
   LogOut,
   Sparkles,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { logout } from "../lib/actions/authAction";
 
-import { useUser } from "@clerk/nextjs";
 import { Avatar } from "../components/ui/avatar";
 import {
   DropdownMenu,
@@ -26,15 +27,21 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "../components/ui/sidebar";
-export function NavUser() {
+import { auth } from "../lib/auth";
+type Session = typeof auth.$Infer.Session;
+export function NavUser({ session }: { session: Session | null }) {
   const { isMobile } = useSidebar();
-  const { user, isLoaded } = useUser();
-  const first = user?.fullName?.split(" ")[0].split("")[0];
-  const second = user?.fullName?.split(" ")[1].split("")[0];
-  if (!isLoaded)
-    return (
-      <div className="bg-subPrimary flex h-10 w-full animate-pulse items-center justify-center rounded-lg"></div>
-    );
+  const router = useRouter();
+  const name: string = session?.user.name.split("")[0] || "";
+  async function handleLogout() {
+    const result = await logout();
+    if (result.success) {
+      toast.success(result.message);
+      router.push("/");
+    } else {
+      toast.error(result.message);
+    }
+  }
   return (
     <SidebarMenu className="bg-main rounded-lg">
       <SidebarMenuItem>
@@ -45,14 +52,14 @@ export function NavUser() {
               className="data-[state=open]:bg-mainHover border-border hover:text-primary text-primary bg-main data-[state=open]:text-primary cursor-pointer border"
             >
               <Avatar className="border-border text-primary flex h-8 w-8 items-center justify-center rounded-sm border">
-                <span className="font-inter">{`${first}${second}`}</span>
+                <span className="font-inter">{name}</span>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="text-primary truncate text-sm font-medium">
-                  {user?.firstName}
+                  {session?.user.name}
                 </span>
                 <span className="text-subPrimary truncate text-sm">
-                  {user?.emailAddresses[0].emailAddress}
+                  {session?.user.email}
                 </span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
@@ -67,14 +74,14 @@ export function NavUser() {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="border-border text-primary flex h-8 w-8 items-center justify-center rounded-sm border">
-                  <span className="font-inter">{`${first}${second}`}</span>
+                  <span className="font-inter">{name}</span>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">
-                    {user?.firstName}
+                    {session?.user.name}
                   </span>
                   <span className="truncate text-xs">
-                    {user?.emailAddresses[0].emailAddress}
+                    {session?.user.email}
                   </span>
                 </div>
               </div>
@@ -105,9 +112,9 @@ export function NavUser() {
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <LogOut />
-                <SignOutButton>
+                <button onClick={handleLogout}>
                   <span className="cursor-pointer">Log out</span>
-                </SignOutButton>
+                </button>
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>

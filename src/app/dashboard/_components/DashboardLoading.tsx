@@ -1,7 +1,7 @@
-import { Skeleton } from "../../../components/ui/skeleton";
 import { CiMoneyBill } from "react-icons/ci";
 import { IoBagOutline, IoCarSport } from "react-icons/io5";
 import { Card, CardDescription, CardHeader } from "../../../components/ui/card";
+import { Skeleton } from "../../../components/ui/skeleton";
 import {
   Table,
   TableBody,

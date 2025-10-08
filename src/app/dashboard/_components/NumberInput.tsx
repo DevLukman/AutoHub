@@ -13,10 +13,10 @@ import {
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
 
+import { type Ref, useImperativeHandle, useRef } from "react";
 import { useMediaQuery } from "../../../utils/mediaQuery";
 import { Description, FieldError, FieldGroup, Input, Label } from "./Field";
 import { composeTailwindRenderProps } from "./Primitive";
-import { type Ref, useImperativeHandle, useRef } from "react";
 
 const fieldBorderStyles = tv({
   base: "group-data-focused:border-primary/70 forced-colors:border-[Highlight]",
@@ -153,5 +153,5 @@ const StepperButton = ({
   );
 };
 
-export type { NumberFieldProps };
 export { NumberField };
+export type { NumberFieldProps };

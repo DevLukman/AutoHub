@@ -1,11 +1,12 @@
 "use server";
-import { auth } from "@clerk/nextjs/server";
-import { db } from "../prisma";
 import { PAGE_SIZE, PLATFORM_FEE_PERCENTAGE } from "@/utils/Constants";
+import { db } from "../prisma";
+import { getUserSession } from "./getSession";
 
 export async function Orders(search: string = "", page: number = 1) {
-  const { userId } = await auth();
-  if (!userId) {
+  const session = await getUserSession();
+
+  if (!session) {
     return {
       success: false,
       error: "Unauthorized access",
@@ -27,33 +28,31 @@ export async function Orders(search: string = "", page: number = 1) {
 
     const whereClause = {
       carListing: {
-        listedById: userId,
-        status: "sold" as const,
+        listedById: session.user.id,
+        status: "sold",
       },
-      ...(cleanSearch && {
-        OR: [
-          {
-            user: {
-              name: { contains: cleanSearch, mode: "insensitive" as const },
-            },
+      OR: [
+        {
+          user: {
+            name: { contains: cleanSearch, mode: "insensitive" as const },
           },
-          {
-            user: {
-              email: { contains: cleanSearch, mode: "insensitive" as const },
-            },
+        },
+        {
+          user: {
+            email: { contains: cleanSearch, mode: "insensitive" as const },
           },
-          {
-            carListing: {
-              model: { contains: cleanSearch, mode: "insensitive" as const },
-            },
+        },
+        {
+          carListing: {
+            model: { contains: cleanSearch, mode: "insensitive" as const },
           },
-          {
-            carListing: {
-              make: { contains: cleanSearch, mode: "insensitive" as const },
-            },
+        },
+        {
+          carListing: {
+            make: { contains: cleanSearch, mode: "insensitive" as const },
           },
-        ],
-      }),
+        },
+      ],
     };
 
     const [data, totalCount] = await Promise.all([
@@ -112,10 +111,11 @@ export async function Orders(search: string = "", page: number = 1) {
       },
     };
   } catch (error) {
+    const e = error as Error;
     console.error("Failed to fetch orders:", error);
     return {
       success: false,
-      error: "Failed to load orders. Please try again.",
+      error: e.message || "Failed to load orders. Please try again.",
       data: [],
       pagination: {
         currentPage: 1,

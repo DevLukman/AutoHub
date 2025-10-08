@@ -1,30 +1,22 @@
 "use server";
-import { auth } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 import { db } from "../prisma";
 import { TWishListSchema, WishListSchema } from "../Types";
-import { revalidatePath } from "next/cache";
+import { getUserSession } from "./getSession";
 
 export async function getWishlist() {
-  const { userId } = await auth();
-  if (!userId) {
-    return {
-      error: "You need to be logged in to add to wishlist",
-      success: false,
-      count: 0,
-      data: [],
-    };
-  }
-
+  const session = await getUserSession();
+  if (!session) return { error: "Unauthorised" };
   try {
     const data = await db.wishList.findMany({
       where: {
-        user: { clerkUserId: userId },
+        user: { id: session.user.id },
       },
       orderBy: { createdAt: "desc" },
     });
     const count = await db.wishList.count({
       where: {
-        user: { clerkUserId: userId },
+        user: { id: session.user.id },
       },
     });
     return { data, success: true, error: null, count };
@@ -40,25 +32,10 @@ export async function getWishlist() {
 }
 
 export async function createWishlist(wishData: TWishListSchema) {
-  const { userId } = await auth();
-  if (!userId) {
-    return {
-      error: "OOps, you have to be logged in to creat wishlist",
-    };
-  }
-  const wishListData = {
-    make: wishData.make,
-    model: wishData.make,
-    location: wishData.location,
-    price: wishData.price,
-    year: wishData.year,
-    mileage: wishData.mileage,
-    fuel: wishData.fuel,
-    transmission: wishData.transmission,
-    image: wishData.image,
-    carListingId: wishData.carListingId,
-  };
-  const WishListSchemaValidation = WishListSchema.safeParse(wishListData);
+  const session = await getUserSession();
+  if (!session)
+    return { error: "OOps, you have to be logged in to create wishlist" };
+  const WishListSchemaValidation = WishListSchema.safeParse(wishData);
 
   if (!WishListSchemaValidation.success) {
     return { error: "There is an error with creating the car list" };
@@ -67,7 +44,7 @@ export async function createWishlist(wishData: TWishListSchema) {
     const data = db.wishList.create({
       data: {
         ...WishListSchemaValidation.data,
-        userId: userId,
+        userId: session.user.id,
       },
     });
     return { success: true, data };
@@ -78,14 +55,14 @@ export async function createWishlist(wishData: TWishListSchema) {
 }
 
 export async function deleteWishlist(id: string) {
-  const { userId } = await auth();
-  if (!userId) return { error: "You have to be logged in" };
+  const session = await getUserSession();
 
+  if (!session) return { error: "You have to be logged in" };
   try {
     const existingItem = await db.wishList.findFirst({
       where: {
         carListingId: id,
-        userId: userId,
+        userId: session.user.id,
       },
     });
 
@@ -98,11 +75,11 @@ export async function deleteWishlist(id: string) {
         id: existingItem.id,
       },
     });
-
-    revalidatePath("/wishlist");
+    revalidatePath("/");
     return { success: true };
   } catch (error) {
+    const e = error as Error;
     console.error("Delete wishlist error:", error);
-    return { error: "Failed to delete from wishlist" };
+    return { error: e.message || "Failed to delete from wishlist" };
   }
 }

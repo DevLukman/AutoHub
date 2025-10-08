@@ -1,5 +1,4 @@
 "use server";
-
 import { buildCarFilters } from "@/utils/helper";
 import { db } from "../prisma";
 import { SearchAndFilterProps } from "../Types";

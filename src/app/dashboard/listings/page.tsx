@@ -112,9 +112,9 @@ export default async function Page({ searchParams }: PageProps) {
                           car.status === "pending"
                             ? "pending"
                             : car.status === "active"
-                              ? "sucess"
+                              ? "success"
                               : car.status === "sold"
-                                ? "secondary"
+                                ? "success"
                                 : "destructive"
                         }`}
                       >

@@ -1,22 +1,39 @@
+"use client";
 import {
   createWishlist,
   deleteWishlist,
   getWishlist,
 } from "@/lib/actions/wishlist";
 import { TWishListSchema } from "@/lib/Types";
-import { useEffect, useState, useTransition } from "react";
+import { useTransition } from "react";
 import { toast } from "react-toastify";
+import useSWR from "swr";
 
 export function useWishlist(wishListData: TWishListSchema) {
   const [isPending, startTransition] = useTransition();
-  const [isInWishlist, setIsInWishlist] = useState(false);
+  const { data: wishlistData, mutate } = useSWR(
+    "wishlist",
+    async () => {
+      const { data } = await getWishlist();
+      return data;
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    },
+  );
+
+  const isInWishlist =
+    wishlistData?.some(
+      (item) => item.carListingId === wishListData.carListingId,
+    ) || false;
 
   async function handleAddtoWishList() {
     startTransition(async () => {
       try {
         const results = await createWishlist(wishListData);
         if (results.success) {
-          setIsInWishlist(true);
+          mutate();
           toast.success("Added to wishlist");
         } else {
           toast.error(results.error);
@@ -28,30 +45,12 @@ export function useWishlist(wishListData: TWishListSchema) {
     });
   }
 
-  useEffect(() => {
-    async function checkInWishlist() {
-      try {
-        const { data } = await getWishlist();
-        const isInList =
-          data?.some(
-            (item) => item.carListingId === wishListData.carListingId,
-          ) || false;
-        setIsInWishlist(isInList);
-      } catch (error) {
-        console.error("Error checking wishlist:", error);
-        setIsInWishlist(false);
-      }
-    }
-
-    checkInWishlist();
-  }, [wishListData.carListingId]);
-
   async function handleDeleteWishList() {
     startTransition(async () => {
       try {
         const results = await deleteWishlist(wishListData.carListingId);
         if (results.success) {
-          setIsInWishlist(false);
+          mutate();
           toast.success("Removed from wishlist");
         } else {
           toast.error(results.error || "Failed to delete");

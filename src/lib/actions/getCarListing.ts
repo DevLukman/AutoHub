@@ -1,10 +1,10 @@
 "use server";
-import { auth } from "@clerk/nextjs/server";
-import { db } from "../prisma";
 import { PAGE_SIZE } from "@/utils/Constants";
+import { db } from "../prisma";
+import { getUserSession } from "./getSession";
 export async function carListing(page: number = 1) {
-  const { userId } = await auth();
-  if (!userId) {
+  const session = await getUserSession();
+  if (!session?.user.id) {
     return {
       success: false,
       error: "Unauthorized access",
@@ -23,12 +23,12 @@ export async function carListing(page: number = 1) {
     const finalPage = Math.max(1, Math.floor(Number(page)) || 1);
     const skip = (finalPage - 1) * PAGE_SIZE;
     const totalCount = await db.carListing.count({
-      where: { listedById: userId },
+      where: { listedById: session.user.id },
     });
     const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
     const data = await db.carListing.findMany({
-      where: { listedById: userId },
+      where: { listedById: session.user.id },
       select: {
         id: true,
         make: true,
@@ -45,8 +45,8 @@ export async function carListing(page: number = 1) {
       take: PAGE_SIZE,
     });
 
-    const count = db.carListing.count({
-      where: { listedById: userId },
+    const count = await db.carListing.count({
+      where: { listedById: session.user.id },
     });
 
     return {
@@ -83,21 +83,21 @@ export async function carListing(page: number = 1) {
 }
 
 export async function listingStatus() {
-  const { userId } = await auth();
-  if (!userId)
+  const session = await getUserSession();
+  if (!session)
     return {
       carListingCount: 0,
       activeCars: 0,
       soldCars: 0,
     };
   const carListingCount = await db.carListing.count({
-    where: { listedById: userId },
+    where: { listedById: session.user.id },
   });
   const activeCars = await db.carListing.count({
-    where: { listedById: userId, status: "active" },
+    where: { listedById: session.user.id, status: "active" },
   });
   const soldCars = await db.carListing.count({
-    where: { listedById: userId, status: "sold" },
+    where: { listedById: session.user.id, status: "sold" },
   });
 
   return { carListingCount, activeCars, soldCars };

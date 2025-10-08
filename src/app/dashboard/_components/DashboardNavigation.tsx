@@ -1,18 +1,17 @@
 "use client";
-
-import {
-  SidebarGroup,
-  SidebarGroupLabel,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BiShoppingBag } from "react-icons/bi";
 import { FaClipboardList } from "react-icons/fa";
 import { GrOverview } from "react-icons/gr";
 import { MdOutlineCreateNewFolder } from "react-icons/md";
+import {
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "../../../components/ui/sidebar";
 
 const dashboardLinks = [
   { id: 1, name: "overview", href: "/dashboard", icon: <GrOverview /> },

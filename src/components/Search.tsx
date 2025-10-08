@@ -93,10 +93,9 @@ export default function SearchButton() {
     [handleClose],
   );
 
-  // Result click handler with cleanup
-  // const handleResultClick = useCallback(() => {
-  //   handleClose();
-  // }, [handleClose]);
+  const handleResultClick = useCallback(() => {
+    handleClose();
+  }, [handleClose]);
 
   return (
     <div>
@@ -106,19 +105,19 @@ export default function SearchButton() {
           className="hover:bg-main text-subPrimary hover:text-primary cursor-pointer rounded-sm px-2 py-2 transition-all duration-300 ease-in-out"
           aria-label="Open search"
         >
-          <Search size="1rem" />
+          <Search size={16} />
         </button>
         {isOpen && (
-          <div className="bg-main/10 fixed inset-0 z-50 h-dvh w-full overflow-hidden backdrop-blur-sm">
+          <div className="bg-main/10 fixed inset-0 z-50 h-dvh w-full overflow-hidden pt-20 backdrop-blur-sm">
             <div
               ref={closeRef}
-              className="absolute top-[15%] left-[50%] w-full -translate-x-[50%] -translate-y-[50%] px-4 md:w-[50%] md:px-0"
+              className="absolute top-[10%] left-[50%] w-full -translate-x-[50%] px-4 md:w-[50%] md:px-0"
             >
               <form className="w-full" onSubmit={(e) => e.preventDefault()}>
                 <div className="relative flex w-full items-center">
                   <Search
                     className="text-subPrimary absolute left-[2%]"
-                    size={"17px"}
+                    size={17}
                     aria-hidden="true"
                   />
                   <input
@@ -146,7 +145,7 @@ export default function SearchButton() {
                 </div>
               </form>
               {search && (
-                <div className="bg-main border-border absolute flex w-[92%] flex-col gap-2 rounded-b-lg border px-2 py-4 md:w-full">
+                <div className="bg-main border-border absolute right-0 left-0 flex flex-col gap-2 rounded-b-lg border px-2 py-4">
                   {isLoading ? (
                     <div
                       className="flex items-center justify-center py-4"
@@ -174,15 +173,13 @@ export default function SearchButton() {
                           href={`/cars/${car?.id}`}
                           className="hover:bg-btnBg hover:text-secondary focus:ring-primary focus:ring-opacity-50 w-full rounded-sm px-1.5 py-2 text-sm transition duration-300 ease-out focus:ring-2 focus:outline-none"
                           role="option"
+                          onClick={handleResultClick}
                           aria-label={`View ${car?.make} ${car?.model} ${car?.year}`}
                         >
                           <div className="flex items-center gap-2">
                             <div className="relative h-6 w-[22px] flex-shrink-0">
                               <Image
-                                src={
-                                  car?.images?.[0]?.url ??
-                                  "/placeholder-car.jpg"
-                                }
+                                src={car?.images?.[0]?.url ?? ""}
                                 alt=""
                                 fill
                                 sizes="22px"

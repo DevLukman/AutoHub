@@ -1,10 +1,10 @@
 "use server";
-import { auth } from "@clerk/nextjs/server";
 import { db } from "../prisma";
+import { getUserSession } from "./getSession";
 
 export async function Purchase() {
-  const { userId } = await auth();
-  if (!userId) {
+  const session = await getUserSession();
+  if (!session) {
     return {
       error: "You need to be logged in to add to wishlist",
       success: false,
@@ -19,19 +19,19 @@ export async function Purchase() {
     const [data, count, amountSpent, orderStatus] = await Promise.all([
       db.purchases.findMany({
         where: {
-          userId: userId,
+          userId: session.user.id,
         },
         orderBy: { createdAt: "desc" },
       }),
 
       db.purchases.count({
         where: {
-          userId: userId,
+          userId: session.user.id,
         },
       }),
       db.purchases.aggregate({
         where: {
-          userId: userId,
+          userId: session.user.id,
         },
         _sum: {
           amount: true,
@@ -39,7 +39,7 @@ export async function Purchase() {
       }),
       db.purchases.count({
         where: {
-          userId: userId,
+          userId: session.user.id,
           status: "active",
         },
       }),
@@ -54,9 +54,10 @@ export async function Purchase() {
       orderStatus,
     };
   } catch (error) {
+    const e = error as Error;
     console.error(error);
     return {
-      error: "There was an error with wishlist",
+      error: e.message || "There was an error with making purchase",
       success: false,
       data: [],
       count: 0,

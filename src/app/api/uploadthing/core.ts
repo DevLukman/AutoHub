@@ -1,4 +1,5 @@
-import { auth } from "@clerk/nextjs/server";
+export const dynamic = "force-dynamic";
+import { getUserSession } from "@/lib/actions/getSession";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 
 const f = createUploadthing();
@@ -10,15 +11,13 @@ export const ourFileRouter = {
     },
   })
     .middleware(async () => {
-      const { userId } = await auth();
-      if (!userId) throw new Error("Unauthorized");
-      return { userId };
+      const session = await getUserSession();
+      if (!session) throw new Error("Unauthorized");
+      return { session };
     })
-    .onUploadComplete(async ({ metadata, file }) => {
+    .onUploadComplete(async ({ metadata }) => {
       try {
-        console.log("Upload complete for userId:", metadata.userId);
-        console.log("file url", file.ufsUrl);
-        return { uploadedBy: metadata.userId };
+        return { uploadedBy: metadata.session.user.id };
       } catch (error) {
         console.error("Error occur with uploading", error);
         throw new Error("There is error with uploading");

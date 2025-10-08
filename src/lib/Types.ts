@@ -1,6 +1,4 @@
-// import { CarListing } from "@/generated/prisma";
 import { z } from "zod";
-
 export type CarListing = {
   id: string;
   listedById: string;
@@ -72,6 +70,15 @@ export const SellerSchema = z.object({
   bankName: z.string().trim().min(1, "Bank name is required").max(100),
 });
 
+export const SellerSchemaDB = z.object({
+  businessName: z.string().trim().min(1, "Business name is required").max(100),
+  businessEmail: z.email().max(255),
+  businessPhone: z
+    .string()
+    .trim()
+    .regex(/^\d{10,11}$/, "Phone number must be 10-11 digits"),
+});
+
 export type TSellerSchema = z.infer<typeof SellerSchema>;
 
 export const CarListingSchema = z.object({
@@ -84,7 +91,7 @@ export const CarListingSchema = z.object({
     .min(2010, "Year must be 2010 or later")
     .max(new Date().getFullYear() + 10, "Invalid year"),
   mileage: z.number().min(0, "Mileage cannot be negative"),
-  condition: z.string(),
+  condition: z.string("Condition is required"),
   location: z.string().trim().min(3, "Location is required"),
   fuel: z.string(),
   transmission: z.string(),
@@ -107,14 +114,6 @@ export const CarListingSchema = z.object({
     .max(6, "Maximum 6 images allowed"),
 });
 export type TCarListingSchema = z.infer<typeof CarListingSchema>;
-
-type GetCar =
-  | { success: boolean; data: CarListing | null; error?: null }
-  | { success?: null; error: string; data?: null };
-
-export type GetCarProps = {
-  updateData: GetCar;
-};
 
 export type SearchAndFilterProps = {
   brand: string;
@@ -141,3 +140,37 @@ export const WishListSchema = z.object({
 });
 
 export type TWishListSchema = z.infer<typeof WishListSchema>;
+
+//For updating the listing
+export type GetCarToUpdateResponse =
+  | { success: true; data: CarListing; error?: never }
+  | { success: false; error: string; data?: never };
+
+export type GetCarProps = {
+  updateData: GetCarToUpdateResponse;
+};
+
+//Auth types
+
+//forgetpassword types
+export const ForgetPasswordSchema = z.object({
+  email: z.email("Please enter a valid email address").max(50),
+});
+export type TForgetPasswordSchema = z.infer<typeof ForgetPasswordSchema>;
+
+//Login types
+export const LoginSchema = z.object({
+  email: z.email("Please enter a valid email").max(50),
+  password: z.string().min(8, "Password must be at least 8 characters").max(20),
+  remember: z.boolean(),
+});
+export type TLoginSchema = z.infer<typeof LoginSchema>;
+
+//Sign up types
+export const SignupSchema = z.object({
+  name: z.string().min(1, "Name is required").max(50),
+  email: z.email("Invalid email format").max(50),
+  password: z.string().min(8, "Password must be at least 8 characters").max(20),
+});
+
+export type TSignUpSchema = z.infer<typeof SignupSchema>;

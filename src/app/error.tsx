@@ -7,6 +7,7 @@ type ErrorBoundary = {
 };
 
 export default function ErrorBoundary({ error, reset }: ErrorBoundary) {
+  console.error(error);
   const router = useRouter();
   function reload() {
     startTransition(() => {
@@ -16,14 +17,14 @@ export default function ErrorBoundary({ error, reset }: ErrorBoundary) {
   }
   return (
     <div className="flex h-dvh w-full flex-col items-center justify-center gap-4">
-      <h1 className="font-nosifer text-center text-sm text-[red]">
-        {error.message || "something went wrong"}
-      </h1>
+      <p className="font-inter text-center text-xl text-red-500">
+        Oops, something when wrong. But Don&apos;t wrong-it not your fault.
+      </p>
       <button
         onClick={reload}
-        className="text-secondary font-secondary border-secondary cursor-pointer rounded-sm border-2 px-5 py-2 text-base uppercase hover:scale-[1.2]"
+        className="font-secondary cursor-pointer rounded-sm border-2 border-red-500 px-5 py-2 text-base text-white uppercase hover:scale-[1.2]"
       >
-        Try Again
+        Retry
       </button>
     </div>
   );

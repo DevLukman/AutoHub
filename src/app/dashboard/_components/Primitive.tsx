@@ -41,7 +41,7 @@ const focusButtonStyles = tv({
 
 export {
   composeTailwindRenderProps,
+  focusButtonStyles,
   focusRing,
   focusStyles,
-  focusButtonStyles,
 };

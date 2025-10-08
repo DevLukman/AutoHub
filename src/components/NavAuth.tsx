@@ -1,57 +1,63 @@
 "use client";
-import { SignInButton, useUser } from "@clerk/nextjs";
+import { auth } from "@/lib/auth";
 import Link from "next/link";
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { sellerProfile } from "../lib/actions/createSeller";
 import NavigationLoading from "./NavigationLoading";
+type Session = typeof auth.$Infer.Session;
 const NavDropdown = lazy(() => import("../components/NavDropdown"));
-export default function NavAuth() {
-  const { isSignedIn, isLoaded } = useUser();
+export default function NavAuth({ session }: { session: Session | null }) {
   const [isMounted, setIsMounted] = useState(false);
   const [seller, setSeller] = useState<boolean | null>(null);
   const [isCheckingSeller, setIsCheckingSeller] = useState(false);
-  const sellerCache = useRef<boolean | null>(null);
+
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
   useEffect(() => {
     async function checkSellerProfile() {
-      if (!isSignedIn || !isMounted || sellerCache.current !== null) {
-        setSeller(sellerCache.current);
+      if (!session?.user) {
+        setSeller(null);
         return;
       }
+
       setIsCheckingSeller(true);
       try {
         const created = await sellerProfile();
-        sellerCache.current = created;
         setSeller(created);
       } catch (error) {
+        const e = error as Error;
+        toast.error(e.message || "There is an error with seller profile");
         console.error("Error checking seller profile:", error);
-        sellerCache.current = false;
         setSeller(false);
       } finally {
         setIsCheckingSeller(false);
       }
     }
 
-    checkSellerProfile();
-  }, [isSignedIn, isMounted]);
-  if (!isMounted || !isLoaded) {
+    if (isMounted && session?.user) {
+      checkSellerProfile();
+    }
+  }, [session?.user?.id, isMounted, session?.user]);
+
+  if (!isMounted) {
     return <NavigationLoading />;
   }
 
-  if (!isSignedIn) {
+  if (!session?.user) {
     return (
-      <SignInButton>
-        <button className="bg-btnBg text-main font-inter cursor-pointer rounded-sm px-3 py-1.5 text-sm">
-          Sign in
-        </button>
-      </SignInButton>
+      <Link
+        href="/login"
+        className="bg-btnBg text-main font-inter cursor-pointer rounded-sm px-3 py-1.5 text-sm"
+      >
+        Sign in
+      </Link>
     );
   }
 
-  if (isCheckingSeller || seller === null) {
+  if (isCheckingSeller) {
     return <NavigationLoading />;
   }
 
@@ -65,10 +71,12 @@ export default function NavAuth() {
       </Link>
     );
   }
-
-  return (
-    <Suspense fallback={<NavigationLoading />}>
-      <NavDropdown />
-    </Suspense>
-  );
+  if (seller) {
+    return (
+      <Suspense fallback={<NavigationLoading />}>
+        <NavDropdown session={session} />
+      </Suspense>
+    );
+  }
+  return <NavigationLoading />;
 }

@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Auto Hub | Wish List",
   description: "Your Best Automobile Marketplace",
@@ -7,16 +8,20 @@ import { LucideCircleGauge, LucideSquareArrowOutUpRight } from "lucide-react";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 import { CiHeart, CiLocationOn } from "react-icons/ci";
 import { GoDotFill } from "react-icons/go";
+import { CarsLoading } from "../../../components/LoadingSkeleton";
 import { getWishlist } from "../../../lib/actions/wishlist";
 import { formatToNaria } from "../../../utils/helper";
 import HandleRemoveFromWish from "./_components/HandleRemoveFromWish";
-import { CarsLoading } from "../../../components/LoadingSkeleton";
-import { Suspense } from "react";
+import { getUserSession } from "@/lib/actions/getSession";
+import { redirect } from "next/navigation";
 export default async function Wishlist() {
   const { data, count } = await getWishlist();
-  if (count < 1)
+  const session = await getUserSession();
+  if (!session?.user) redirect("/login");
+  if (!count)
     return (
       <div className="inner-container mt-[45px] flex w-full flex-col items-center">
         <span>
@@ -63,10 +68,10 @@ export default async function Wishlist() {
                 </div>
 
                 <div className="flex flex-col gap-2 px-4 py-4">
-                  <p className="text-primary truncate text-base font-semibold">
+                  <p className="text-primary truncate text-base font-bold">
                     {`${wish.make} ${wish.model}`}
                   </p>
-                  <p className="text-primary text-xl font-[700]">
+                  <p className="text-primary text-xl font-bold">
                     {formatToNaria(wish.price)}
                   </p>
                   <p className="text-subPrimary flex items-center gap-[120px] capitalize">

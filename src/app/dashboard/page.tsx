@@ -1,11 +1,10 @@
-import { getCarStatus } from "../../lib/actions/getStatus";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
 import { CiMoneyBill } from "react-icons/ci";
 import { IoBagOutline, IoCarSport } from "react-icons/io5";
 import { Badge } from "../../components/ui/badge";
 import { Card, CardDescription, CardHeader } from "../../components/ui/card";
-import { OverViewLoading, TableLoading } from "./_components/DashboardLoading";
 import {
   Table,
   TableBody,
@@ -15,8 +14,9 @@ import {
   TableRow,
 } from "../../components/ui/table";
 import { carListing } from "../../lib/actions/getCarListing";
+import { getCarStatus } from "../../lib/actions/getStatus";
 import { formatToNaria } from "../../utils/helper";
-import { Suspense } from "react";
+import { OverViewLoading, TableLoading } from "./_components/DashboardLoading";
 type PageProps = {
   searchParams: Promise<{ page?: string }>;
 };
@@ -34,7 +34,7 @@ export default async function Overview({ searchParams }: PageProps) {
           <Card className="bg-secondary border-border rounded-lg border py-4">
             <CardHeader>
               <CardDescription className="text-primary flex items-center justify-between">
-                <p className="text-sm font-medium">Total Revenue</p>
+                <p className="text-lg font-medium">Total Revenue</p>
                 <span>
                   <CiMoneyBill size={"16px"} />
                 </span>
@@ -49,7 +49,7 @@ export default async function Overview({ searchParams }: PageProps) {
           <Card className="bg-secondary border-border rounded-lg border py-4">
             <CardHeader>
               <CardDescription className="text-primary flex items-center justify-between">
-                <p className="text-sm font-medium">Active Listings</p>
+                <p className="text-lg font-medium">Active Listings</p>
                 <span>
                   <IoCarSport size={"16px"} />
                 </span>
@@ -64,7 +64,7 @@ export default async function Overview({ searchParams }: PageProps) {
           <Card className="bg-secondary border-border rounded-lg border py-4">
             <CardHeader>
               <CardDescription className="text-primary flex items-center justify-between">
-                <p className="text-sm font-medium">Total Listing</p>
+                <p className="text-lg font-medium">Total Listing</p>
                 <span>
                   <IoBagOutline size={"16px"} />
                 </span>
@@ -110,7 +110,6 @@ export default async function Overview({ searchParams }: PageProps) {
                   <TableHead>Year</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Listed At</TableHead>
-                  <TableHead></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -157,33 +156,33 @@ export default async function Overview({ searchParams }: PageProps) {
                   </TableRow>
                 ) : (
                   data.map((car) => (
-                    <TableRow className="text-xs" key={car.id}>
-                      <TableCell>{car.id}</TableCell>
-                      <TableCell>{car.make}</TableCell>
-                      <TableCell>{car.model}</TableCell>
-                      <TableCell className="font-medium">
+                    <TableRow className="text-xs sm:text-sm" key={car.id}>
+                      <TableCell className="font-medium">{car.id}</TableCell>
+                      <TableCell className="font-semibold">
                         {formatToNaria(car.price)}
                       </TableCell>
+                      <TableCell>{car.make}</TableCell>
+                      <TableCell>{car.model}</TableCell>
                       <TableCell>{car.year}</TableCell>
                       <TableCell>
                         <Badge
-                          variant={`${
+                          variant={
                             car.status === "pending"
                               ? "pending"
                               : car.status === "active"
-                                ? "sucess"
+                                ? "success"
                                 : car.status === "sold"
                                   ? "secondary"
                                   : "destructive"
-                          }`}
+                          }
                         >
                           {car.status}
                         </Badge>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="whitespace-nowrap">
                         {car.createdAt.toLocaleDateString("en-NG", {
                           day: "numeric",
-                          month: "long",
+                          month: "short",
                           year: "numeric",
                         })}
                       </TableCell>
@@ -207,6 +206,7 @@ export default async function Overview({ searchParams }: PageProps) {
                     : "cursor-not-allowed text-gray-400"
                 }`}
                 aria-disabled={!pagination.hasPrevious}
+                tabIndex={pagination.hasPrevious ? 0 : -1}
               >
                 <span>
                   <ChevronLeftIcon size={14} />
@@ -228,6 +228,7 @@ export default async function Overview({ searchParams }: PageProps) {
                     : "cursor-not-allowed text-gray-400"
                 }`}
                 aria-disabled={!pagination.hasNext}
+                tabIndex={pagination.hasNext ? 0 : -1}
               >
                 <span>Next</span>
                 <span>

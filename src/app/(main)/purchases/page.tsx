@@ -1,8 +1,10 @@
+export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Auto Hub | Purchases",
   description: "Your Best Automobile Marketplace",
 };
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { CiMoneyBill } from "react-icons/ci";
 import { IoBagOutline, IoCarSport } from "react-icons/io5";
@@ -20,10 +22,15 @@ import {
   TableHeader,
   TableRow,
 } from "../../../components/ui/table";
+import { getUserSession } from "../../../lib/actions/getSession";
 import { Purchase } from "../../../lib/actions/purchase";
 import { formatToNaria } from "../../../utils/helper";
 
 export default async function Purchases() {
+  const session = await getUserSession();
+  if (!session?.user) {
+    redirect("/login");
+  }
   const { data, count, spent, orderStatus } = await Purchase();
   return (
     <>
@@ -139,7 +146,7 @@ export default async function Purchases() {
                           <Badge
                             variant={
                               purchase.status === "completed"
-                                ? "sucess"
+                                ? "success"
                                 : "destructive"
                             }
                           >

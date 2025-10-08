@@ -1,12 +1,13 @@
 "use server";
-import { currentUser } from "@clerk/nextjs/server";
 import { db } from "../prisma";
-import { SellerSchema } from "../Types";
+import { SellerSchemaDB } from "../Types";
+import { getUserSession } from "./getSession";
+
 export async function createSeller(formData: FormData) {
-  const user = await currentUser();
-  if (!user?.id) return { error: "Unauthorized" };
+  const session = await getUserSession();
+  if (!session) return { error: "Unauthorized" };
   const existingSeller = await db.seller.findUnique({
-    where: { sellerId: user.id },
+    where: { sellerId: session.user.id },
   });
 
   if (existingSeller) return { error: "Seller profile already exists" };
@@ -15,40 +16,37 @@ export async function createSeller(formData: FormData) {
     businessName: formData.get("businessName"),
     businessEmail: formData.get("businessEmail"),
     businessPhone: formData.get("businessPhone"),
-    accountNumber: formData.get("accountNumber"),
-    bankName: formData.get("bankName"),
   };
 
-  const schemaValidation = SellerSchema.safeParse(sellerData);
+  const schemaValidation = SellerSchemaDB.safeParse(sellerData);
   if (!schemaValidation.success) {
-    return { error: "there is an error with creating seller" };
+    return { error: "There is an error with creating seller" };
   }
 
   try {
     await db.seller.create({
       data: {
         ...schemaValidation.data,
-        sellerId: user.id,
+        sellerId: session.user.id,
         isProfileComplete: true,
       },
     });
     return { success: true };
   } catch (error) {
-    console.error("Error creating seller:", {
-      message: error,
-      stack: error,
-    });
-    return { error: "Failed to create seller profile. Please try again." };
+    const e = error as Error;
+    console.error("Error creating seller:");
+    return {
+      error: e.message || "Failed to create seller profile. Please try again.",
+    };
   }
 }
 
 export async function sellerProfile() {
-  const user = await currentUser();
-  if (!user) return null;
-
+  const session = await getUserSession();
+  if (!session?.user) return null;
   try {
     const seller = await db.seller.findUnique({
-      where: { sellerId: user.id },
+      where: { sellerId: session.user.id },
       select: { isProfileComplete: true },
     });
     return !!seller?.isProfileComplete;
