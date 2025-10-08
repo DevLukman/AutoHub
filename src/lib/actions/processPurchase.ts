@@ -34,7 +34,7 @@ export async function processPurchase(
           amount: amount,
           make: make,
           model: model,
-          carPuchasedId: carListingId,
+          carPurchaseId: carListingId,
         },
       }),
     ]);

@@ -16,6 +16,7 @@ model User {
   image         String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @default(now()) @updatedAt
+  role          String     @default("user")
   sessions      Session[]
   accounts      Account[]
   order         Order[]
@@ -160,7 +161,7 @@ model Order {
 model Purchases {
   id            String   @id @default(cuid())
   userId        String
-  carPuchasedId String
+  carPurchaseId String
   amount        Float
   model         String
   make          String
