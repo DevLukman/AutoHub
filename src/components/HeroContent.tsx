@@ -6,10 +6,11 @@ export default async function HeroContent() {
       <div className="display mt-[80px] flex w-full flex-col items-center justify-center">
         <div>
           <h1 className="font-inter mb-2 text-center text-3xl leading-tight font-extrabold md:text-6xl">
-            Discover Your Dream Ride
+            Drive the Future You Deserve
           </h1>
-          <p className="text-subPrimary mb-6 text-center text-base md:text-lg">
-            Explore thousands of quality vehicles at unbeatable prices
+          <p className="text-subPrimary mb-6 text-center text-base font-normal">
+            Browse thousands of trusted listings, compare deals, and drive away
+            with confidence.
           </p>
         </div>
         <HeroSearch />

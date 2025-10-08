@@ -126,7 +126,7 @@ model CarImage {
 model WishList {
   id           String     @id @default(cuid())
   userId       String
-  carListingId String     @unique
+  carListingId String     
   year         Int
   transmission String
   price        Float
@@ -139,7 +139,6 @@ model WishList {
   createdAt    DateTime   @default(now())
   carListing   CarListing @relation(fields: [carListingId], references: [id], onDelete: Cascade)
   user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-
   @@index([userId, carListingId])
 }
 
