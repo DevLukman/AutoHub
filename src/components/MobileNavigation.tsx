@@ -15,6 +15,7 @@ import {
 } from "../components/ui/sheet";
 import NavAuth from "./NavAuth";
 import SearchButton from "./Search";
+import { IoBagOutline } from "react-icons/io5";
 const navLinks = [
   { link: "Home", href: "/" },
   { link: "Browse Cars", href: "/cars" },
@@ -84,6 +85,12 @@ export default function MobileNavigation({
       <div>
         <div className="flex h-5 items-center gap-2">
           <SearchButton />
+          <Link
+            href="/purchases"
+            className="hover:bg-main hover:text-primary cursor-pointer rounded-sm px-2 py-2 transition-all duration-300 ease-in-out"
+          >
+            <IoBagOutline size={16} aria-label="View your purchases" />
+          </Link>
           <Separator orientation="vertical" className="mr-2" />
           <NavAuth session={session} />
         </div>

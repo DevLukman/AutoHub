@@ -5,6 +5,7 @@ import { nextCookies } from "better-auth/next-js";
 import { lastLoginMethod } from "better-auth/plugins";
 import { Resend } from "resend";
 import ForgotPasswordEmail from "../components/ForgetPasswordEmail";
+
 const now = new Date();
 const requestedAt = now
   .toLocaleString("en-US", {
@@ -16,11 +17,19 @@ const requestedAt = now
     hour12: true,
   })
   .replace(",", " at");
+
 const resend = new Resend(process.env.RESEND_API_KEY as string);
-const prisma = new PrismaClient();
+
+const globalForPrisma = global as unknown as { prisma: PrismaClient };
+const prisma = globalForPrisma.prisma || new PrismaClient();
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
 export const auth = betterAuth({
+  baseURL: process.env.BETTER_AUTH_URL!,
+  secret: process.env.BETTER_AUTH_SECRET!,
+
   database: prismaAdapter(prisma, { provider: "postgresql" }),
+
   emailAndPassword: {
     enabled: true,
     sendResetPassword: async ({ user, url }) => {
@@ -46,11 +55,13 @@ export const auth = betterAuth({
       }
     },
   },
+
   socialProviders: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
   },
+
   plugins: [lastLoginMethod(), nextCookies()],
 });
