@@ -536,7 +536,7 @@ export default function CreatingListingForm() {
                     <button
                       type="button"
                       onClick={() => handleRemoveImage(index)}
-                      className="absolute top-2 right-2 cursor-pointer rounded-full bg-red-500 p-1.5 text-white opacity-0 transition-opacity group-hover:opacity-100 hover:bg-red-600"
+                      className="absolute top-2 right-2 cursor-pointer rounded-full bg-red-500 p-1.5 text-white transition-opacity hover:bg-red-600"
                       aria-label={`Remove image ${index + 1}`}
                     >
                       <X size={14} />
