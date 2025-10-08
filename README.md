@@ -1,36 +1,106 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚗 AutoHub
 
-## Getting Started
+A full-stack car marketplace platform that allows users to **buy** or **sell cars** seamlessly.  
+It features a **secure payment system**, **role-based dashboards**, and a **modern UI** inspired by real-world marketplaces.
 
-First, run the development server:
+---
+
+## 🧭 Overview
+
+AutoHub is a comprehensive web application that connects car buyers and sellers on a single platform.  
+It offers a secure payment system powered by **Paystack**, intuitive dashboards for **admins** and **sellers**, and a responsive interface built with **Next.js** and **Tailwind CSS**.
+
+Whether you're a car owner looking to sell, an admin managing listings, or a buyer searching for your next ride — AutoHub provides a smooth, fast, and secure experience.
+
+---
+
+## ✨ Features
+
+- 🔐 **Authentication**: Email, Google login, and password reset functionality powered by **Better Auth**
+- 👥 **Role-based access control** for:
+  - **Admin**: Approve/reject car listings, verify authenticity, and manage all listings
+  - **Seller**: Create, update, track, or delete their listings
+  - **Buyer**: Purchase cars, manage wishlist (after account creation)
+- 💳 **Secure payments** with **Paystack**
+- 🔎 **Browse, filter, and search** for cars effortlessly
+- 🧱 **Fully responsive** design with **Tailwind CSS**
+- 🧩 **Type safety** with **TypeScript**
+- ✅ **Schema validation** using **Zod**
+- 📝 **Form validation** with **React Hook Form**
+
+---
+
+## 🛠️ Tech Stack
+
+| Category           | Technologies                                                              |
+| ------------------ | ------------------------------------------------------------------------- |
+| **Frontend**       | Next.js, React, TypeScript, Tailwind CSS, ShadCN UI, React Hook Form, Zod |
+| **Backend**        | Prisma, PostgreSQL (**Neon Database**), Zod                               |
+| **Authentication** | Better Auth (Login, Signup, Password Reset, Last Used Method)             |
+| **Payment**        | Paystack                                                                  |
+| **Deployment**     | Vercel                                                                    |
+
+### 🧩 Badges
+
+![Next.js](https://img.shields.io/badge/Next.js-000000?logo=nextdotjs)
+![React](https://img.shields.io/badge/React-61DAFB?logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?logo=tailwind-css)
+![Prisma](https://img.shields.io/badge/Prisma-2D3748?logo=prisma)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?logo=postgresql)
+![Paystack](https://img.shields.io/badge/Paystack-3BB75E?logo=paystack)
+![Vercel](https://img.shields.io/badge/Vercel-000000?logo=vercel)
+
+---
+
+## 🖼️ Screenshots
+
+| Homepage                                       | Dashboard                                        |
+| ---------------------------------------------- | ------------------------------------------------ |
+| ![Homepage](./public/screenshots/homepage.png) | ![Dashboard](./public/screenshots/dashboard.png) |
+
+---
+
+## 🔗 Live Demo
+
+👉 [**View Project Live**](https://your-live-demo-link.com)
+
+---
+
+## 🙏 Acknowledgements
+
+- 👨‍💻 Developed by [**Lukman Muhammed**](https://github.com/yourusername)
+- 🎨 Design by [**Olamide**](https://link-to-designer.com)
+- 🔐 [Better Auth](https://better-auth.com)
+- 💳 [Paystack](https://paystack.com)
+- ⚛️ [React](https://react.dev)
+- ▲ [Next.js](https://nextjs.org)
+- 🧠 [TypeScript](https://www.typescriptlang.org)
+- 🪄 [ShadCN UI](https://ui.shadcn.com)
+
+---
+
+> 💡 _AutoHub aims to simplify the car marketplace experience through secure payments, smooth role-based workflows, and a beautiful, accessible interface._
+
+## 🔗 Live Demo
+
+👉 [**View Project Live**](https://your-live-demo-link.com)
+
+---
+
+## 🚀 Getting Started
+
+This project was bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+### 🧰 Prerequisites
+
+Make sure you have the following installed:
+
+- Node.js (>= 18)
+- npm, yarn, pnpm, or bun
+
+### 🛠 Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/DevLukman/AutoHub.git
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
