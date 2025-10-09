@@ -14,7 +14,7 @@ export async function carListings(
     const totalPages = Math.ceil(totalCount / CARS_SIZE);
     const filters = buildCarFilters(searchParams);
     const data = await db.carListing.findMany({
-      where: filters,
+      where: { status: "active", ...filters },
       include: {
         images: true,
       },
@@ -57,7 +57,7 @@ export async function getCarsCount(searchParams: SearchAndFilterProps) {
   try {
     const filters = buildCarFilters(searchParams);
     const count = await db.carListing.count({
-      where: filters,
+      where: { status: "active", ...filters },
     });
     return count;
   } catch (error) {
@@ -74,6 +74,7 @@ export async function getSearch(search: string) {
   try {
     const data = await db.carListing.findMany({
       where: {
+        status: "active",
         OR: [
           { make: { contains: search, mode: "insensitive" } },
           { model: { contains: search, mode: "insensitive" } },

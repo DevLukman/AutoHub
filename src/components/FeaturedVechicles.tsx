@@ -7,6 +7,7 @@ import { formatToNaria } from "../utils/helper";
 import AddToWishlist from "./AddToWishlist";
 export default async function FeaturedVechicles() {
   const results = await db.carListing.findMany({
+    where: { status: "active" },
     include: { images: { select: { url: true } } },
     orderBy: {
       id: "desc",

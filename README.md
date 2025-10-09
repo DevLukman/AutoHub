@@ -104,3 +104,19 @@ Make sure you have the following installed:
 ```bash
 git clone https://github.com/DevLukman/AutoHub.git
 ```
+
+Hi,  
+My name is Luqman Muhammed, and I'm excited to apply for the Frontend Developer Intern position.  
+What excites me most about web development is the blend of creativity and problem-solving, particularly in building beautiful, intuitive user interfaces. It's satisfying to take a design concept and turn it into a responsive, accessible experience that users enjoy. Solving UI challenges and creating seamless interactions drives me.  
+I've been working with React, Next.js, and TypeScript. I'm particularly interested in this role because it offers the chance to work on production applications alongside experienced engineers. The tech stack you are using matches perfectly with what I've learned and built, and I'm eager to contribute while enhancing my skills in a real-world setting.  
+I've completed a couple of projects that I’m proud of:  
+**Car Marketplace (Next.js, TypeScript, Tailwind CSS, shadcn/ui)** — A full-stack platform for users to buy and sell cars. I implemented authentication, advanced search and filtering, and integrated Supabase for the backend. Working through the complexity of state management and creating an intuitive search experience taught me a lot about building user-centric applications.  
+**Artwork E-commerce Store (React, TypeScript, Tailwind CSS, Redux)** — A mini e-commerce platform for purchasing artwork, featuring authentication, product filtering, and cart functionality. I used Redux for state management and Neon database for data persistence, focusing on clean UI architecture and smooth user flows.  
+Both projects are live, and I would love to share the links along with my GitHub profile so you can see the code and functionality firsthand.  
+I’m available for at least three months, comfortable working remotely, and genuinely excited about the chance to learn from your team while contributing to projects that make a real impact.  
+Looking forward to hearing from you!  
+Best regards,  
+Luqman Muhammed  
+[Your GitHub Profile Link]  
+[Car Marketplace Live Link]  
+[Artwork E-commerce Live Link]
