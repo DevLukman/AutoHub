@@ -1,5 +1,5 @@
 "use client";
-import { Loader2 } from "lucide-react";
+import { Spinner } from "../../../../components/ui/spinner";
 import { useState, useTransition } from "react";
 import {
   AlertDialog,
@@ -50,7 +50,7 @@ export default function BankDetailsModal({
         >
           {isSubmitting ? (
             <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Spinner />
               Becoming a seller...
             </>
           ) : (
@@ -97,7 +97,7 @@ export default function BankDetailsModal({
             >
               {isPending ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Spinner />
                   Creating Account...
                 </>
               ) : (

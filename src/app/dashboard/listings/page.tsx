@@ -3,10 +3,11 @@ export const metadata: Metadata = {
   description: "Your Best Automobile Marketplace",
 };
 
-import { carListing } from "../../../lib/actions/getCarListing";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { Badge } from "../../../components/ui/badge";
-import DropDownAction from "./components/DropDownActions";
 import {
   Table,
   TableBody,
@@ -15,11 +16,10 @@ import {
   TableHeader,
   TableRow,
 } from "../../../components/ui/table";
+import { carListing } from "../../../lib/actions/getCarListing";
 import { formatToNaria } from "../../../utils/helper";
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { Metadata } from "next";
-import { Suspense } from "react";
 import { TableLoading } from "../_components/DashboardLoading";
+import DropDownAction from "./components/DropDownActions";
 type PageProps = {
   searchParams: Promise<{ page?: string }>;
 };

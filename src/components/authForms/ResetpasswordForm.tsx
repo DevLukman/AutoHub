@@ -1,6 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
@@ -12,6 +12,7 @@ import { ResetPassword } from "../../lib/actions/authAction";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { Spinner } from "../ui/spinner";
 
 const ResetPasswordSchema = z
   .object({
@@ -140,7 +141,7 @@ export default function ResetPasswordForm() {
           >
             {isSubmitting ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Spinner />
                 Resetting Password...
               </>
             ) : (

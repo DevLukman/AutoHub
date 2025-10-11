@@ -1,7 +1,8 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IconPaperclip } from "@intentui/icons";
-import { ChevronLeft, Loader2, X } from "lucide-react";
+import { ChevronLeft, X } from "lucide-react";
+import { Spinner } from "../../../../components/ui/spinner";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -483,10 +484,7 @@ export default function CreatingListingForm() {
                 <div>
                   {isUploading ? (
                     <>
-                      <Loader2
-                        className="text-subPrimary animate-spin"
-                        size={16}
-                      />
+                      <Spinner className="text-subPrimary" />
                       <span>Uploading...</span>
                     </>
                   ) : (
@@ -554,7 +552,7 @@ export default function CreatingListingForm() {
           >
             {isSubmitting ? (
               <>
-                <Loader2 className="mr-1 h-4 w-4 animate-spin" />
+                <Spinner />
                 Creating Listing...
               </>
             ) : (

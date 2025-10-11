@@ -1,7 +1,7 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IconPaperclip } from "@intentui/icons";
-import { ChevronLeft, Loader2, X } from "lucide-react";
+import { ChevronLeft, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../../../components/ui/select";
+import { Spinner } from "../../../../components/ui/spinner";
 import { Textarea } from "../../../../components/ui/textarea";
 import { UpdateListing } from "../../../../lib/actions/updateListing";
 import {
@@ -26,10 +27,10 @@ import {
   TCarListingSchema,
 } from "../../../../lib/Types";
 
+import { ALLOWED_FILE_TYPES, MAX_FILE_SIZE } from "../../../../utils/Constants";
 import { useUploadThing } from "../../../../utils/uploadthing";
 import ListingInputContainer from "../../_components/ListingInputContainer";
 import { NumberField } from "../../_components/NumberInput";
-import { ALLOWED_FILE_TYPES, MAX_FILE_SIZE } from "../../../../utils/Constants";
 
 type UploadedFile = {
   url: string;
@@ -493,10 +494,7 @@ export default function UpdateListingForm({ updateData }: GetCarProps) {
                 <div>
                   {isUploading ? (
                     <>
-                      <Loader2
-                        className="text-subPrimary animate-spin"
-                        size={16}
-                      />
+                      <Spinner className="text-subPrimary" />
                       <span>Uploading...</span>
                     </>
                   ) : (
@@ -564,7 +562,7 @@ export default function UpdateListingForm({ updateData }: GetCarProps) {
           >
             {isSubmitting ? (
               <>
-                <Loader2 className="mr-1 h-4 w-4 animate-spin" />
+                <Spinner />
                 Updating Listing...
               </>
             ) : (

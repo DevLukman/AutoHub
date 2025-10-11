@@ -1,6 +1,5 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -10,6 +9,7 @@ import { ForgetPasswordSchema, TForgetPasswordSchema } from "../../lib/Types";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { Spinner } from "../ui/spinner";
 
 export default function ForgetPasswordForm() {
   const {
@@ -69,7 +69,7 @@ export default function ForgetPasswordForm() {
           >
             {isSubmitting ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Spinner />
                 Sending Reset Link...
               </>
             ) : (

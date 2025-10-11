@@ -1,10 +1,11 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { FcGoogle } from "react-icons/fc";
 import { toast } from "react-toastify";
 import ListingInputContainer from "../../app/dashboard/_components/ListingInputContainer";
 import { Badge } from "../../components/ui/badge";
@@ -15,6 +16,7 @@ import { LoginSchema, TLoginSchema } from "../../lib/Types";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { Spinner } from "../ui/spinner";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -113,7 +115,7 @@ export default function LoginForm() {
             <div className="relative">
               <Input
                 {...register("password")}
-                className="border-border border pr-10"
+                className="border-border border pr-10 disabled:cursor-not-allowed"
                 id="password"
                 type={showPassword ? "text" : "password"}
                 placeholder="Minimum 8 characters"
@@ -146,6 +148,7 @@ export default function LoginForm() {
                 <Checkbox
                   id="remember"
                   checked={field.value}
+                  className="disabled:cursor-not-allowed"
                   onCheckedChange={field.onChange}
                   disabled={isGoogleLoading || isSubmitting}
                 />
@@ -155,13 +158,13 @@ export default function LoginForm() {
           </div>
 
           <Button
-            className="bg-btnBg text-secondary hover:bg-btnBg hover:text-secondary mt-4 w-full cursor-pointer font-semibold"
+            className="bg-btnBg text-secondary hover:bg-btnBg hover:text-secondary mt-4 w-full cursor-pointer font-semibold disabled:cursor-not-allowed"
             type="submit"
             disabled={isSubmitting || isGoogleLoading}
           >
             {isSubmitting ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Spinner />
                 Logging in...
               </>
             ) : (
@@ -170,18 +173,23 @@ export default function LoginForm() {
           </Button>
           <div className="relative w-full">
             <Button
-              className="bg-btnBg text-secondary hover:bg-btnBg hover:text-secondary relative mt-4 w-full cursor-pointer font-semibold"
+              className="bg-btnBg text-secondary hover:bg-btnBg hover:text-secondary relative mt-4 w-full cursor-pointer font-semibold disabled:cursor-not-allowed"
               type="button"
               onClick={handleSocialLogin}
               disabled={isGoogleLoading || isSubmitting}
             >
               {isGoogleLoading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Spinner />
                   Logging in with Google...
                 </>
               ) : (
-                "Login with Google"
+                <div className="flex items-center gap-3">
+                  <span>
+                    <FcGoogle size={30} />
+                  </span>
+                  <span> Login with Google</span>
+                </div>
               )}
             </Button>
             {lastMethod === "google" && (

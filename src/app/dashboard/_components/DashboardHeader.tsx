@@ -24,7 +24,10 @@ export default function DashboardHeader() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/" className="text-primary text-sm">
+              <BreadcrumbLink
+                href="/dashboard"
+                className="text-primary text-sm"
+              >
                 Dashboard
               </BreadcrumbLink>
             </BreadcrumbItem>

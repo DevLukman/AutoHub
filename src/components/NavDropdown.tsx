@@ -73,7 +73,9 @@ export default function NavDropdown({ session }: { session: Session }) {
         <DropdownMenuSeparator />
         <DropdownMenuItem className="focus:bg-btnBg focus:text-secondary py-2">
           <LogOut />
-          <button onClick={handleLogout}>Logout</button>
+          <button onClick={handleLogout} className="cursor-pointer">
+            Logout
+          </button>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

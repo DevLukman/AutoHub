@@ -1,18 +1,20 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { FcGoogle } from "react-icons/fc";
 import { toast } from "react-toastify";
 import ListingInputContainer from "../../app/dashboard/_components/ListingInputContainer";
 import { signUp } from "../../lib/actions/authAction";
 import { authClient } from "../../lib/auth-client";
+import { SignupSchema, TSignUpSchema } from "../../lib/Types";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { SignupSchema, TSignUpSchema } from "../../lib/Types";
+import { Spinner } from "../ui/spinner";
 
 export default function SignupForm() {
   const router = useRouter();
@@ -140,7 +142,7 @@ export default function SignupForm() {
           >
             {isSubmitting ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Spinner />
                 Signing Up...
               </>
             ) : (
@@ -155,11 +157,16 @@ export default function SignupForm() {
           >
             {isGoogleLoading ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Spinner />
                 Signing Up with Google...
               </>
             ) : (
-              "Signup with Google"
+              <div className="flex items-center gap-3">
+                <span>
+                  <FcGoogle size={30} />
+                </span>
+                <span> Login with Google</span>
+              </div>
             )}
           </Button>
         </form>

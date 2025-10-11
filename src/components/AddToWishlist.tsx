@@ -3,6 +3,7 @@ import { useWishlist } from "@/hooks/useWishlist";
 import { TWishListSchema } from "@/lib/Types";
 import { Delete } from "lucide-react";
 import { CiHeart } from "react-icons/ci";
+import { Spinner } from "./ui/spinner";
 
 export default function AddToWishlist({
   image,
@@ -40,7 +41,7 @@ export default function AddToWishlist({
         aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
       >
         {isPending ? (
-          <div className="h-[18px] w-[18px] animate-spin rounded-full border-2 border-current border-t-transparent" />
+          <Spinner />
         ) : isInWishlist ? (
           <Delete color="red" size={18} />
         ) : (

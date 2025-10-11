@@ -1,5 +1,6 @@
 "use client";
-import { deleteWishlist } from "@/lib/actions/wishlist";
+import { deleteWishlist } from "../../../../lib/actions/wishlist";
+import { Spinner } from "../../../../components/ui/spinner";
 import { useTransition } from "react";
 import { CiHeart } from "react-icons/ci";
 import { toast } from "react-toastify";
@@ -26,7 +27,7 @@ export default function HandleRemoveFromWish({ id }: { id: string }) {
       className="border-border flex cursor-pointer items-center gap-2 rounded-sm border px-3 py-1.5"
     >
       {isPending ? (
-        <div className="h-[18px] w-[18px] animate-spin rounded-full border-2 border-current border-t-transparent" />
+        <Spinner />
       ) : (
         <>
           <span>
