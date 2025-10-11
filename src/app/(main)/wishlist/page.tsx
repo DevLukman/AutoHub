@@ -8,15 +8,15 @@ import { LucideCircleGauge, LucideSquareArrowOutUpRight } from "lucide-react";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { CiHeart, CiLocationOn } from "react-icons/ci";
 import { GoDotFill } from "react-icons/go";
 import { CarsLoading } from "../../../components/LoadingSkeleton";
+import { getUserSession } from "../../../lib/actions/getSession";
 import { getWishlist } from "../../../lib/actions/wishlist";
 import { formatToNaria } from "../../../utils/helper";
 import HandleRemoveFromWish from "./_components/HandleRemoveFromWish";
-import { getUserSession } from "@/lib/actions/getSession";
-import { redirect } from "next/navigation";
 export default async function Wishlist() {
   const { data, count } = await getWishlist();
   const session = await getUserSession();
@@ -98,7 +98,7 @@ export default async function Wishlist() {
                   <div className="flex items-center justify-end gap-2">
                     <HandleRemoveFromWish id={wish.carListingId} />
                     <Link
-                      href={`/cars/${wish.id}`}
+                      href={`/cars/${wish.carListingId}`}
                       className="border-border bg-main flex cursor-pointer items-center gap-2 rounded-sm border px-3 py-1.5"
                     >
                       <span>
